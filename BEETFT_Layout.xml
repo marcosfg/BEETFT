@@ -1,0 +1,20 @@
+<BEETFT>
+	<screen>
+		<width>320</width>
+		<heigth>240</heigth>
+		<leftPanelWidth>31.25</leftPanelWidth>
+	</screen>
+	<leftPanel>
+		<button>
+			<width>80</width>
+			<heigth>7.8125</heigth>
+			<posX>10</posX>
+			<posY>12.8125</posY>
+			<text>Jog</text>
+			<action>OPEN_JOG_PANEL</action>
+			<img></img>
+			<btnBgColor>0x000000</btnBgColor>
+			<btnTxtColor>0xffffff</btnTxtColor>
+		</button>
+	</leftPanel>
+</BEETFT>
