@@ -41,31 +41,26 @@ import pygame
 import pygbutton
 #from lxml import etree
 import xml.etree.ElementTree as etree
+from time import sleep
+import BEETFT
+
 
 os.environ["SDL_FBDEV"] = "/dev/fb1"
 
  
-class BEETFT():
+class StartScreen():
     """
     @var done: anything can set to True to forcequit
     @var screen: points to: pygame.display.get_surface()        
     """
 
-    def __init__(self, width=320, height=240, caption="BEETFT"):
+    def __init__(self, width=320, height=240, caption="OctoPiPanel"):
         """
         .
         """
         self.done = False
         #self.color_bg = pygame.Color(254, 193, 0)
         self.color_bg = pygame.Color(255, 255, 255)
-        self.btnColor_bg = pygame.Color(254, 193, 0)
-        #self.btnColor_bg = pygame.Color(255, 255, 255)
-        self.btnFgcolor = pygame.Color(0, 0, 0)
-        self.pygbutton_font = pygame.font.Font('freesansbold.ttf', 10)
-
-        # Button settings
-        self.buttonWidth = 80
-        self.buttonHeight = 25
 
         # init pygame and set up screen
         pygame.init()
@@ -73,11 +68,7 @@ class BEETFT():
         self.width, self.height = width, height
         self.screen = pygame.display.set_mode( (width,height) )
 
-        # Left buttons
-        self.btnJog         = pygbutton.PygButton((  10,  41, self.buttonWidth, self.buttonHeight), "Jog", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font) 
-        self.btnMaint       = pygbutton.PygButton((  10,  108, self.buttonWidth, self.buttonHeight), "Maintenance", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font) 
-        self.btnCal         = pygbutton.PygButton((  10,  174, self.buttonWidth, self.buttonHeight), "Calibration", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font)
-
+        # Start Image
         self.asurf = pygame.image.load('Images/beeVector.png')
 
    
@@ -96,6 +87,12 @@ class BEETFT():
 
             # Draw everything
             self.draw()
+
+            sleep(1) # Time in seconds.
+            self.screen.fill( self.color_bg )
+            app = BEETFT.BEETFT(320, 240, "BEETFT")
+            app.Start()
+
 
         """ Quit """
         pygame.quit()
@@ -134,14 +131,9 @@ class BEETFT():
     def draw(self):
         #clear whole screen
         self.screen.fill( self.color_bg )
-        pygame.draw.line(self.screen, (0, 0, 0), (100, 0), (100, 240),3)
 
-        # Draw buttons
-        self.btnJog.draw(self.screen)
-        self.btnMaint.draw(self.screen)
-        self.btnCal.draw(self.screen)
-
-        self.screen.blit(self.asurf,(30,30))
+        # Draw Image
+        self.screen.blit(self.asurf,(0,0))
 
 
         # update screen
@@ -149,5 +141,5 @@ class BEETFT():
 
 
 if __name__ == '__main__':
-    opp = BEETFT(320, 240, "BEETFT")
+    opp = StartScreen(320, 240, "BEETFT")
     opp.Start()
