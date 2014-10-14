@@ -47,7 +47,7 @@ from array import array
 os.environ["SDL_FBDEV"] = "/dev/fb1"
 
  
-class BEETFT_Start():
+class BEETFT():
     """
     @var done: anything can set to True to forcequit
     @var screen: points to: pygame.display.get_surface()        
@@ -76,11 +76,13 @@ class BEETFT_Start():
         self.screen = pygame.display.set_mode( (width,height) )
 
         # Left buttons
-        self.btnJog         = pygbutton.PygButton((  10,  41, self.buttonWidth, self.buttonHeight), "Jog", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font) 
-        self.btnMaint       = pygbutton.PygButton((  10,  108, self.buttonWidth, self.buttonHeight), "Maintenance", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font) 
-        self.btnCal         = pygbutton.PygButton((  10,  174, self.buttonWidth, self.buttonHeight), "Calibration", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font)
+        #self.btnJog         = pygbutton.PygButton((  10,  41, self.buttonWidth, self.buttonHeight), "Jog", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font) 
+        #self.btnMaint       = pygbutton.PygButton((  10,  108, self.buttonWidth, self.buttonHeight), "Maintenance", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font) 
+        #self.btnCal         = pygbutton.PygButton((  10,  174, self.buttonWidth, self.buttonHeight), "Calibration", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font)
 
-        self.btnTest       = pygbutton.PygButton((  10,  108, self.buttonWidth, self.buttonHeight), "Test", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font)
+        self.btn = []
+        for i in range(1, 4):
+            self.btn.append(pygbutton.PygButton((  10,  67*i-26, self.buttonWidth, self.buttonHeight), "Jog"+str(i), self.btnColor_bg, self.btnFgcolor, self.pygbutton_font))
 
         self.asurf = pygame.image.load('Images/beeVector.png')
 
@@ -111,19 +113,16 @@ class BEETFT_Start():
                 print "quit"
                 self.done = True
 
-            if 'click' in self.btnJog.handleEvent(event):
-                print "Jog Button click"
-            if 'click' in self.btnMaint.handleEvent(event):
-                print "Maintenance Buttin click"
-            if 'click' in self.btnCal.handleEvent(event):
-                print "Calibration Buttin click"
-
-            if 'click' in self.btnTest.handleEvent(event):
-                print "Test Buttin click"
-
         # Did the user click on the screen?
             if event.type == pygame.MOUSEBUTTONDOWN:
-                pass
+                # Reset backlight counter
+                self.bglight_ticks = pygame.time.get_ticks()
+
+                if self.bglight_on == False and platform.system() == 'Linux':
+                    # enable the backlight
+                    #os.system("echo '1' > /sys/class/gpio/gpio252/value")
+                    self.bglight_on = True
+                    print "Background light on."
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -150,14 +149,16 @@ class BEETFT_Start():
         pygame.draw.line(self.screen, (0, 0, 0), (100, 0), (100, 240),3)
 
         # Draw buttons
-        self.btnJog.draw(self.screen)
+        #self.btnJog.draw(self.screen)
         #self.btnMaint.draw(self.screen)
-        self.btnCal.draw(self.screen)
+        #self.btnCal.draw(self.screen)
 
-        self.btnTest.draw(self.screen)
-        
+        for i in range(0, 3):
+            print i
+            btn = self.btn[i]
+            btn.draw(self.screen)
 
-        #self.screen.blit(self.asurf,(30,30))
+        self.screen.blit(self.asurf,(30,30))
 
 
         # update screen
@@ -165,5 +166,5 @@ class BEETFT_Start():
 
 
 if __name__ == '__main__':
-    opp = BEETFT_Start(320, 240, "BEETFT")
+    opp = BEETFT(320, 240, "BEETFT")
     opp.Start()

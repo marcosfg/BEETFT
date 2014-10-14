@@ -116,7 +116,7 @@ class PygButton(object):
         other is to have the caller of handleEvent() check the return value
         for the strings 'enter', 'move', 'down', 'up', 'click', or 'exit'.
 
-        Note that mouseEnter() is always c alled before mouseMove(), and
+        Note that mouseEnter() is always called before mouseMove(), and
         mouseMove() is always called before mouseExit(). Also, mouseUp() is
         always called before mouseClick().
 
