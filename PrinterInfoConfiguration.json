@@ -1,0 +1,19 @@
+{
+    "PrinterInfo":[
+        {
+            "lblSize":"10",
+            "lblFontType":"Bold",
+            "lblFontColor":"0,0,0",
+            "lblValSize":"10",
+            "lblValFontType":"Light",
+            "lblValFontColor":"0,0,0",
+            "lblStatus_Y":"20",
+            "lblFW_Y":"50",
+            "lblSN_Y":"80",
+            "lbl_X":"110",
+            "lblVal_X":"220",
+            "PrinterName":"BTF",
+            "lblPN_Y":"110"
+        }
+    ]
+}

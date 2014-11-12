@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<BEETFT>
+    <leftPanel>
+        <Button>
+            <Title>Printer Info</Title>
+            <Pos>
+                <x>10</x>
+                <y>20</y>
+            </Pos>
+            <Size>
+                <width>80</width>
+                <heigth>25</heigth>
+            </Size>
+        </Button>
+        <Button>
+            <Title>Jog</Title>
+            <Pos>
+                <x>10</x>
+                <y>20</y>
+            </Pos>
+            <Size>
+                <width>80</width>
+                <heigth>25</heigth>
+            </Size>
+        </Button>
+        <Button>
+            <Title>Calibration</Title>
+            <Pos>
+                <x>10</x>
+                <y>20</y>
+            </Pos>
+            <Size>
+                <width>80</width>
+                <heigth>25</heigth>
+            </Size>
+        </Button>
+        <Button>
+            <Title>Filament Change</Title>
+            <Pos>
+                <x>10</x>
+                <y>20</y>
+            </Pos>
+            <Size>
+                <width>80</width>
+                <heigth>25</heigth>
+            </Size>
+        </Button>
+        <Button>
+            <Title>Settings</Title>
+            <Pos>
+                <x>10</x>
+                <y>20</y>
+            </Pos>
+            <Size>
+                <width>80</width>
+                <heigth>25</heigth>
+            </Size>
+        </Button>
+        <Button>
+            <Title>Browser</Title>
+            <Pos>
+                <x>10</x>
+                <y>20</y>
+            </Pos>
+            <Size>
+                <width>80</width>
+                <heigth>25</heigth>
+            </Size>
+        </Button>
+        <Button>
+            <Title>About</Title>
+            <Pos>
+                <x>10</x>
+                <y>20</y>
+            </Pos>
+            <Size>
+                <width>80</width>
+                <heigth>25</heigth>
+            </Size>
+        </Button>
+    </leftPanel>
+</BEETFT>

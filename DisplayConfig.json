@@ -1,0 +1,13 @@
+{
+    "display":[
+        {"Name":"Adafruit PiTFT Resistive",
+            "Width":"320",
+            "Height":"240",
+            "bgColor":"255,255,255",
+            "SplitLinePos":"100",
+            "SplitLineColor":"0,0,0",
+            "SplitLineThickness":"3",
+            "DefaultScreen":"FilamentChange"
+        }
+    ]
+}

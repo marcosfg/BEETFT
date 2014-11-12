@@ -1,5 +1,5 @@
 """
-PygButton v0.1.0
+PygButton v0.1.1
 
 PygButton (pronounced "pig button") is a module that implements UI buttons for Pygame.
 PygButton requires Pygame to be installed. Pygame can be downloaded from http://pygame.org
@@ -34,6 +34,14 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those of the
 authors and should not be interpreted as representing official policies, either expressed
 or implied, of Al Sweigart.
+
+                        UPDATE NOTE:
+
+By marcosfg
+
+Added Methods and propoerty for name var, which allow to add a name to the button, even if it is a image button
+
+
 """
 import pygame
 from pygame.locals import *
@@ -48,6 +56,7 @@ GRAY      = (128, 128, 128)
 LIGHTGRAY = (212, 208, 200)
 
 class PygButton(object):
+    
     def __init__(self, rect=None, caption='', bgcolor=LIGHTGRAY, fgcolor=BLACK, font=None, normal=None, down=None, highlight=None):
         """Create a new button object. Parameters:
             rect - The size and position of the button as a pygame.Rect object
@@ -83,6 +92,8 @@ class PygButton(object):
         self._caption = caption
         self._bgcolor = bgcolor
         self._fgcolor = fgcolor
+        
+        self._name = caption
 
         if font is None:
             self._font = PYGBUTTON_FONT
@@ -282,7 +293,7 @@ class PygButton(object):
 
 
     def _propSetCaption(self, captionText):
-        self.customSurfaces = False
+        #self.customSurfaces = False
         self._caption = captionText
         self._update()
 
@@ -333,8 +344,18 @@ class PygButton(object):
         self.customSurfaces = False
         self._font = setting
         self._update()
+        
+    def _propGetName(self):
+        return self._name
 
 
+    def _propSetName(self, setting):
+        #self.customSurfaces = False
+        self._name = setting
+        self._update()
+
+
+    name = property(_propGetName, _propSetName)
     caption = property(_propGetCaption, _propSetCaption)
     rect = property(_propGetRect, _propSetRect)
     visible = property(_propGetVisible, _propSetVisible)

@@ -36,61 +36,140 @@ __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
 import os
-import sys
+import json
+from pprint import pprint
+from subprocess import call
+import BEETFTJsonLoader
+import WaitForConnection
 import pygame
-import pygbutton
-#from lxml import etree
-import xml.etree.ElementTree as etree
-from array import array
+
+import BEETFTDisplay
+#Screen interfaces imports
+import PrinterInfo
+import Jog
+import Calibration
+import FilamentChange
+import Settings
+import FileBrowser
+import About
 
 
 os.environ["SDL_FBDEV"] = "/dev/fb1"
 
- 
-class BEETFT_Start():
-    """
-    @var done: anything can set to True to forcequit
-    @var screen: points to: pygame.display.get_surface()        
-    """
 
-    def __init__(self, width=320, height=240, caption="BEETFT"):
-        """
-        .
-        """
+"""
+Main Class Interfaces
+"""
+class BEETFT_Main():
+    
+    """
+    State vars
+    """
+    BEEConnected = False
+    
+    """
+    vars
+    @var done: anything can set to True to force quit
+    """
+    done = False
+    jsonLoader = None
+    BEEDisplay = None
+    leftMenuButtons = None
+    
+    """
+    Interfaces
+    """
+    currentScreenName = "Printer Info"
+    currentScreen = None
+    printerInfoScreenLoader = None
+    jogScreenLoader = None
+    calibrationScreenLoader = None
+    filamentScreenLoader = None
+    settingsScreenLoader = None
+    browserScreenLoader = None
+    aboutScreenLoader = None
+
+    """*************************************************************************
+                                Init Method 
+    
+    Calls the JSON loader and setups the GUI
+    *************************************************************************"""
+    def __init__(self):
+        
+        #Make sure the infinite loop wokrs
         self.done = False
-        #self.color_bg = pygame.Color(254, 193, 0)
-        self.color_bg = pygame.Color(255, 255, 255)
-        self.btnColor_bg = pygame.Color(254, 193, 0)
-        #self.btnColor_bg = pygame.Color(255, 255, 255)
-        self.btnFgcolor = pygame.Color(0, 0, 0)
-        self.pygbutton_font = pygame.font.Font('freesansbold.ttf', 10)
-
-        # Button settings
-        self.buttonWidth = 80
-        self.buttonHeight = 25
-
+        """
+        JSON Loading
+        """
+        self.jsonLoader = BEETFTJsonLoader.jsonLoader()
+        
+        print("Using display: ",self.jsonLoader.displayObject.displayType)
+        print("Display Resolution: ", 
+                self.jsonLoader.displayObject.displayWidth, 
+                "x", self.jsonLoader.displayObject.displayHeight)
+        
+        self.BEEDisplay = self.jsonLoader.displayObject
+        self.leftMenuButtons = self.jsonLoader.GetLeftButtonsList()
+        
+        """
+        Screen Loaders
+        """
+        self.printerInfoScreenLoader = self.jsonLoader.GetPrinterInfoInterface()
+        self.jogLoader = self.jsonLoader.GetJogInterface()
+        self.calibrationLoader = self.jsonLoader.GetCalibrationInterface()
+        self.filamentChangeLoader = self.jsonLoader.GetFilamentChangeInterface()
+        self.settingsLoader = self.jsonLoader.GetSettingsInterface()
+        self.fileBrowserLoader = self.jsonLoader.GetFileBrowserInterface()
+        self.aboutLoader = self.jsonLoader.GetAboutInterface()
+        
+        """
+        Init pygame
+        """
+        print("Drawing Interfaces")
         # init pygame and set up screen
         pygame.init()
-
-        self.width, self.height = width, height
-        self.screen = pygame.display.set_mode( (width,height) )
-
-        # Left buttons
-        self.btnJog         = pygbutton.PygButton((  10,  41, self.buttonWidth, self.buttonHeight), "Jog", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font) 
-        self.btnMaint       = pygbutton.PygButton((  10,  108, self.buttonWidth, self.buttonHeight), "Maintenance", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font) 
-        self.btnCal         = pygbutton.PygButton((  10,  174, self.buttonWidth, self.buttonHeight), "Calibration", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font)
-
-        self.btnTest       = pygbutton.PygButton((  10,  108, self.buttonWidth, self.buttonHeight), "Test", self.btnColor_bg, self.btnFgcolor, self.pygbutton_font)
-
-        self.asurf = pygame.image.load('Images/beeVector.png')
-
-   
-    def Start(self):
-        # OctoPiPanel started
-        print "BEETFT start"
-        print "---"
+        self.screen = self.BEEDisplay.GetBEEScreen()
+        self.screen.fill(self.BEEDisplay.GetbgColor())
         
-        """ game loop: input, move, render"""
+        """
+        Wait For Connection
+        """
+        waitScreen = WaitForConnection.WaitScreen(self.screen)
+        #If the user closes the windows without a connection
+        if not waitScreen.connected:
+            self.done = True
+            
+        waitScreen.KillAll()
+        waitScreen = None
+        
+        """
+        Init Interfaces Screens
+        """
+        self.currentScreenName = self.jsonLoader.GetDefaultScreen()
+        
+        if self.currentScreenName == "PrinterInfo":
+            self.currentScreen = PrinterInfo.PrinterInfoScreen(self.screen,self.printerInfoScreenLoader)
+        elif self.currentScreenName == "Jog":
+            self.currentScreen = Jog.JogScreen(self.screen,self.jogLoader)
+        elif self.currentScreenName == "Calibration":
+            self.currentScreen = Calibration.CalibrationScreen(self.screen,self.calibrationLoader)
+        elif self.currentScreenName == "FilamentChange":
+            self.currentScreen = FilamentChange.FilamentChangeScreen(self.screen,self.filamentChangeLoader)
+        elif self.currentScreenName == "Settings":
+            self.currentScreen = Settings.SettingsScreen(self.screen,self.settingsLoader)
+        elif self.currentScreenName == "FileBrowser":
+            self.currentScreen = FileBrowser.FileBrowserScreen(self.screen,self.fileBrowserLoader)
+        elif self.currentScreenName == "About":
+            self.currentScreen = About.AboutScreen(self.screen,self.aboutLoader)
+        
+    """*************************************************************************
+                                Start Method 
+    
+    Infinit loop, calls methos to draw, update and handle events
+    *************************************************************************"""
+    def start(self):
+        print("\nStarting BEETFT")
+        
         while not self.done:
             # Handle events
             self.handle_events()
@@ -100,70 +179,116 @@ class BEETFT_Start():
 
             # Draw everything
             self.draw()
-
-        """ Quit """
-        #pygame.quit()
-       
+            
+            #Pull variables
+            self.currentScreen.Pull()
+            
+            # Check for interface CallBack
+            if self.currentScreen.ExitCallBack():
+                self.currentScreen.KillAll()
+                self.currentScreen = None
+                self = BEETFT_Main()
+            
+        pygame.quit()
+        
+        
+        
+    """*************************************************************************
+                                handle_events Method 
+    
+    Retrieves the event vector and sends it to the individual interface methods
+    *************************************************************************"""
     def handle_events(self):
+
+        retVal = pygame.event.get()
         """handle all events."""
-        for event in pygame.event.get():
+        for event in retVal:
             if event.type == pygame.QUIT:
-                print "quit"
+                print("quit")
                 self.done = True
-
-            if 'click' in self.btnJog.handleEvent(event):
-                print "Jog Button click"
-            if 'click' in self.btnMaint.handleEvent(event):
-                print "Maintenance Buttin click"
-            if 'click' in self.btnCal.handleEvent(event):
-                print "Calibration Buttin click"
-
-            if 'click' in self.btnTest.handleEvent(event):
-                print "Test Buttin click"
-
-        # Did the user click on the screen?
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pass
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    print "Got escape key"
-                    self.done = True
-
-                # Look for specific keys.
-                #  Could be used if a keyboard is connected
-                if event.key == pygame.K_a:
-                    print "Got A key"
-
-    """
-    Update buttons, text, graphs etc.
-    """
+                
+            self.currentScreen.handle_events(retVal)
+            
+            setScreen = None
+            for btn in self.leftMenuButtons:
+                if 'click' in btn.handleEvent(event):
+                    if btn._propGetName() == "Printer Info":
+                        setScreen = "PrinterInfo"
+                    elif btn._propGetName() == "Jog":
+                        setScreen = "Jog"
+                    elif btn._propGetName() == "Calibration":
+                        setScreen = "Calibration"
+                    elif btn._propGetName() == "Filament":
+                        setScreen = "FilamentChange"
+                    elif btn._propGetName() == "Settings":
+                        setScreen = "Settings"
+                    elif btn._propGetName() == "Browser":
+                        setScreen = "FileBrowser"
+                    elif btn._propGetName() == "About":
+                        setScreen = "About"
+                    
+            
+            if (not (setScreen is None)) and (not setScreen==self.currentScreen.GetCurrentScreenName()):
+                self.currentScreen.KillAll()
+                self.currentScreen = None
+                
+                if setScreen == "PrinterInfo":
+                    self.currentScreen = PrinterInfo.PrinterInfoScreen(self.screen,self.printerInfoScreenLoader)
+                elif setScreen == "Jog":
+                    self.currentScreen = Jog.JogScreen(self.screen,self.jogLoader)
+                elif setScreen == "Calibration":
+                    self.currentScreen = Calibration.CalibrationScreen(self.screen,self.calibrationLoader)
+                elif setScreen == "FilamentChange":
+                    self.currentScreen = FilamentChange.FilamentChangeScreen(self.screen,self.filamentChangeLoader)
+                elif setScreen == "Settings":
+                    self.currentScreen = Settings.SettingsScreen(self.screen,self.settingsLoader)
+                elif setScreen == "FileBrowser":
+                    self.currentScreen = FileBrowser.FileBrowserScreen(self.screen,self.fileBrowserLoader)
+                elif setScreen == "About":
+                    self.currentScreen = About.AboutScreen(self.screen,self.aboutLoader)
+                    
+                self.currentScreenName = self.currentScreen.GetCurrentScreenName()
+        
+        
+        
+    """*************************************************************************
+                                update Method 
+    
+    Calls all the individual update methods
+    *************************************************************************"""
     def update(self):
-
-        pass
-
+        #set left buttons visible
+        for btn in self.jsonLoader.leftMenuButtons:
+            btn.visible = True
+        
+        self.currentScreen.update()
+            
+        
         return
-               
+            
+    """*************************************************************************
+                                draw Method 
+    
+    Draws current screen and calls all the individual draw methods
+    *************************************************************************"""   
     def draw(self):
         #clear whole screen
-        self.screen.fill( self.color_bg )
-        pygame.draw.line(self.screen, (0, 0, 0), (100, 0), (100, 240),3)
-
-        # Draw buttons
-        self.btnJog.draw(self.screen)
-        #self.btnMaint.draw(self.screen)
-        self.btnCal.draw(self.screen)
-
-        self.btnTest.draw(self.screen)
+        self.screen.fill(self.BEEDisplay.GetbgColor())
         
-
-        #self.screen.blit(self.asurf,(30,30))
-
-
+        #draw split line
+        self.BEEDisplay.DrawLine(self.screen)
+        
+        for btn in self.leftMenuButtons:
+            btn.draw(self.screen)
+            if btn._propGetName() == self.currentScreen.GetCurrentScreenName():
+                pygame.draw.rect(self.screen, btn._propGetFgColor(), btn._propGetRect(), 3)
+        
+        #draw screen elements
+        self.currentScreen.draw()
+        
         # update screen
         pygame.display.update()
 
-
 if __name__ == '__main__':
-    opp = BEETFT_Start(320, 240, "BEETFT")
-    opp.Start()
+    opp = BEETFT_Main()
+    opp.start()

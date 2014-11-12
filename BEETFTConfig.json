@@ -1,0 +1,16 @@
+{
+    "interfaces":[
+        {
+            "InterfaceName":"FilamentChange"
+        },
+        {
+            "InterfaceName":"Settings"
+        },
+        {
+            "InterfaceName":"FileBrowser"
+        },
+        {
+            "InterfaceName":"About"
+        }
+    ]
+}
