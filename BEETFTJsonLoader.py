@@ -65,7 +65,7 @@ class jsonLoader():
     fileBrowserJsonPath = "/home/pi/BEETFT/FileBrowserConfiguration.json"
     aboutJsonPath = "/home/pi/BEETFT/AboutConfiguration.json"
     
-    printingJsonPath = "/home/pi/BEETFT/PrintingConfiguration.Json"
+    printingJsonPath = "/home/pi/BEETFT/PrintingConfiguration.json"
     
     """
     Display Configuration class
