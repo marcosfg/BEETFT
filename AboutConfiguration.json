@@ -1,0 +1,52 @@
+{
+    "About":[
+        {
+            "Labels":[
+                {
+                    "Text":"About",
+                    "X":"110",
+                    "Y":"5",
+                    "FontType":"Bold",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0"
+                },
+                {
+                    "Text":"https://github.com/marcosfg/BEETFT",
+                    "X":"110",
+                    "Y":"150",
+                    "FontType":"Bold",
+                    "FontSize":"9",
+                    "FontColor":"0,0,0"
+                }
+            ],
+            "Buttons":[
+                {
+                    "ButtonName":"Check For Updates",
+                    "X":"110",
+                    "Y":"50",
+                    "Width":"150",
+                    "Height":"25",
+                    "ButtonType":"Text",
+                    "Title":"Check For Updates",
+                    "FontType":"Regular",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0",
+                    "bgColor":"255,255,255"
+                },
+                {
+                    "ButtonName":"Update",
+                    "X":"110",
+                    "Y":"100",
+                    "Width":"150",
+                    "Height":"25",
+                    "ButtonType":"Text",
+                    "Title":"Update",
+                    "FontType":"Regular",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0",
+                    "bgColor":"255,255,255"
+                }
+            ]
+        }
+    ]
+}

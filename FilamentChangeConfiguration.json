@@ -3,6 +3,7 @@
         {
             "FirstTopLabel":
                     {
+                        "Text":"Heating Nozzle",
                         "X":"110",
                         "Y":"5",
                         "FontType":"Bold",
@@ -11,6 +12,7 @@
                     },
             "SecondTopLabel":
                     {
+                        "Text":"Choose Action",
                         "X":"110",
                         "Y":"5",
                         "FontType":"Bold",
@@ -19,6 +21,7 @@
                     },
             "ThirdTopLabel":
                     {
+                        "Text":"Pick Color",
                         "X":"110",
                         "Y":"5",
                         "FontType":"Bold",
@@ -28,7 +31,7 @@
             "FirstButtons":[
                 {
                     "ButtonName":"Next",
-                    "X":"272",
+                    "X":"270",
                     "Y":"200",
                     "Width":"30",
                     "Height":"30",
@@ -42,7 +45,7 @@
             "SecondButtons":[
                 {
                     "ButtonName":"OK",
-                    "X":"272",
+                    "X":"270",
                     "Y":"200",
                     "Width":"40",
                     "Height":"30",
@@ -55,8 +58,8 @@
                 },
                 {
                     "ButtonName":"Load",
-                    "X":"170",
-                    "Y":"78",
+                    "X":"150",
+                    "Y":"50",
                     "Width":"80",
                     "Height":"25",
                     "ButtonType":"Text",
@@ -68,8 +71,8 @@
                 },
                 {
                     "ButtonName":"Unload",
-                    "X":"170",
-                    "Y":"132",
+                    "X":"150",
+                    "Y":"100",
                     "Width":"80",
                     "Height":"25",
                     "ButtonType":"Text",
@@ -80,9 +83,9 @@
                     "bgColor":"255,255,255"
                 },
                 {
-                    "ButtonName":"PickColor",
-                    "X":"170",
-                    "Y":"186",
+                    "ButtonName":"Pick Color",
+                    "X":"150",
+                    "Y":"150",
                     "Width":"80",
                     "Height":"25",
                     "ButtonType":"Text",
@@ -93,10 +96,18 @@
                     "bgColor":"255,255,255"
                 }
             ],
+            "SelectedColorLbl":
+                    {
+                        "FontSize":"12",
+                        "FontType":"Regular",
+                        "FontColor":"0,0,0",
+                        "X":"130",
+                        "Y":"180"
+                    },
             "ThirdButtons":[
                 {
                     "ButtonName":"Next",
-                    "X":"272",
+                    "X":"270",
                     "Y":"200",
                     "Width":"30",
                     "Height":"30",
@@ -108,8 +119,8 @@
                 },
                 {
                     "ButtonName":"Up",
-                    "X":"150",
-                    "Y":"100",
+                    "X":"270",
+                    "Y":"50",
                     "Width":"30",
                     "Height":"30",
                     "ButtonType":"Img",
@@ -120,8 +131,8 @@
                 },
                 {
                     "ButtonName":"Down",
-                    "X":"200",
-                    "Y":"100",
+                    "X":"270",
+                    "Y":"150",
                     "Width":"30",
                     "Height":"30",
                     "ButtonType":"Img",
@@ -136,6 +147,26 @@
                         "ImgPath":"Images/beeBWVectorSmall.png",
                         "X":"150",
                         "Y":"50"
+                    },
+            "ProgressBar":
+                    {
+                        "X":"110",
+                        "Y":"160",
+                        "Width":"200",
+                        "Height":"25",
+                        "Thickness":"3",
+                        "bgColor":"0,0,0",
+                        "LineColor":"0,0,0"
+                    },
+            "ColorPicker":
+                    {
+                        "X":"110",
+                        "Y":"105",
+                        "Width":"150",
+                        "Height":"30",
+                        "FontColor":"0,0,0",
+                        "FontSize":"12",
+                        "FontType":"Bold"
                     }
         }
     ]

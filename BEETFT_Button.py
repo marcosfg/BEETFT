@@ -58,17 +58,19 @@ class Button():
     normalSurf = None
     downSurf = None
     highlightSurf = None
+    name = None
     
     def __init__(self, x = 0, y = 0, width = 0, height = 0, title="", 
                     bgR=0, bgG=0, bgB=0, fR=0, fG = 0, fB = 0,
                     fontType=None, fontSize = 10,
-                    normal=None, down=None, highlight=None):
+                    normal=None, down=None, highlight=None, name=""):
                         
         self.buttonWidth = width
         self.buttonHeight = height
         self.posX = x
         self.posY = y
         self.title = title
+        self.name = name
         
         if (bgR is not None) or (bgG is not None) or (bgB is not None):
             self.bgColor = pygame.Color(bgR,bgG,bgB)
@@ -95,14 +97,21 @@ class Button():
         
     def GetTextButton(self):
         self.btn = pygbutton.PygButton((self.posX,  self.posY, self.buttonWidth, self.buttonHeight),
-                                                self.title, self.bgColor, self.fontColor, self.font)
+                                                self.title, self.bgColor, self.fontColor, self.font,
+                                                None,None,None,
+                                                self.name)
                                                 
+        
+        #caption='', bgcolor=LIGHTGRAY, fgcolor=BLACK, font=None,
+        #normal=None, down=None, highlight=None, bName=None
+        
         return self.btn
     
     def GetImageButton(self):
         
         self.btn = pygbutton.PygButton((self.posX,  self.posY, self.buttonWidth, self.buttonHeight),
                                                 None, None, None, None,
-                                                self.normalSurf, self.downSurf, self.highlightSurf)
+                                                self.normalSurf, self.downSurf, self.highlightSurf,
+                                                self.name)
         
         return self.btn

@@ -38,17 +38,73 @@ __license__ = "MIT"
 import os
 import sys
 import pygame
+from turtle import width
 import pygbutton
 
-class AboutLoader():
+class ProgressBar():
     
+    x = 0
+    y = 0
+    width = 0
+    height = 0
+    thickness = 0
     
+    lineColor = None
+    fillColor = None
+    
+    rect = None
     
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, interfaceJson):
+    def __init__(self, x, y, width, height, lineColor, fillColor,thickness):
+        
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.lineColor = lineColor
+        self.fillColor = fillColor
+        self.thickness = thickness
+        
         
         return
+    
+    """
+    GetRect
+    """
+    def DrawRect(self,screen):
+        
+        self.rect = pygame.draw.rect(screen, 
+                                    self.lineColor,
+                                    (self.x,self.y,self.width,self.height),
+                                    self.thickness)
+        
+        return
+    
+    """
+    GetRect
+    """
+    def GetSurface(self,fillWidth):
+        
+        if fillWidth > 1:
+            fillWidth = 1
+        
+        surf = pygame.Surface((int(fillWidth*self.width),self.height))
+        surf.fill(self.fillColor)
+        
+        #fillWidth = int((self.nozzleTemperature/self.targetTemperature)*width)
+            
+            #self.temperatureBarRect = pygame.draw.rect(self.screen, fontColor, (x,y,width,height), 3)
+            #self.temperatureBarSurf = pygame.Surface((fillWidth,height))
+            #self.temperatureBarSurf.fill(fontColor)
+            #self.screen.blit(self.temperatureBarSurf, (x,y))
+        return surf
+    
+    """
+    GetPos
+    """
+    def GetPos(self):
+        return (self.x,self.y)

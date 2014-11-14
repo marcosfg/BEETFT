@@ -1,9 +1,6 @@
 {
     "interfaces":[
         {
-            "InterfaceName":"FilamentChange"
-        },
-        {
             "InterfaceName":"Settings"
         },
         {

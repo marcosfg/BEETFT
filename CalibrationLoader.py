@@ -55,6 +55,15 @@ class CalibrationLoader():
     
     interfaceButtons = []
     
+    leftImgJson = None
+    rightImgJson = None
+    leftImgPath = None
+    rightImgPath = None
+    leftImgX = 100
+    rightImgX = 100
+    sliceImgY = 0
+    rightImgY = 0
+    
     """*************************************************************************
                                 Init Method 
     
@@ -71,6 +80,10 @@ class CalibrationLoader():
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FirstButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['SecondButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['ThirdButtons'])))
+        
+        self.leftImgJson = json.loads(json.dumps(self.interfaceJson['LeftBoltImg']))[0]
+        self.rightImgJson = json.loads(json.dumps(self.interfaceJson['RightBoltImg']))[0]
+        
         
         for lbl in self.lblJson:
             lblFontType = lbl['FontType']
@@ -111,11 +124,13 @@ class CalibrationLoader():
                     fColor = btn['FontColor'].split(",")
                     fType = btn['FontType']
                     fSize = int(btn['FontSize'])
+                    btnName = btn['ButtonName']
                 
                     jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,
                                                 int(bgColor[0]),int(bgColor[2]),int(bgColor[2]),
                                                 int(fColor[0]),int(fColor[2]),int(fColor[2]),
-                                                fType,fSize)
+                                                fType,fSize, None, None, None, btnName)
+                                                
                     newBtn = jogBtn.GetTextButton()
                     newBtn._propSetName(btnTitle)
                     calButtons.append(newBtn)
@@ -124,16 +139,29 @@ class CalibrationLoader():
                     normalPath = btn['NormalPath']
                     downPath = btn['DownPath']
                     highlightedPath = btn['HighlightedPath']
+                    btnName = btn['ButtonName']
                 
-                    jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,
+                    jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,None,
                                                 None,None,None,None,None,None,
                                                 None,None,
-                                                normalPath,downPath,highlightedPath)
+                                                normalPath,downPath,highlightedPath,
+                                                btnName)
+                                                
                     newBtn = jogBtn.GetImageButton()
                     newBtn._propSetName(btnTitle)
                     calButtons.append(newBtn)
         
             self.interfaceButtons.append(calButtons)
+            
+        """
+        Image Files Configuration
+        """
+        self.leftImgPath = self.leftImgJson['ImgPath']
+        self.rightImgPath = self.rightImgJson['ImgPath']
+        self.leftImgX = int(self.leftImgJson['X'])
+        self.leftImgY = int(self.leftImgJson['Y'])
+        self.rightImgX = int(self.rightImgJson['X'])
+        self.rightImgY = int(self.rightImgJson['Y'])
             
         return
     
@@ -170,3 +198,43 @@ class CalibrationLoader():
     """
     def GetlblYPos(self,calibrationState):
         return self.lblYPos[calibrationState]
+    
+    """*************************************************************************
+                                IMAGES
+    *************************************************************************"""
+    
+    """
+    GetLeftImgPath
+    """
+    def GetLeftImgPath(self):
+        return self.leftImgPath
+    
+    """
+    GetRightImgPath
+    """
+    def GetRightImgPath(self):
+        return self.rightImgPath
+    
+    """
+    GetLeftImgX
+    """
+    def GetLeftImgX(self):
+        return self.leftImgX
+    
+    """
+    GetLeftImgY
+    """
+    def GetLeftImgY(self):
+        return self.leftImgY
+    
+    """
+    GetRightImgX
+    """
+    def GetRightImgX(self):
+        return self.rightImgX
+    
+    """
+    GetRightImgY
+    """
+    def GetRightImgY(self):
+        return self.rightImgY

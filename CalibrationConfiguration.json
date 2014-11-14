@@ -27,7 +27,7 @@
                     },
             "FirstButtons":[
                 {
-                    "ButtonName":"BtnPlus0_5",
+                    "ButtonName":"+0.5mm",
                     "X":"118",
                     "Y":"64",
                     "Width":"136",
@@ -40,7 +40,7 @@
                     "bgColor":"255,255,255"
                 },
                 {
-                    "ButtonName":"BtnPlus0_05",
+                    "ButtonName":"+0.05mm",
                     "X":"118",
                     "Y":"108",
                     "Width":"136",
@@ -53,7 +53,7 @@
                     "bgColor":"255,255,255"
                 },
                 {
-                    "ButtonName":"BtnMinus0_05",
+                    "ButtonName":"-0.05mm",
                     "X":"118",
                     "Y":"152",
                     "Width":"136",
@@ -66,7 +66,7 @@
                     "bgColor":"255,255,255"
                 },
                 {
-                    "ButtonName":"BtnMinus0_5",
+                    "ButtonName":"-0.5mm",
                     "X":"118",
                     "Y":"196",
                     "Width":"136",
@@ -117,6 +117,20 @@
                     "NormalPath":"Images/Next.png",
                     "DownPath":"Images/InvertedNext.png",
                     "HighlightedPath":"Images/Next.png"
+                }
+            ],
+            "RightBoltImg":[
+                {
+                    "ImgPath":"Images/rightBolt.png",
+                    "X":"110",
+                    "Y":"50"
+                }
+            ],
+            "LeftBoltImg":[
+                {
+                    "ImgPath":"Images/leftBolt.png",
+                    "X":"110",
+                    "Y":"50"
                 }
             ]
         }

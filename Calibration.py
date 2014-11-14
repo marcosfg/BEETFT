@@ -40,6 +40,8 @@ import sys
 import pygame
 import pygbutton
 
+
+
 class CalibrationScreen():
     
     calibrationState = 0
@@ -52,12 +54,24 @@ class CalibrationScreen():
     
     exit = False
     
+    """
+    Images
+    """
+    rightBoltImgPath = None
+    leftBoltImgPath = None
+    rightBoltImgX = 0
+    rightBoltImgY = 0
+    leftBoltImgX = 0
+    leftBoltImgY = 0
+    
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
     def __init__(self, screen, interfaceLoader):
+        
+        print("Loading Calibration Screen Components")
         
         self.exit = False
         
@@ -71,7 +85,14 @@ class CalibrationScreen():
         
         self.buttons = self.interfaceLoader.GetLeftButtonsList(self.calibrationState)
         
-        print("Loading Calibration Screen Components")
+        self.rightBoltImg = pygame.image.load(self.interfaceLoader.GetRightImgPath())
+        self.leftBoltImg = pygame.image.load(self.interfaceLoader.GetLeftImgPath())
+        self.rightBoltImgX = self.interfaceLoader.GetRightImgX()
+        self.rightBoltImgY = self.interfaceLoader.GetRightImgY()
+        self.leftBoltImgX = self.interfaceLoader.GetLeftImgX()
+        self.leftBoltImgY = self.interfaceLoader.GetLeftImgY()
+        
+        
         
         
 
@@ -139,6 +160,14 @@ class CalibrationScreen():
         for btn in self.buttons:
             btn.draw(self.screen)
         
+        if self.calibrationState == 1:
+            # Draw Image
+            self.screen.blit(self.leftBoltImg,(self.leftBoltImgX,self.leftBoltImgY))
+        elif self.calibrationState == 2:
+            # Draw Image
+            self.screen.blit(self.rightBoltImg,(self.rightBoltImgX,self.rightBoltImgY))
+        
+        
         return
     
     """*************************************************************************
@@ -163,6 +192,12 @@ class CalibrationScreen():
         self.lblText = None
         self.buttons = None
         self.exit = None
+        self.rightBoltImgPath = None
+        self.leftBoltImgPath = None
+        self.rightBoltImgX = None
+        self.rightBoltImgY = None
+        self.leftBoltImgX = None
+        self.leftBoltImgY = None
         
         return
     

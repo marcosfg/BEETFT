@@ -42,7 +42,7 @@
     </control>
     <control controlID="8" controlTypeID="com.balsamiq.mockups::CallOut" x="1314" y="682" w="337" h="181" measuredW="387" measuredH="39" zOrder="8" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>GetTimeRemaining%28%29%20-%20Get%20Time%20Remaining%0APause%28%29%20-%20Pause%20Printing%0ACancelPrint%28%29%20-%20Cancels%20Printig%0AShutdown%28%29%20-%20Shutdown%20printer%20routine%0A%20%0AReadyToLoad%28%29%20-%20returns%20true%20if%20ready%20to%20load/unload%20filament%0A%20%0ALoadFilament%28%29%20-%20Load%20Filament%20option%20from%20BEESoft%0AUnloadFilament%28%29%20-%20Unload%20Filament%20option%20from%20BEESoft%0ASetColorCode%28int%20colorCode%29%20-%20Set%20filament%20color%20code%0AGetCurrentColorCode%28%29%20-%20Get%20current%20filament%20color%20code%0A%20</text>
+        <text>GetTimeRemaining%28%29%20-%20Get%20Time%20Remaining%0APause%28%29%20-%20Pause%20Printing%0ACancelPrint%28%29%20-%20Cancels%20Printig%0AShutdown%28%29%20-%20Shutdown%20printer%20routine%0A%20%0A%20%0A%20%0AReadyToLoad%28%29%20-%20returns%20true%20if%20ready%20to%20load/unload%20filament%0A%20%0ALoadFilament%28%29%20-%20Load%20Filament%20option%20from%20BEESoft%0AUnloadFilament%28%29%20-%20Unload%20Filament%20option%20from%20BEESoft%0ASetColorCode%28int%20colorCode%29%20-%20Set%20filament%20color%20code%0AGetCurrentColorCode%28%29%20-%20Get%20current%20filament%20color%20code%0A%20</text>
       </controlProperties>
     </control>
   </controls>

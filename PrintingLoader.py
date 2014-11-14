@@ -43,23 +43,39 @@ import json
 import BEETFT_Button
 import ProgressBar
 
-class FilamentChangeLoader():
+class PrintingLoader():
     
     interfaceJson = None
-    topLblJson = []
-    buttonsJson = []
-    lbltext = []
     
-    lblTopFont = []
-    lblTopFontColor = []
-    lblTopXPos = []
-    lblTopYPos = []
+    interfacelabels = None
+    lblsJson = None
+    lblFontColor = None
+    lblXPos = None
+    lblYPos = None
+    lblText = None
+    lblFont = None 
+    lblIndexes = None
     
-    interfaceButtons = []
+    timeLblFontColor = None
+    timeLblXPos = None
+    timeLblYPos = None
+    timeLblText = None
+    timeLblFont = None
     
+    colorLblFontColor = None
+    colorLblXPos = None
+    colorLblYPos = None
+    colorLblText = None
+    colorLblFont = None 
+    
+    buttonsJson = None
+    interfaceButtons = None
+    
+    images = None
+    imagesJson = None
     imagePath = None
-    imageX = 100
-    imageY = 0
+    imageX = None
+    imageY = None
     
     #Progress Bar
     progressBar = None
@@ -83,36 +99,95 @@ class FilamentChangeLoader():
         
         self.interfaceJson = interfaceJson
         
-        self.topLblJson.append(json.loads(json.dumps(self.interfaceJson['FirstTopLabel'])))
-        self.topLblJson.append(json.loads(json.dumps(self.interfaceJson['SecondTopLabel'])))
-        self.topLblJson.append(json.loads(json.dumps(self.interfaceJson['ThirdTopLabel'])))
+        self.buttonsJson = []
+        
+        self.lblsJson = []
+        self.lblFontColor = []
+        self.lblXPos = []
+        self.lblYPos = []
+        self.lblText = []
+        self.lblFont = []
+        self.lblIndexes = []
+        
+        self.images = []
+        self.imagesJson = []
+        self.imagePath = []
+        self.imageX = []
+        self.imageY = []
+        
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FirstTopLabel'])))
+        self.lblIndexes.append(len(self.lblsJson[0]))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['SecondTopLabel'])))
+        self.lblIndexes.append(len(self.lblsJson[1]))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['ThirdTopLabel'])))
+        self.lblIndexes.append(len(self.lblsJson[2]))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FourthTopLabel'])))
+        self.lblIndexes.append(len(self.lblsJson[3]))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FifthTopLabel'])))
+        self.lblIndexes.append(len(self.lblsJson[4]))
         
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FirstButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['SecondButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['ThirdButtons'])))
+        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FourthButtons'])))
+        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FifthButtons'])))
+        
+        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['FirstImage'])))
+        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['SecondImage'])))
+        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['ThirdImage'])))
+        #self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['FourthImage'])))
         
         """
-        Load Top Labels Configuration
+        Time Label Configuration
         """
-        for lbl in self.topLblJson:
-            lblFontType = lbl['FontType']
-            lblFontSize = int(lbl['FontSize'])
-            lblFColor = lbl['lblFontColor']
-            self.lblTopXPos.append(int(lbl['X']))
-            self.lblTopYPos.append(int(lbl['Y']))
-            self.lbltext.append(lbl['Text'])
-            
-            font = self.GetFont(lblFontType,lblFontSize)
-            
-            self.lblTopFont.append(font)
-            
-            splitColor = lblFColor.split(",")
-            fontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
-            self.lblTopFontColor.append(fontColor)
+        timeLblJson = json.loads(json.dumps(self.interfaceJson['TimeLabel']))
         
+        self.timeLblXPos = int(timeLblJson['X'])
+        self.timeLblYPos = int(timeLblJson['Y'])
+        self.timeLblText = timeLblJson['Text']
+        
+        self.timeLblFont = self.GetFont(timeLblJson['FontType'],int(timeLblJson['FontSize']))
+        
+        timeFontColor = timeLblJson['FontColor']
+        splitColor = timeFontColor.split(",")
+        self.timeLblFontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
+        
+        """
+        Color Label Configuration
+        """
+        colorLblJson = json.loads(json.dumps(self.interfaceJson['ColorLabel']))
+        
+        self.colorLblXPos = int(colorLblJson['X'])
+        self.colorLblYPos = int(colorLblJson['Y'])
+        self.colorLblText = colorLblJson['Text']
+        
+        self.colorLblFont = self.GetFont(colorLblJson['FontType'],int(colorLblJson['FontSize']))
+        
+        colorFontColor = colorLblJson['FontColor']
+        splitColor = colorFontColor.split(",")
+        self.colorLblFontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
+        
+        """
+        Load Labels Configuration
+        """
+        for lbls in self.lblsJson:
+            lblJson = json.loads(json.dumps(lbls))
+            for lbl in lblJson:
+                lblFontType = lbl['FontType']
+                lblFontSize = int(lbl['FontSize'])
+                lblFColor = lbl['FontColor']
+                self.lblXPos.append(int(lbl['X']))
+                self.lblYPos.append(int(lbl['Y']))
+                self.lblText.append(lbl['Text'])
+                self.lblFont.append(self.GetFont(lblFontType,lblFontSize))
+                
+                splitColor = lblFColor.split(",")
+                fontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
+                self.lblFontColor.append(fontColor)
         """
         Load Buttons Configuration
         """
+        self.interfaceButtons = []
         for btns in self.buttonsJson:
             filButtons = []
             for btn in btns:
@@ -121,6 +196,7 @@ class FilamentChangeLoader():
                 btnWidth = int(btn['Width'])
                 btnHeight = int(btn['Height'])
                 btnType = btn['ButtonType']
+                
             
                 if btnType == "Text":
                     btnTitle = btn['Title']
@@ -133,7 +209,8 @@ class FilamentChangeLoader():
                     jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,
                                                 int(bgColor[0]),int(bgColor[2]),int(bgColor[2]),
                                                 int(fColor[0]),int(fColor[2]),int(fColor[2]),
-                                                fType,fSize, None, None, None, btnName)
+                                                fType,fSize,None,None,None,btnName)
+                                                
                     newBtn = jogBtn.GetTextButton()
                     newBtn._propSetName(btnTitle)
                     filButtons.append(newBtn)
@@ -144,7 +221,7 @@ class FilamentChangeLoader():
                     highlightedPath = btn['HighlightedPath']
                     btnName = btn['ButtonName']
                 
-                    jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,
+                    jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,None,
                                                 None,None,None,None,None,None,
                                                 None,None,
                                                 normalPath,downPath,highlightedPath,
@@ -154,14 +231,17 @@ class FilamentChangeLoader():
                     filButtons.append(newBtn)
         
             self.interfaceButtons.append(filButtons)
-        
+            
         """
         Load Heating Image Configuration
         """
-        imageJson = json.loads(json.dumps(self.interfaceJson['FirstImage']))
-        self.imagePath = imageJson['ImgPath']
-        self.imageX = int(imageJson['X'])
-        self.imageY = int(imageJson['Y'])
+        for img in self.imagesJson:
+            imgJson = json.loads(json.dumps(img))
+            for img in imgJson:
+                self.imagePath.append(img['ImgPath'])
+                self.imageX.append(int(img['X']))
+                self.imageY.append(int(img['Y']))
+                
         
         """
         Load Progress Bar Configuration
@@ -201,23 +281,7 @@ class FilamentChangeLoader():
         
         splitColor = pickerFontColorRGB.split(",")
         self.pickerFontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
-        
-        
-        
-        """
-        Selected Color Label Configuration
-        """
-        colorLblJson = json.loads(json.dumps(self.interfaceJson['SelectedColorLbl']))
-        lblFontType = colorLblJson['FontType']
-        lblFontSize = int(colorLblJson['FontSize'])
-        lblFColor = colorLblJson['FontColor']
-        self.selectedLblX = int(colorLblJson['X'])
-        self.selectedLblY = int(colorLblJson['Y'])
-            
-        splitColor = lblFColor.split(",")
-        self.selectedLblFontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
-        self.selectedLblFont = self.GetFont(lblFontType,lblFontSize)
-            
+                
         return
     
     """
@@ -241,67 +305,142 @@ class FilamentChangeLoader():
     
     returns the list with buttons
     """
-    def GetButtonsList(self,calibrationState):
+    def GetButtonsList(self,interfaceState):
         
-        return self.interfaceButtons[calibrationState]
+        return self.interfaceButtons[interfaceState]
     
     """
-    GetlblText(self)
-    
-    returns the list with the label text
+    GetLblsText
     """
-    def GetlblText(self,calibrationState):
-        
-        return self.lbltext[calibrationState]
+    def GetLblsText(self,interfaceState):
+        return self.lblText[interfaceState]
     
     """
-    GetlblFont
+    GetLblsFont
     """
-    def GetlblFont(self,calibrationState):
-        return self.lblTopFont[calibrationState]
+    def GetLblsFont(self,interfaceState):
+        return self.lblFont[interfaceState]
     
     """
-    GetlblFontColor
+    GetLblsFontColor
     """
-    def GetlblFontColor(self,calibrationState):
-        return self.lblTopFontColor[calibrationState]
-    
-    
-    """
-    GetlblTopXPos
-    """
-    def GetlblTopXPos(self,calibrationState):
-        return self.lblTopXPos[calibrationState]
+    def GetLblsFontColor(self,interfaceState):
+        return self.lblFontColor[interfaceState]
     
     """
-    GetlblTopYPos
+    GetLblsXPos
     """
-    def GetlblTopYPos(self,calibrationState):
-        return self.lblTopYPos[calibrationState]
+    def GetLblsXPos(self,interfaceState):
+        return self.lblXPos[interfaceState]
+    
+    """
+    GetLblsYPos
+    """
+    def GetLblsYPos(self,interfaceState):
+        return self.lblYPos[interfaceState]
+    
+    """
+    GetTimeLblText
+    """
+    def GetTimeLblText(self,interfaceState):
+        if interfaceState == 0:
+            return self.timeLblText
+    
+    """
+    GetTimeLblFont
+    """
+    def GetTimeLblFont(self,interfaceState):
+        if interfaceState == 0:
+            return self.timeLblFont
+    
+    """
+    GetTimeLblFontColor
+    """
+    def GetTimeLblFontColor(self,interfaceState):
+        if interfaceState == 0:
+            return self.timeLblFontColor
+    
+    """
+    GetTimeLblXPos
+    """
+    def GetTimeLblXPos(self,interfaceState):
+        if interfaceState == 0:
+            return self.timeLblXPos
+    
+    """
+    GetTimeLblYPos
+    """
+    def GetTimeLblYPos(self,interfaceState):
+        if interfaceState == 0:
+            return self.timeLblYPos
+    
+    """
+    GetColorLblText
+    """
+    def GetColorLblText(self,interfaceState):
+        if interfaceState == 3:
+            return self.colorLblText
+    
+    """
+    GetColorLblFont
+    """
+    def GetColorLblFont(self,interfaceState):
+        if interfaceState == 3:
+            return self.colorLblFont
+    
+    """
+    GetColorLblFontColor
+    """
+    def GetColorLblFontColor(self,interfaceState):
+        if interfaceState == 3:
+            return self.colorLblFontColor
+    
+    """
+    GetColorLblXPos
+    """
+    def GetColorLblXPos(self,interfaceState):
+        if interfaceState == 3:
+            return self.colorLblXPos
+    
+    """
+    GetColorLblYPos
+    """
+    def GetColorLblYPos(self,interfaceState):
+        if interfaceState == 3:
+            return self.colorLblYPos
     
     """
     GetImagePath
     """
-    def GetImagePath(self):
-        return self.imagePath
+    def GetImagePath(self,interfaceState):
+        if interfaceState >= len(self.imagePath):
+            return []
+        return self.imagePath[interfaceState]
     
     """
     GetImageX
     """
-    def GetImageX(self):
-        return self.imageX
+    def GetImageX(self,interfaceState):
+        if interfaceState >= len(self.imagePath):
+            return []
+        return self.imageX[interfaceState]
     
     """
     GetImageY
     """
-    def GetImageY(self):
-        return self.imageY
+    def GetImageY(self,interfaceState):
+        if interfaceState >= len(self.imagePath):
+            return []
+        return self.imageY[interfaceState]
     
     """
     GetProgessBar
     """
-    def GetProgessBar(self):
-        return self.progressBar
+    def GetProgessBar(self,interfaceState):
+        if interfaceState == 0:
+            return self.progressBar 
+        else:
+            return
     
     """
     GetPickerX
@@ -344,27 +483,5 @@ class FilamentChangeLoader():
     """
     def GetPickerFont(self):
         return self.pickerFont
-    
-    """
-    GetSelectedLblFont
-    """
-    def GetSelectedLblFont(self):
-        return self.selectedLblFont
-    
-    """
-    GetSelectedLblFontColor
-    """
-    def GetSelectedLblFontColor(self):
-        return self.selectedLblFontColor
-    
-    """
-    GetSelectedLblX
-    """
-    def GetSelectedLblX(self):
-        return self.selectedLblX
-    
-    """
-    GetSelectedLblY
-    """
-    def GetSelectedLblY(self):
-        return self.selectedLblY
+        
+        

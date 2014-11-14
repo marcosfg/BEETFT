@@ -52,7 +52,7 @@ import FilamentChange
 import Settings
 import FileBrowser
 import About
-
+import Printing
 
 os.environ["SDL_FBDEV"] = "/dev/fb1"
 
@@ -66,6 +66,7 @@ class BEETFT_Main():
     State vars
     """
     BEEConnected = False
+    BEEState = "Diconnected"            #["Diconnected","StandBy","Printing"]
     
     """
     vars
@@ -79,7 +80,7 @@ class BEETFT_Main():
     """
     Interfaces
     """
-    currentScreenName = "Printer Info"
+    currentScreenName = None
     currentScreen = None
     printerInfoScreenLoader = None
     jogScreenLoader = None
@@ -88,6 +89,8 @@ class BEETFT_Main():
     settingsScreenLoader = None
     browserScreenLoader = None
     aboutScreenLoader = None
+    
+    printingScreenLoader = None
 
     """*************************************************************************
                                 Init Method 
@@ -98,6 +101,8 @@ class BEETFT_Main():
         
         #Make sure the infinite loop wokrs
         self.done = False
+        
+        self.BEEState = "Disconnected"
         """
         JSON Loading
         """
@@ -122,6 +127,8 @@ class BEETFT_Main():
         self.fileBrowserLoader = self.jsonLoader.GetFileBrowserInterface()
         self.aboutLoader = self.jsonLoader.GetAboutInterface()
         
+        self.printingScreenLoader = self.jsonLoader.GetPrintingInterface()
+        
         """
         Init pygame
         """
@@ -141,6 +148,17 @@ class BEETFT_Main():
             
         waitScreen.KillAll()
         waitScreen = None
+        
+        self.GetBEEStatus() 
+        
+        """
+        Print interface screen
+        """
+        if self.BEEState == "Printing":
+            self.currentScreen = Printing.PrintScreen(self.screen,self.printingScreenLoader,self.BEEDisplay)
+            
+            self.currentScreen.KillAll()
+            self.currentScreen = None
         
         """
         Init Interfaces Screens
@@ -288,6 +306,19 @@ class BEETFT_Main():
         
         # update screen
         pygame.display.update()
+        
+        return
+    
+    """*************************************************************************
+                                GetBEEStatus Method 
+    
+    Gets the printer status
+    *************************************************************************"""  
+    def GetBEEStatus(self):
+        
+        self.BEEState = "Printing"
+        
+        return
 
 if __name__ == '__main__':
     opp = BEETFT_Main()

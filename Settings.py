@@ -42,6 +42,21 @@ import pygbutton
 
 class SettingsScreen():
     
+    screen = None
+    interfaceLoader = None
+    
+    lblFontColor = None
+    lblXPos = None
+    lblYPos = None
+    lblText = None
+    lblFont = None
+    
+    lbl = None
+    
+    buttons = None
+    
+    updateReady = None
+    
     """*************************************************************************
                                 Init Method 
     
@@ -53,6 +68,20 @@ class SettingsScreen():
         """
         print("Loading Settings Screen Components")
         
+        self.screen = screen
+        self.interfaceLoader = interfaceLoader
+        
+        self.updateReady = False
+        
+        self.lblFontColor = self.interfaceLoader.GetLblsFontColor()
+        self.lblXPos = self.interfaceLoader.GetLblsXPos()
+        self.lblYPos = self.interfaceLoader.GetLblsYPos()
+        self.lblText = self.interfaceLoader.GetLblsText()
+        self.lblFont = self.interfaceLoader.GetLblsFont()
+        
+        self.buttons = self.interfaceLoader.GetButtonsList()
+        
+        return
         
 
     """*************************************************************************
@@ -63,7 +92,15 @@ class SettingsScreen():
     def handle_events(self,retVal):
         """handle all events."""
         for event in retVal:
-            pass
+            
+            for btn in self.buttons:
+                if 'click' in btn.handleEvent(event):
+                    btnName = btn._propGetName()
+                    
+                    if btnName == "Update Cura":
+                        print("Updating Cura...")
+                    elif btnName == "Update WiFi":
+                        print("Updating WiFi...")
         
         return
 
@@ -73,7 +110,14 @@ class SettingsScreen():
     Updates screen components
     *************************************************************************"""
     def update(self):
-
+        
+        self.lbls = []
+        for i in range(0,len(self.lblText)):
+            self.lbls.append(self.lblFont[i].render(self.lblText[i], 1, self.lblFontColor[i]))
+        
+        for btn in self.buttons:
+            btn.visible = True
+                
         return
 
     """*************************************************************************
@@ -82,6 +126,12 @@ class SettingsScreen():
     Draws current screen
     *************************************************************************""" 
     def draw(self):
+        
+        for i in range(0,len(self.lblText)):
+            self.screen.blit(self.lbls[i], (self.lblXPos[i],self.lblYPos[i]))
+        
+        for btn in self.buttons:
+            btn.draw(self.screen)
         
         return
     
@@ -101,4 +151,23 @@ class SettingsScreen():
     *************************************************************************""" 
     def KillAll(self):
         
+        return
+    
+    """*************************************************************************
+                                ExitCallBack Method 
+    
+    Tells the main class to load the default interface
+    *************************************************************************""" 
+    def ExitCallBack(self):
+        
+        return False
+    
+    """*************************************************************************
+                                Pull Method 
+    
+    Pull variables
+    *************************************************************************""" 
+    def Pull(self):
+        
+            
         return

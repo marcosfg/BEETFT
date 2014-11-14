@@ -39,21 +39,27 @@ import os
 import sys
 import pygame
 import pygbutton
+import json
 
 class PrinterInfoLoader():
     
+    interfaceJson = None
+    
+    lblJson = None
+    lblValJson = None
+    
     lblFont = None
     lblFontColor = None
+    lblXPos = None
+    lblYPos = None
+    lblText = None
+    
     lblValFont = None
     lblValFontColor = None
-    printerName = None
     
-    lblXPos = 110
-    lblValXPos = 210
-    lblStatusY = 20
-    lblFWY = 50
-    lblSNY = 80
-    lblPN = 110
+    lblValXPos = None
+    lblValFont = None
+    lblValFontColor = None
     
     """*************************************************************************
                                 Init Method 
@@ -62,45 +68,79 @@ class PrinterInfoLoader():
     *************************************************************************"""
     def __init__(self, interfaceJson):
         
-        lblFontType = interfaceJson['lblFontType']
-        lblFontSize = int(interfaceJson['lblSize'])
-        lblFColor = interfaceJson['lblFontColor']
-        lblValFontType = interfaceJson['lblValFontType']
-        lblValFontSize = int(interfaceJson['lblValSize'])
-        lblValFColor = interfaceJson['lblValFontColor']
-        self.printerName = interfaceJson['PrinterName']
-        self.lblXPos = int(interfaceJson['lbl_X'])
-        self.lblValXPos = int(interfaceJson['lblVal_X'])
-        self.lblStatusY = int(interfaceJson['lblStatus_Y'])
-        self.lblFWY = int(interfaceJson['lblFW_Y'])
-        self.lblSNY = int(interfaceJson['lblSN_Y'])
-        self.lblPNY = int(interfaceJson['lblPN_Y'])
+        self.interfaceJson = interfaceJson
         
-        if lblFontType == "Regular":
-            self.lblFont = pygame.font.Font("Fonts/DejaVuSans-Regular.ttf",lblFontSize)
-        elif lblFontType == "Bold":
-            self.lblFont = pygame.font.Font("Fonts/DejaVuSans-Bold.ttf",lblFontSize)
-        elif lblFontType == "Italic":
-            self.lblFont = pygame.font.Font("Fonts/DejaVuSans-Italic.ttf",lblFontSize)
-        elif lblFontType == "Light":
-            self.lblFont = pygame.font.Font("Fonts/DejaVuSans-Light.ttf",lblFontSize)
         
-        splitColor = lblFColor.split(",")
-        self.lblFontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
-            
-        if lblValFontType == "Regular":
-            self.lblValFont = pygame.font.Font("Fonts/DejaVuSans-Regular.ttf",lblValFontSize)
-        elif lblValFontType == "Bold":
-            self.lblValFont = pygame.font.Font("Fonts/DejaVuSans-Bold.ttf",lblValFontSize)
-        elif lblValFontType == "Italic":
-            self.lblValFont = pygame.font.Font("Fonts/DejaVuSans-Italic.ttf",lblValFontSize)
-        elif lblValFontType == "Light":
-            self.lblValFont = pygame.font.Font("Fonts/DejaVuSans-Light.ttf",lblValFontSize)
+        self.lblJson = json.loads(json.dumps(self.interfaceJson['Labels']))
+        self.lblValJson = json.loads(json.dumps(self.interfaceJson['ValuesSettings']))
         
+        """
+        Values Labels Configuration
+        
+        "X":"220",
+                    "FontType":"Bold",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0"
+        """
+        self.lblValXPos = int(self.lblValJson['X'])
+        lblValFontType = self.lblValJson['FontType']
+        lblValFontSize = int(self.lblValJson['FontSize'])
+        self.lblValFont = self.GetFont(lblValFontType,lblValFontSize)
+        lblValFColor = self.lblValJson['FontColor']
         splitColor = lblValFColor.split(",")
         self.lblValFontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
         
+        """
+        Load Labels Configuration
+        """
+        self.lblText = []
+        self.lblXPos = []
+        self.lblYPos = []
+        self.lblFont = []
+        self.lblFontColor = []
+        
+        for lbl in self.lblJson:
+            lblFontType = lbl['FontType']
+            lblFontSize = int(lbl['FontSize'])
+            lblFColor = lbl['FontColor']
+            
+            self.lblXPos.append(int(lbl['X']))
+            self.lblYPos.append(int(lbl['Y']))
+            self.lblText.append(lbl['Text'])
+            
+            font = self.GetFont(lblFontType,lblFontSize)
+            
+            self.lblFont.append(font)
+            
+            splitColor = lblFColor.split(",")
+            fontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
+            self.lblFontColor.append(fontColor)
+        
         return
+    
+    """
+    GetFont
+    """
+    def GetFont(self,fontType,fontSize):
+        font = None
+        if fontType == "Regular":
+            font = pygame.font.Font("Fonts/DejaVuSans-Regular.ttf",fontSize)
+        elif fontType == "Bold":
+            font = pygame.font.Font("Fonts/DejaVuSans-Bold.ttf",fontSize)
+        elif fontType == "Italic":
+            font = pygame.font.Font("Fonts/DejaVuSans-Italic.ttf",fontSize)
+        elif fontType == "Light":
+            font = pygame.font.Font("Fonts/DejaVuSans-Light.ttf",fontSize)
+            
+        return font
+    
+    """
+    GetlblText(self)
+    
+    returns the list with the label text
+    """
+    def GetlblText(self):
+        return self.lblText
     
     """
     GetlblFont
@@ -109,22 +149,11 @@ class PrinterInfoLoader():
         return self.lblFont
     
     """
-    GetlblValFont
-    """
-    def GetlblValFont(self):
-        return self.lblValFont
-    
-    """
     GetlblFontColor
     """
     def GetlblFontColor(self):
         return self.lblFontColor
     
-    """
-    GetlblValFontColor
-    """
-    def GetlblValFontColor(self):
-        return self.lblValFontColor
     
     """
     GetlblXPos
@@ -133,37 +162,26 @@ class PrinterInfoLoader():
         return self.lblXPos
     
     """
+    GetlblYPos
+    """
+    def GetlblYPos(self):
+        return self.lblYPos
+    
+    """
+    GetlblValFont
+    """
+    def GetlblValFont(self):
+        return self.lblValFont
+    
+    """
+    GetlblValFontColor
+    """
+    def GetlblValFontColor(self):
+        return self.lblValFontColor
+    
+    
+    """
     GetlblValXPos
     """
     def GetlblValXPos(self):
         return self.lblValXPos
-    
-    """
-    GetlblStatusY
-    """
-    def GetlblStatusY(self):
-        return self.lblStatusY
-    
-    """
-    GetlblFWY
-    """
-    def GetlblFWY(self):
-        return self.lblFWY
-    
-    """
-    GetlblSNY
-    """
-    def GetlblSNY(self):
-        return self.lblSNY
-    
-    """
-    GetlblPNY
-    """
-    def GetlblPNY(self):
-        return self.lblPNY
-    
-    """
-    GetPrinterName
-    """
-    def GetPrinterName(self):
-        return self.printerName

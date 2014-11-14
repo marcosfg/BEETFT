@@ -1,19 +1,63 @@
 {
     "PrinterInfo":[
         {
-            "lblSize":"10",
-            "lblFontType":"Bold",
-            "lblFontColor":"0,0,0",
-            "lblValSize":"10",
-            "lblValFontType":"Light",
-            "lblValFontColor":"0,0,0",
-            "lblStatus_Y":"20",
-            "lblFW_Y":"50",
-            "lblSN_Y":"80",
-            "lbl_X":"110",
-            "lblVal_X":"220",
-            "PrinterName":"BTF",
-            "lblPN_Y":"110"
+            "ValuesSettings":
+                {
+                    "X":"220",
+                    "FontType":"Light",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0"
+                },
+            "Labels":[
+                {
+                    "Text":"Printer Status:",
+                    "X":"110",
+                    "Y":"20",
+                    "FontType":"Bold",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0"
+                },
+                {
+                    "Text":"Firmware:",
+                    "X":"110",
+                    "Y":"50",
+                    "FontType":"Bold",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0"
+                },
+                {
+                    "Text":"BEEConnect:",
+                    "X":"110",
+                    "Y":"80",
+                    "FontType":"Bold",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0"
+                },
+                {
+                    "Text":"SN:",
+                    "X":"110",
+                    "Y":"110",
+                    "FontType":"Bold",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0"
+                },
+                {
+                    "Text":"Network:",
+                    "X":"110",
+                    "Y":"140",
+                    "FontType":"Bold",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0"
+                },
+                {
+                    "Text":"IP:",
+                    "X":"110",
+                    "Y":"170",
+                    "FontType":"Bold",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0"
+                }
+            ]
         }
     ]
 }

@@ -65,10 +65,10 @@
         <text>GetBEEStatus%28%29%20-%20StandBy%2CPrinting%2C%20Other%0AGetBEEFW%28%29%0AGetBEESN%28%29</text>
       </controlProperties>
     </control>
-    <control controlID="14" controlTypeID="com.balsamiq.mockups::Label" x="563" y="433" w="-1" h="-1" measuredW="87" measuredH="21" zOrder="14" locked="false" isInGroup="-1">
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::Label" x="563" y="433" w="-1" h="-1" measuredW="55" measuredH="21" zOrder="14" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>true</bold>
-        <text>Printer%20Name%3A</text>
+        <text>Network%3A</text>
       </controlProperties>
     </control>
     <control controlID="15" controlTypeID="com.balsamiq.mockups::Label" x="563" y="456" w="-1" h="-1" measuredW="70" measuredH="21" zOrder="15" locked="false" isInGroup="-1">

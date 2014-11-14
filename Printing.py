@@ -41,39 +41,48 @@ import pygame
 import pygbutton
 from time import time
 import ColorCodesLoader
-import ProgressBar
 
-class FilamentChangeScreen():
+class PrintScreen():
     
-    exit = False
-    interfaceState = 0
+    screen = None
+    interfaceLoader = None
+    printing = None
+    exit = None
     
-    lblTopText = None           #list for top label text
-    lblTop = None               #Top label object
-    lblTopFont = None           #Top label font
-    lblTopFontColor = None      #top label color
+    lblFontColor = None
+    lblXPos = None
+    lblYPos = None
+    lblText = None
+    lblFont = None
+    lbl = None
     
-    buttons = None              #list for interface buttons
+    timeLbl = None
+    timeLblFontColor = None
+    timeLblXPos = None
+    timeLblYPos = None
+    timeLblText = None
+    timeLblFont = None
     
-    image = None                #image object for heating screen
+    colorLbl = None
+    colorLblFontColor = None
+    colorLblXPos = None
+    colorLblYPos = None
+    colorLblText = None
+    colorLblFont = None
     
-    targetTemperature = 220     
-    nozzleTemperature = 0
-    pullInterval = 0.1         #pull interval for simulation mode
+    buttons = None
+    
+    interfaceState = None
+    
+    image = None
+    imageX = None
+    imageY = None
+    
+    timeRemaining = None
+    printPercent = None
+    
     nextPullTime = None
-    
-    firstNextReady = False      #true when target temperature is established
-    
-    pickColorRect = None        #Rect for selected color
-    colorCodes = None
-    colorNameList = None
-    colorCodeList = None
-    colorList = None
-    listPosition = 0
-    selectedColoridx = 0
-    
-    selectedColorFont = None
-    selectedColorFontColor = None
+    pullInterval = 1
     
     """
     Progress Bar vars
@@ -82,35 +91,44 @@ class FilamentChangeScreen():
     pBarRect = None
     pBarFill = None
     
+    """
+    Color Picker vars
+    """
+    pickColorRect = None        #Rect for selected color
+    colorCodes = None
+    colorNameList = None
+    colorCodeList = None
+    colorList = None
+    listPosition = 0
+    selectedColoridx = 0
+    
+    
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, screen, interfaceLoader):
-        
-        print("Loading Filament Change Screen Components")
-        
-        self.exit = False
-        self.firstNextReady = False
+    def __init__(self, screen, interfaceLoader, display):
+        """
+        .
+        """
+        print("loading Print Screen")
         
         self.screen = screen
         self.interfaceLoader = interfaceLoader
+        self.printing = True
+        self.exit = False
+        self.interfaceState = 0
+        self.printPercent = float(0)
         
-        self.interfaceState = 0         #reset interface state
+        self.nextPullTime = time()
+        self.Pull()
         
-        """
-        Load lists and settings from interfaceLoader
-        """
-        self.lblTopFont = self.interfaceLoader.GetlblFont(self.interfaceState)
-        self.lblTopFontColor = self.interfaceLoader.GetlblFontColor(self.interfaceState)
-        self.lblTopText = self.interfaceLoader.GetlblText(self.interfaceState)
-        self.buttons = self.interfaceLoader.GetButtonsList(self.interfaceState)
+        self.BEEDisplay = display
         
-        self.progressBar = self.interfaceLoader.GetProgessBar()
-        self.image = pygame.image.load(self.interfaceLoader.GetImagePath())
-        self.selectedColorFont = self.interfaceLoader.GetSelectedLblFont()
-        self.selectedColorFontColor = self.interfaceLoader.GetSelectedLblFontColor()
+        self.updateReady = False
+        
+        self.UpdateVars()
         
         """
         Load Colors
@@ -120,63 +138,92 @@ class FilamentChangeScreen():
         self.colorCodeList = self.colorCodes.GetColorCodeList()
         self.colorList = self.colorCodes.GetColorList()
         
-        #TODO ask the printer current Temperature
-        self.nozzleTemperature = 0
         
-        self.nextPullTime = time() + self.pullInterval
+        self.start()
         
+        return
+    
+    """*************************************************************************
+                                start Method 
+    
+    Infinite Loop while printing state
+    *************************************************************************"""
+    def start(self):
+        
+        while (self.printing) and (not self.exit):
+            # Handle events
+            self.handle_events()
+            
+            # Update buttons visibility, text, graphs etc
+            self.update()
+
+            # Draw everything
+            self.draw()
+            
+            #Pull Variable
+            self.Pull()
+            
+        return
+        
+        return
+    
 
     """*************************************************************************
                                 handle_events Method 
     
     Received the event vector and checks if it has any event from interface items
     *************************************************************************"""
-    def handle_events(self,retVal):
+    def handle_events(self):
+        
+        retVal = pygame.event.get()
         """handle all events."""
         for event in retVal:
-            
+            if event.type == pygame.QUIT:
+                self.exit = True
+                
             if event.type == pygame.MOUSEBUTTONDOWN:
             	self.GetSelectedIdx(event)
-                
+
             for btn in self.buttons:
                 if 'click' in btn.handleEvent(event):
                     btnName = btn._propGetName()
                     
-                    if btnName == "Next":
-                        if self.interfaceState == 0:
-                            self.interfaceState = 1
-                        elif self.interfaceState == 2:
-                            self.interfaceState = 1
-                            #TODO SEND FILAMENT CODE TO PRINTER
-                            self.selectedColoridx = (2+self.listPosition) % len(self.colorList)
-                            print("Selected Filament Code: ", self.colorCodeList[self.selectedColoridx])
-                    elif btnName == "OK":
-                        if self.interfaceState == 1:
-                            self.exit = True
-                    elif btnName == "Pick Color":
-                        self.interfaceState = self.interfaceState + 1
+                    if btnName == "Cancel":
+                        print("\n//TODO: SEND CANCEL PRINT\n")
+                        self.exit = True
+                    elif btnName == "Resume":
+                        self.interfaceState = 0
+                        print("\n//TODO: SEND RESUME PRINT\n")
+                    elif btnName == "Pause":
+                        self.interfaceState = 1
+                        print("\n//TODO: SEND PAUSE PRINT\n")
+                    elif btnName == "ShutDown":
+                        self.interfaceState = 2
+                        print("\n//TODO: SEND SHUTDOWN\n")
+                    elif btnName == "Close":
+                        print("\n//TODO: SEND CLOSE COMMAND\n")
+                        self.exit = True
+                    elif btnName == "Change Filament":
+                        self.interfaceState = 3
+                        print("\n//TODO: VERIFY ReadyToLoad?\n")
                     elif btnName == "Load":
-                        print("Load Filament")
+                        print("\n//TODO: LOAD FILAMENT \n")
                     elif btnName == "Unload":
-                        print("Unload Filament")
+                        print("\n//TODO: UNLOAD FILAMENT \n")
+                    elif btnName == "Color":
+                        self.interfaceState = 4
                     elif btnName == "Up":
                         self.listPosition = self.listPosition - 1
                     elif btnName == "Down":
                         self.listPosition = self.listPosition + 1
-                        
-                    """
-                    Load new buttons and labels from interfaceLoader
-                    """
-                    self.lblTopFont = None
-                    self.lblTopFontColor = None
-                    self.buttons = None
-                    self.lblTopFont = self.interfaceLoader.GetlblFont(self.interfaceState)
-                    self.lblTopFontColor = self.interfaceLoader.GetlblFontColor(self.interfaceState)
-                    self.buttons = self.interfaceLoader.GetButtonsList(self.interfaceState)
-                    self.lblTopText = self.interfaceLoader.GetlblText(self.interfaceState)
-                    
+                    elif btnName == "Next":
+                        self.selectedColoridx = (2+self.listPosition) % len(self.colorList)
+                        self.interfaceState = 3
+                        print("\n//TODO: SEND COLOR CODE: ", self.colorCodeList[self.selectedColoridx],"\n")
+                
+                self.UpdateVars()
+        
         return
-    
 
     """*************************************************************************
                                 update Method 
@@ -185,17 +232,25 @@ class FilamentChangeScreen():
     *************************************************************************"""
     def update(self):
         
-        self.lblTop = self.lblTopFont.render(self.lblTopText, 1, self.lblTopFontColor)
+        #Update Top label
+        self.lbl = self.lblFont.render(self.lblText, 1, self.lblFontColor)
+        
+        #Update Time Label
+        if self.interfaceState == 0:
+            str = self.timeLblText + self.timeRemaining
+            self.timeLbl = self.timeLblFont.render(str, 1, self.timeLblFontColor)
+        #Update Color Label
+        elif self.interfaceState == 3:
+            str = self.colorLblText + self.colorNameList[self.selectedColoridx]
+            self.colorLbl = self.colorLblFont.render(str, 1, self.colorLblFontColor)
+        
         
         for btn in self.buttons:
-            if self.interfaceState == 0:
-                if btn._propGetName() == "Next":
-                    btn.visible = self.firstNextReady
-                else:
-                    btn.visible = True
+            if btn._propGetName() == "Update":
+                btn.visible = self.updateReady
             else:
                 btn.visible = True
-
+        
         return
 
     """*************************************************************************
@@ -203,31 +258,26 @@ class FilamentChangeScreen():
     
     Draws current screen
     *************************************************************************""" 
-    def draw(self):
+    def draw(self):        
+        #clear whole screen
+        self.screen.fill(self.BEEDisplay.GetbgColor())
         
-        self.screen.blit(self.lblTop, (self.interfaceLoader.GetlblTopXPos(self.interfaceState),
-                                            self.interfaceLoader.GetlblTopYPos(self.interfaceState)))
+        #Draw Top label
+        self.screen.blit(self.lbl, (self.lblXPos,self.lblYPos))
         
-        for btn in self.buttons:
-            btn.draw(self.screen)
-        
+        #Draw Time label
         if self.interfaceState == 0:
-            # Draw Image
-            x = self.interfaceLoader.GetImageX()
-            y = self.interfaceLoader.GetImageY()
-            self.screen.blit(self.image,(x,y))
+            self.screen.blit(self.timeLbl, (self.timeLblXPos,self.timeLblYPos))
             
             # Draw Progress Bar
             self.progressBar.DrawRect(self.screen)
-            self.screen.blit(self.progressBar.GetSurface(float(self.nozzleTemperature/self.targetTemperature)),
+            self.screen.blit(self.progressBar.GetSurface(self.printPercent),
                                 self.progressBar.GetPos())
-        elif self.interfaceState == 1:
-            lblCurrentColorText = "Current Color: " + self.colorNameList[self.selectedColoridx]
-            lbl = self.selectedColorFont.render(lblCurrentColorText, 1, self.selectedColorFontColor)
-            self.screen.blit(lbl, (self.interfaceLoader.GetSelectedLblX(),self.interfaceLoader.GetSelectedLblY()))
+        #Draw Time label
+        elif self.interfaceState == 3:
+            self.screen.blit(self.colorLbl, (self.colorLblXPos,self.colorLblYPos))
             
-        elif self.interfaceState == 2:
-            
+        elif self.interfaceState == 4:
             x = self.interfaceLoader.GetPickerX()
             y = self.interfaceLoader.GetPickerY()
             width = self.interfaceLoader.GetPickerWidth()
@@ -261,8 +311,19 @@ class FilamentChangeScreen():
             
             
             self.pickColorRect = pygame.draw.rect(self.screen, pickerColor, (x,y,width,height), 3)
-            
         
+        
+        #Draw Image
+        if (self.interfaceState != 3) and (self.interfaceState != 4):
+            self.screen.blit(self.image,(self.imageX,self.imageY))
+        
+        for btn in self.buttons:
+            btn.draw(self.screen)
+        
+        
+        
+        # update screen
+        pygame.display.update()
         
         return
     
@@ -273,7 +334,7 @@ class FilamentChangeScreen():
     *************************************************************************""" 
     def GetCurrentScreenName(self):
         
-        return "Filament"
+        return "Printing"
     
     """*************************************************************************
                                 KillAll Method 
@@ -282,28 +343,40 @@ class FilamentChangeScreen():
     *************************************************************************""" 
     def KillAll(self):
         
-        #TODO
-        #CANCEL HEATING
-        
+        self.screen = None
+        self.interfaceLoader = None
+        self.printing = None
         self.exit = None
-        self.interfaceState = None
-    
-        self.lblTopText = None
-        self.lblTop = None
-        self.lblTopFont = None
-        self.lblTopFontColor = None
-    
+        self.lblFontColor = None
+        self.lblXPos = None
+        self.lblYPos = None
+        self.lblText = None
+        self.lblFont = None
+        self.lbl = None
+        self.timeLbl = None
+        self.timeLblFontColor = None
+        self.timeLblXPos = None
+        self.timeLblYPos = None
+        self.timeLblText = None
+        self.timeLblFont = None
+        self.colorLbl = None
+        self.colorLblFontColor = None
+        self.colorLblXPos = None
+        self.colorLblYPos = None
+        self.colorLblText = None
+        self.colorLblFont = None
         self.buttons = None
-    
+        self.interfaceState = None
         self.image = None
-    
-        self.targetTemperature = None
-        self.nozzleTemperature = None
-        self.pullInterval = None
+        self.imageX = None
+        self.imageY = None
+        self.timeRemaining = None
+        self.printPercent = None
         self.nextPullTime = None
-    
-        self.firstNextReady = None
-    
+        self.pullInterval = None
+        self.progressBar = None
+        self.pBarRect = None
+        self.pBarFill = None
         self.pickColorRect = None
         self.colorCodes = None
         self.colorNameList = None
@@ -312,13 +385,6 @@ class FilamentChangeScreen():
         self.listPosition = None
         self.selectedColoridx = None
     
-        self.selectedColorFont = None
-        self.selectedColorFontColor = None
-    
-        self.progressBar = None
-        self.pBarRect = None
-        self.pBarFill = None
-        
         return
     
     """*************************************************************************
@@ -328,10 +394,7 @@ class FilamentChangeScreen():
     *************************************************************************""" 
     def ExitCallBack(self):
         
-        #TODO
-        #CANCEL HEATING
-        
-        return self.exit
+        return False
     
     """*************************************************************************
                                 Pull Method 
@@ -343,15 +406,55 @@ class FilamentChangeScreen():
         t = time()
         if t > self.nextPullTime:
             self.nextPullTime = time() + self.pullInterval
-            if self.nozzleTemperature <= self.targetTemperature:
-                self.nozzleTemperature = self.nozzleTemperature + 20
-            else:
-                self.nozzleTemperature = self.targetTemperature
             
-            if self.nozzleTemperature >= self.targetTemperature:
-                self.nozzleTemperature = self.targetTemperature
-                self.firstNextReady = True
+            self.timeRemaining = "4:55:12"
+            
+            if self.interfaceState == 0:
+                self.printPercent = float(self.printPercent + 0.05)
+                if self.printPercent > 1:
+                    self.printPercent = 1
+                    self.printing = False
         
+            
+        return
+    
+    """*************************************************************************
+                                Update Vars Method 
+    
+    Update variables
+    *************************************************************************""" 
+    def UpdateVars(self):
+        
+        self.lblFontColor = self.interfaceLoader.GetLblsFontColor(self.interfaceState)
+        self.lblXPos = self.interfaceLoader.GetLblsXPos(self.interfaceState)
+        self.lblYPos = self.interfaceLoader.GetLblsYPos(self.interfaceState)
+        self.lblText = self.interfaceLoader.GetLblsText(self.interfaceState)
+        self.lblFont = self.interfaceLoader.GetLblsFont(self.interfaceState)
+        
+        self.timeLblFontColor = self.interfaceLoader.GetTimeLblFontColor(self.interfaceState)
+        self.timeLblXPos = self.interfaceLoader.GetTimeLblXPos(self.interfaceState)
+        self.timeLblYPos = self.interfaceLoader.GetTimeLblYPos(self.interfaceState)
+        self.timeLblText = self.interfaceLoader.GetTimeLblText(self.interfaceState)
+        self.timeLblFont = self.interfaceLoader.GetTimeLblFont(self.interfaceState)
+        
+        self.colorLblFontColor = self.interfaceLoader.GetColorLblFontColor(self.interfaceState)
+        self.colorLblXPos = self.interfaceLoader.GetColorLblXPos(self.interfaceState)
+        self.colorLblYPos = self.interfaceLoader.GetColorLblYPos(self.interfaceState)
+        self.colorLblText = self.interfaceLoader.GetColorLblText(self.interfaceState)
+        self.colorLblFont = self.interfaceLoader.GetColorLblFont(self.interfaceState)
+        
+        self.buttons = self.interfaceLoader.GetButtonsList(self.interfaceState)
+        
+        if (self.interfaceState == 3) or (self.interfaceState == 4):
+            self.image = None
+            self.imageX = None
+            self.imageY = None
+        else:    
+            self.image = pygame.image.load(self.interfaceLoader.GetImagePath(self.interfaceState))
+            self.imageX = self.interfaceLoader.GetImageX(self.interfaceState)
+            self.imageY = self.interfaceLoader.GetImageY(self.interfaceState)
+        
+        self.progressBar = self.interfaceLoader.GetProgessBar(self.interfaceState)
         
         return
     
@@ -362,7 +465,7 @@ class FilamentChangeScreen():
     *************************************************************************""" 
     def GetSelectedIdx(self, event):
         
-        if self.interfaceState ==2:
+        if self.interfaceState ==4:
             pos = pygame.mouse.get_pos()
             posX = pos[0]
             posY = pos[1]

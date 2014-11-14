@@ -11,7 +11,7 @@
                     },
             "Buttons":[
                 {
-                    "ButtonName":"BtnX_Minus",
+                    "ButtonName":"X-",
                     "X":"112",
                     "Y":"92",
                     "Width":"50",
@@ -24,7 +24,7 @@
                     "bgColor":"255,255,255"
                 },
                 {
-                    "ButtonName":"BtnX_Plus",
+                    "ButtonName":"X+",
                     "X":"216",
                     "Y":"92",
                     "Width":"50",
@@ -37,7 +37,7 @@
                     "bgColor":"255,255,255"
                 },
                 {
-                    "ButtonName":"BtnY_Minus",
+                    "ButtonName":"Y-",
                     "X":"174",
                     "Y":"134",
                     "Width":"30",
@@ -50,7 +50,7 @@
                     "bgColor":"255,255,255"
                 },
                 {
-                    "ButtonName":"BtnY_Plus",
+                    "ButtonName":"Y+",
                     "X":"174",
                     "Y":"30",
                     "Width":"30",
@@ -63,7 +63,7 @@
                     "bgColor":"255,255,255"
                 },
                 {
-                    "ButtonName":"BtnZ_Minus",
+                    "ButtonName":"Z-",
                     "X":"278",
                     "Y":"134",
                     "Width":"30",
@@ -76,7 +76,7 @@
                     "bgColor":"255,255,255"
                 },
                 {
-                    "ButtonName":"BtnZ_Plus",
+                    "ButtonName":"Z+",
                     "X":"278",
                     "Y":"30",
                     "Width":"30",
@@ -89,7 +89,7 @@
                     "bgColor":"255,255,255"
                 },
                 {
-                    "ButtonName":"Btn0_1",
+                    "ButtonName":"0.1",
                     "X":"117",
                     "Y":"205",
                     "Width":"50",
@@ -102,7 +102,7 @@
                     "bgColor":"255,255,255"
                 },
                 {
-                    "ButtonName":"Btn1",
+                    "ButtonName":"1",
                     "X":"185",
                     "Y":"205",
                     "Width":"50",
@@ -115,7 +115,7 @@
                     "bgColor":"255,255,255"
                 },
                 {
-                    "ButtonName":"Btn10",
+                    "ButtonName":"10",
                     "X":"253",
                     "Y":"205",
                     "Width":"50",
@@ -128,7 +128,7 @@
                     "bgColor":"255,255,255"
                 },
                 {
-                    "ButtonName":"BtnHomeXY",
+                    "ButtonName":"HomeXY",
                     "X":"174",
                     "Y":"92",
                     "Width":"30",
@@ -140,7 +140,7 @@
                     "HighlightedPath":"Images/Home.png"
                 },
                 {
-                    "ButtonName":"BtnHomeZ",
+                    "ButtonName":"HomeZ",
                     "X":"278",
                     "Y":"92",
                     "Width":"30",

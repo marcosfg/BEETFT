@@ -178,5 +178,13 @@
         <text>Color</text>
       </controlProperties>
     </control>
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::Label" x="422" y="955" w="120" h="-1" measuredW="107" measuredH="20" zOrder="39" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <color>2848996</color>
+        <size>12</size>
+        <text>Current%20color%3A%20Black</text>
+      </controlProperties>
+    </control>
   </controls>
 </mockup>

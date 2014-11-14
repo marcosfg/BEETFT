@@ -1,6 +1,7 @@
 {
     "leftMenu":[
         {
+            "ButtonName":"Printer Info",
             "Title":"Printer Info",
             "Pos":"10,8",
             "Size":"80x25",
@@ -11,6 +12,7 @@
             "fType":"Regular"
         },
         {
+            "ButtonName":"Jog",
             "Title":"Jog",
             "Pos":"10,41",
             "Size":"80x25",
@@ -21,6 +23,7 @@
             "fType":"Regular"
         },
         {
+            "ButtonName":"Calibration",
             "Title":"Calibration",
             "Pos":"10,74",
             "Size":"80x25",
@@ -31,6 +34,7 @@
             "fType":"Regular"
         },
         {
+            "ButtonName":"Filament",
             "Title":"Filament",
             "Pos":"10,107",
             "Size":"80x25",
@@ -41,6 +45,7 @@
             "fType":"Regular"
         },
         {
+            "ButtonName":"Settings",
             "Title":"Settings",
             "Pos":"10,140",
             "Size":"80x25",
@@ -51,6 +56,7 @@
             "fType":"Regular"
         },
         {
+            "ButtonName":"Browser",
             "Title":"Browser",
             "Pos":"10,173",
             "Size":"80x25",
@@ -61,6 +67,7 @@
             "fType":"Regular"
         },
         {
+            "ButtonName":"About",
             "Title":"About",
             "Pos":"10,206",
             "Size":"80x25",

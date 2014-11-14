@@ -98,11 +98,12 @@ class JogLoader():
                 fColor = btn['FontColor'].split(",")
                 fType = btn['FontType']
                 fSize = int(btn['FontSize'])
+                btnName = btn['ButtonName']
                 
                 jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,
                                                 int(bgColor[0]),int(bgColor[2]),int(bgColor[2]),
                                                 int(fColor[0]),int(fColor[2]),int(fColor[2]),
-                                                fType,fSize)
+                                                fType,fSize, None, None, None, btnName)
                 newBtn = jogBtn.GetTextButton()
                 newBtn._propSetName(btnTitle)
                 self.interfaceButtons.append(newBtn)
@@ -111,11 +112,13 @@ class JogLoader():
                 normalPath = btn['NormalPath']
                 downPath = btn['DownPath']
                 highlightedPath = btn['HighlightedPath']
+                btnName = btn['ButtonName']
                 
-                jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,
+                jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,None,
                                                 None,None,None,None,None,None,
                                                 None,None,
-                                                normalPath,downPath,highlightedPath)
+                                                normalPath,downPath,highlightedPath,
+                                                btnName)
                 newBtn = jogBtn.GetImageButton()
                 newBtn._propSetName(btnTitle)
                 self.interfaceButtons.append(newBtn)

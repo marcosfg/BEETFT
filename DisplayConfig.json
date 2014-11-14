@@ -7,7 +7,7 @@
             "SplitLinePos":"100",
             "SplitLineColor":"0,0,0",
             "SplitLineThickness":"3",
-            "DefaultScreen":"FilamentChange"
+            "DefaultScreen":"Settings"
         }
     ]
 }

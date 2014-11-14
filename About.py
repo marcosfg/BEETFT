@@ -42,6 +42,21 @@ import pygbutton
 
 class AboutScreen():
     
+    screen = None
+    interfaceLoader = None
+    
+    lblFontColor = None
+    lblXPos = None
+    lblYPos = None
+    lblText = None
+    lblFont = None
+    
+    lbl = None
+    
+    buttons = None
+    
+    updateReady = None
+    
     """*************************************************************************
                                 Init Method 
     
@@ -53,6 +68,20 @@ class AboutScreen():
         """
         print("Loading About Screen Components")
         
+        self.screen = screen
+        self.interfaceLoader = interfaceLoader
+        
+        self.updateReady = False
+        
+        self.lblFontColor = self.interfaceLoader.GetLblsFontColor()
+        self.lblXPos = self.interfaceLoader.GetLblsXPos()
+        self.lblYPos = self.interfaceLoader.GetLblsYPos()
+        self.lblText = self.interfaceLoader.GetLblsText()
+        self.lblFont = self.interfaceLoader.GetLblsFont()
+        
+        self.buttons = self.interfaceLoader.GetButtonsList()
+        
+        return
         
 
     """*************************************************************************
@@ -63,7 +92,15 @@ class AboutScreen():
     def handle_events(self,retVal):
         """handle all events."""
         for event in retVal:
-            pass
+            
+            for btn in self.buttons:
+                if 'click' in btn.handleEvent(event):
+                    btnName = btn._propGetName()
+                    
+                    if btnName == "Check For Updates":
+                        self.updateReady = True
+                    elif btnName == "Update":
+                        print("Updating...")
         
         return
 
@@ -73,7 +110,17 @@ class AboutScreen():
     Updates screen components
     *************************************************************************"""
     def update(self):
-
+        
+        self.lbls = []
+        for i in range(0,len(self.lblText)):
+            self.lbls.append(self.lblFont[i].render(self.lblText[i], 1, self.lblFontColor[i]))
+        
+        for btn in self.buttons:
+            if btn._propGetName() == "Update":
+                btn.visible = self.updateReady
+            else:
+                btn.visible = True
+        
         return
 
     """*************************************************************************
@@ -82,7 +129,13 @@ class AboutScreen():
     Draws current screen
     *************************************************************************""" 
     def draw(self):
+            
+        for i in range(0,len(self.lblText)):
+            self.screen.blit(self.lbls[i], (self.lblXPos[i],self.lblYPos[i]))
         
+        for btn in self.buttons:
+            btn.draw(self.screen)
+            
         return
     
     """*************************************************************************
@@ -101,4 +154,38 @@ class AboutScreen():
     *************************************************************************""" 
     def KillAll(self):
         
+        self.screen = None
+        self.interfaceLoader = None
+
+        self.lblFontColor = None
+        self.lblXPos = None
+        self.lblYPos = None
+        self.lblText = None
+        self.lblFont = None
+
+        self.lbl = None
+
+        self.buttons = None
+
+        self.updateReady = None
+    
+        return
+    
+    """*************************************************************************
+                                ExitCallBack Method 
+    
+    Tells the main class to load the default interface
+    *************************************************************************""" 
+    def ExitCallBack(self):
+        
+        return False
+    
+    """*************************************************************************
+                                Pull Method 
+    
+    Pull variables
+    *************************************************************************""" 
+    def Pull(self):
+        
+            
         return
