@@ -113,64 +113,69 @@
         <text>Resume</text>
       </controlProperties>
     </control>
-    <control controlID="26" controlTypeID="com.balsamiq.mockups::Button" x="332" y="886" w="122" h="55" measuredW="52" measuredH="27" zOrder="26" locked="false" isInGroup="-1">
+    <control controlID="26" controlTypeID="com.balsamiq.mockups::Button" x="332" y="886" w="90" h="55" measuredW="52" measuredH="27" zOrder="26" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Load</text>
       </controlProperties>
     </control>
-    <control controlID="27" controlTypeID="com.balsamiq.mockups::Button" x="490" y="886" w="122" h="55" measuredW="63" measuredH="27" zOrder="27" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Unload</text>
-      </controlProperties>
-    </control>
-    <control controlID="28" controlTypeID="com.balsamiq.mockups::StickyNote" x="181" y="852" w="-1" h="-1" measuredW="109" measuredH="123" zOrder="28" locked="false" isInGroup="-1">
+    <control controlID="28" controlTypeID="com.balsamiq.mockups::StickyNote" x="181" y="852" w="-1" h="-1" measuredW="109" measuredH="123" zOrder="27" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Op%E7%E3o%20para%20o%20evento%20de%20Change%20Filament</text>
       </controlProperties>
     </control>
-    <control controlID="29" controlTypeID="com.balsamiq.mockups::StickyNote" x="173" y="549" w="-1" h="-1" measuredW="109" measuredH="123" zOrder="29" locked="false" isInGroup="-1">
+    <control controlID="29" controlTypeID="com.balsamiq.mockups::StickyNote" x="173" y="549" w="-1" h="-1" measuredW="109" measuredH="123" zOrder="28" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Chamada%20ao%20painel%20de%20Change%20Filament</text>
       </controlProperties>
     </control>
-    <control controlID="30" controlTypeID="com.balsamiq.mockups::CallOut" x="524" y="421" w="-1" h="-1" measuredW="36" measuredH="43" zOrder="30" locked="false" isInGroup="-1">
+    <control controlID="30" controlTypeID="com.balsamiq.mockups::CallOut" x="524" y="421" w="-1" h="-1" measuredW="36" measuredH="43" zOrder="29" locked="false" isInGroup="-1">
       <controlProperties>
         <text>3</text>
       </controlProperties>
     </control>
-    <control controlID="31" controlTypeID="com.balsamiq.mockups::CallOut" x="332" y="510" w="-1" h="-1" measuredW="38" measuredH="40" zOrder="31" locked="false" isInGroup="-1">
+    <control controlID="31" controlTypeID="com.balsamiq.mockups::CallOut" x="332" y="510" w="-1" h="-1" measuredW="38" measuredH="40" zOrder="30" locked="false" isInGroup="-1">
       <controlProperties>
         <text>2</text>
       </controlProperties>
     </control>
-    <control controlID="32" controlTypeID="com.balsamiq.mockups::CallOut" x="860" y="235" w="-1" h="-1" measuredW="36" measuredH="37" zOrder="32" locked="false" isInGroup="-1">
+    <control controlID="32" controlTypeID="com.balsamiq.mockups::CallOut" x="860" y="235" w="-1" h="-1" measuredW="36" measuredH="37" zOrder="31" locked="false" isInGroup="-1">
       <controlProperties>
         <text>3</text>
       </controlProperties>
     </control>
-    <control controlID="33" controlTypeID="com.balsamiq.mockups::CallOut" x="1020" y="475" w="-1" h="-1" measuredW="39" measuredH="39" zOrder="33" locked="false" isInGroup="-1">
+    <control controlID="33" controlTypeID="com.balsamiq.mockups::CallOut" x="1020" y="475" w="-1" h="-1" measuredW="39" measuredH="39" zOrder="32" locked="false" isInGroup="-1">
       <controlProperties>
         <text>A</text>
       </controlProperties>
     </control>
-    <control controlID="34" controlTypeID="com.balsamiq.mockups::CallOut" x="282" y="196" w="-1" h="-1" measuredW="45" measuredH="40" zOrder="34" locked="false" isInGroup="-1">
+    <control controlID="34" controlTypeID="com.balsamiq.mockups::CallOut" x="282" y="196" w="-1" h="-1" measuredW="45" measuredH="40" zOrder="33" locked="false" isInGroup="-1">
       <controlProperties>
         <text>A</text>
       </controlProperties>
     </control>
-    <control controlID="35" controlTypeID="com.balsamiq.mockups::CallOut" x="1118" y="473" w="-1" h="-1" measuredW="89" measuredH="39" zOrder="35" locked="false" isInGroup="-1">
+    <control controlID="35" controlTypeID="com.balsamiq.mockups::CallOut" x="1118" y="473" w="-1" h="-1" measuredW="89" measuredH="39" zOrder="34" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Main%20Menu</text>
       </controlProperties>
     </control>
-    <control controlID="36" controlTypeID="com.balsamiq.mockups::CallOut" x="243" y="704" w="-1" h="-1" measuredW="89" measuredH="39" zOrder="36" locked="false" isInGroup="-1">
+    <control controlID="36" controlTypeID="com.balsamiq.mockups::CallOut" x="243" y="704" w="-1" h="-1" measuredW="89" measuredH="39" zOrder="35" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Main%20Menu</text>
       </controlProperties>
     </control>
-    <control controlID="37" controlTypeID="com.balsamiq.mockups::StickyNote" x="812" y="605" w="473" h="290" measuredW="109" measuredH="123" zOrder="37" locked="false" isInGroup="-1">
+    <control controlID="37" controlTypeID="com.balsamiq.mockups::StickyNote" x="812" y="605" w="473" h="290" measuredW="109" measuredH="123" zOrder="36" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Transi%E7%F5es%20durante%20eventos%20da%20impress%E3o%3A%0A%20%0A-%20Texto%20atualizado%20para%20%22Processing..%20Please%20wait%22%0A-%20Bot%F5es%20bloqueados</text>
+      </controlProperties>
+    </control>
+    <control controlID="39" controlTypeID="com.balsamiq.mockups::Button" x="432" y="886" w="90" h="55" measuredW="63" measuredH="27" zOrder="37" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Unload</text>
+      </controlProperties>
+    </control>
+    <control controlID="40" controlTypeID="com.balsamiq.mockups::Button" x="533" y="886" w="90" h="55" measuredW="54" measuredH="27" zOrder="38" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Color</text>
       </controlProperties>
     </control>
   </controls>

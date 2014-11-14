@@ -1,4 +1,4 @@
-<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1771" measuredH="735" mockupW="1771" mockupH="618">
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1771" measuredH="863" mockupW="1771" mockupH="746">
   <controls>
     <control controlID="0" controlTypeID="com.balsamiq.mockups::SiteMap" x="0" y="117" w="-1" h="-1" measuredW="1771" measuredH="550" zOrder="0" locked="false" isInGroup="-1">
       <controlProperties>
@@ -33,6 +33,16 @@
     <control controlID="6" controlTypeID="com.balsamiq.mockups::CallOut" x="483" y="554" w="106" h="181" measuredW="387" measuredH="39" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
         <text>GoToHeatingPosition%28%29%20-%20Go%20to%20heating%20position%0AGoToLoadPosition%28%29%20-%20Go%20to%20load/unload%20Position%0ALoadFilament%28%29%20-%20Load%20Filament%20option%20from%20BEESoft%0AUnloadFilament%28%29%20-%20Unload%20Filament%20option%20from%20BEESoft%0ASetColorCode%28int%20colorCode%29%20-%20Set%20filament%20color%20code%0AGetCurrentColorCode%28%29%20-%20Get%20current%20filament%20color%20code%0AGetCurrentTemperature%28%29%20-%20Get%20current%20temeprature%0AHeatNozzle%28%29%20-%20Heat%20nozzle%0AGetTargetTemperature%28%29%20-%20Get%20Setpoint%20Temp%0A%20%0AReadyToLoad%28%29%20-%20returns%20true%20if%20ready%20to%20load/unload%20filament%0ACancelHeating%28%29%20-%20Cancels%20Heating</text>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::CallOut" x="892" y="682" w="106" h="181" measuredW="336" measuredH="40" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>UploadGcode%28gCode%29%20-%20Uploads%20Gcode%20File%20to%20R2C2%0AStartPrint%28%29%20-%20starts%20printing%20uploaded%20gcode%0ACancelPrint%28%29%20-%20cancels%20print</text>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::CallOut" x="1314" y="682" w="337" h="181" measuredW="387" measuredH="39" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>GetTimeRemaining%28%29%20-%20Get%20Time%20Remaining%0APause%28%29%20-%20Pause%20Printing%0ACancelPrint%28%29%20-%20Cancels%20Printig%0AShutdown%28%29%20-%20Shutdown%20printer%20routine%0A%20%0AReadyToLoad%28%29%20-%20returns%20true%20if%20ready%20to%20load/unload%20filament%0A%20%0ALoadFilament%28%29%20-%20Load%20Filament%20option%20from%20BEESoft%0AUnloadFilament%28%29%20-%20Unload%20Filament%20option%20from%20BEESoft%0ASetColorCode%28int%20colorCode%29%20-%20Set%20filament%20color%20code%0AGetCurrentColorCode%28%29%20-%20Get%20current%20filament%20color%20code%0A%20</text>
       </controlProperties>
     </control>
   </controls>

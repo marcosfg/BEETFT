@@ -1,4 +1,4 @@
-<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1431" measuredH="804" mockupW="1324" mockupH="653">
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1162" measuredH="850" mockupW="1100" mockupH="697">
   <controls>
     <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="440" y="153" w="220" h="240" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="-1"/>
     <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="340" y="153" w="100" h="240" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1"/>
@@ -102,9 +102,9 @@
         <text>Main%20Menu</text>
       </controlProperties>
     </control>
-    <control controlID="22" controlTypeID="com.balsamiq.mockups::StickyNote" x="181" y="546" w="112" h="55" measuredW="109" measuredH="123" zOrder="22" locked="false" isInGroup="-1">
+    <control controlID="22" controlTypeID="com.balsamiq.mockups::StickyNote" x="181" y="546" w="135" h="54" measuredW="109" measuredH="123" zOrder="22" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>PRINT</text>
+        <text>PRINT%20or%20SLICE</text>
       </controlProperties>
     </control>
     <control controlID="23" controlTypeID="com.balsamiq.mockups::CallOut" x="885" y="521" w="-1" h="-1" measuredW="89" measuredH="37" zOrder="23" locked="false" isInGroup="-1">
@@ -163,15 +163,21 @@
         <text>Slice</text>
       </controlProperties>
     </control>
-    <control controlID="34" controlTypeID="com.balsamiq.mockups::StickyNote" x="1177" y="151" w="254" h="235" measuredW="109" measuredH="123" zOrder="34" locked="false" isInGroup="-1">
+    <control controlID="34" controlTypeID="com.balsamiq.mockups::StickyNote" x="62" y="615" w="254" h="235" measuredW="109" measuredH="123" zOrder="34" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Ap%F3s%20o%20final%20do%20Slice%2C%20o%20bot%E3o%20para%20PRINT</text>
+        <text>Ap%F3s%20o%20final%20do%20Slice%2C%20o%20bot%E3o%20PRINT%20fica%20vis%EDvel</text>
       </controlProperties>
     </control>
-    <control controlID="35" controlTypeID="com.balsamiq.mockups::Arrow" x="912" y="393" w="21" h="119" measuredW="150" measuredH="100" zOrder="35" locked="false" isInGroup="-1">
+    <control controlID="35" controlTypeID="com.balsamiq.mockups::Arrow" x="617" y="378" w="281" h="143" measuredW="150" measuredH="100" zOrder="35" locked="false" isInGroup="-1">
       <controlProperties>
-        <direction>top</direction>
+        <direction>bottom</direction>
         <text/>
+      </controlProperties>
+    </control>
+    <control controlID="36" controlTypeID="com.balsamiq.mockups::Button" x="469" y="729" w="80" h="25" measuredW="50" measuredH="27" zOrder="36" locked="false" isInGroup="-1">
+      <controlProperties>
+        <state>disabled</state>
+        <text>Print</text>
       </controlProperties>
     </control>
   </controls>
