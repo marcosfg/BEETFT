@@ -40,7 +40,7 @@ import json
 
 class ColorCodes():
     
-    jsonPath = "ColorCodes.json"
+    jsonPath = "/home/pi/BEETFT/ColorCodes.json"
     
     colors = None
     

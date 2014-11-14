@@ -55,17 +55,17 @@ class jsonLoader():
     Json vars
     """
     #jsonPath = "BEETFTConfig.json"
-    displayJsonPath = "DisplayConfig.json"
-    leftMenuJsonPath = "LeftMenuButtonsConfiguration.json"
-    printerInfoJsonPath = "PrinterInfoConfiguration.json"
-    jogJsonPath = "JogConfiguration.json"
-    calibrationJsonPath = "CalibrationConfiguration.json"
-    filamentChangeJsonPath = "FilamentChangeConfiguration.json"
-    settingsJsonPath = "SettingsConfiguration.json"
-    fileBrowserJsonPath = "FileBrowserConfiguration.json"
-    aboutJsonPath = "AboutConfiguration.json"
+    displayJsonPath = "/home/pi/BEETFT/DisplayConfig.json"
+    leftMenuJsonPath = "/home/pi/BEETFT/LeftMenuButtonsConfiguration.json"
+    printerInfoJsonPath = "/home/pi/BEETFT/PrinterInfoConfiguration.json"
+    jogJsonPath = "/home/pi/BEETFT/JogConfiguration.json"
+    calibrationJsonPath = "/home/pi/BEETFT/CalibrationConfiguration.json"
+    filamentChangeJsonPath = "/home/pi/BEETFT/FilamentChangeConfiguration.json"
+    settingsJsonPath = "/home/pi/BEETFT/SettingsConfiguration.json"
+    fileBrowserJsonPath = "/home/pi/BEETFT/FileBrowserConfiguration.json"
+    aboutJsonPath = "/home/pi/BEETFT/AboutConfiguration.json"
     
-    printingJsonPath = "PrintingConfiguration.Json"
+    printingJsonPath = "/home/pi/BEETFT/PrintingConfiguration.Json"
     
     """
     Display Configuration class
