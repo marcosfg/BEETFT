@@ -296,6 +296,8 @@ class BEETFT_Main():
         #clear whole screen
         self.screen.fill(self.BEEDisplay.GetbgColor())
         
+        pygame.mouse.set_visible = False
+        
         #draw split line
         self.BEEDisplay.DrawLine(self.screen)
         
