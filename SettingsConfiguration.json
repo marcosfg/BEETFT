@@ -53,6 +53,19 @@
                     "FontSize":"12",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
+                },
+                {
+                    "ButtonName":"Quit BEETFT",
+                    "X":"110",
+                    "Y":"200",
+                    "Width":"150",
+                    "Height":"25",
+                    "ButtonType":"Text",
+                    "Title":"Quit BEETFT",
+                    "FontType":"Regular",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0",
+                    "bgColor":"255,255,255"
                 }
             ]
         }

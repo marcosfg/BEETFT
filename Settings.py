@@ -104,6 +104,8 @@ class SettingsScreen():
                         print("Updating WiFi...")
                     elif btnName == "Screen Calibration":
                         os.system("sudo TSLIB_FBDEVICE=/dev/fb1 TSLIB_TSDEVICE=/dev/input/touchscreen ts_calibrate")
+                    elif btnName == "Quit BEETFT":
+                        pygame.quit()
         
         return
 
