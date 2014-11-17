@@ -37,20 +37,19 @@ __license__ = "MIT"
 
 
 import json
+
+import AboutLoader
 import BEETFTDisplay
 import BEETFT_Button
-import PrinterInfoLoader
-import JogLoader
 import CalibrationLoader
 import FilamentChangeLoader
-import SettingsLoader
 import FileBrowserLoader
-import AboutLoader
-
-import PrintingLoader
-
-import os
 import FileFinder
+import JogLoader
+import PrinterInfoLoader
+import PrintingLoader
+import SettingsLoader
+import LeftMenuLoader
 
 class jsonLoader():
     
@@ -58,19 +57,6 @@ class jsonLoader():
     Json vars
     """
     #jsonPath = "BEETFTConfig.json"
-    """
-    displayJsonPath = "/home/pi/BEETFT/DisplayConfig.json"
-    leftMenuJsonPath = "/home/pi/BEETFT/LeftMenuButtonsConfiguration.json"
-    printerInfoJsonPath = "/home/pi/BEETFT/PrinterInfoConfiguration.json"
-    jogJsonPath = "/home/pi/BEETFT/JogConfiguration.json"
-    calibrationJsonPath = "/home/pi/BEETFT/CalibrationConfiguration.json"
-    filamentChangeJsonPath = "/home/pi/BEETFT/FilamentChangeConfiguration.json"
-    settingsJsonPath = "/home/pi/BEETFT/SettingsConfiguration.json"
-    fileBrowserJsonPath = "/home/pi/BEETFT/FileBrowserConfiguration.json"
-    aboutJsonPath = "/home/pi/BEETFT/AboutConfiguration.json"
-    
-    printingJsonPath = "/home/pi/BEETFT/PrintingConfiguration.json"
-    """
     
     displayJsonPath = "DisplayConfig.json"
     leftMenuJsonPath = "LeftMenuButtonsConfiguration.json"
@@ -97,6 +83,7 @@ class jsonLoader():
     leftMenu = []
     leftMenuButtons = []
     defaultScreen = ""
+    leftMenuLoader = None
     
     """
     Interface Configuration
@@ -144,43 +131,7 @@ class jsonLoader():
         """
         f = open(ff.GetAbsPath(self.leftMenuJsonPath),'r')                          #load json as text file
         menuData = json.load(f)                                     #parse the json file
-        self.leftMenu = menuData.get('leftMenu')                    #get the leftPanel list from json file
-        for btn in self.leftMenu:
-            btnJson = json.loads(json.dumps(btn))
-            title = btnJson['Title']
-            btnName = btn['ButtonName']
-            pos = btnJson['Pos']
-            splitPos = pos.split(",")
-            x = int(splitPos[0])
-            y = int(splitPos[1])
-            
-            size = btnJson['Size']
-            splitSize = size.split("x")
-            width = int(splitSize[0])
-            height = int(splitSize[1])
-            
-            #btnType = btnJson['ButtonType']
-            
-            bgColor = btnJson['bgColor']
-            splitBGColor = bgColor.split(",")
-            bgR = int(splitBGColor[0])
-            bgG = int(splitBGColor[1])
-            bgB = int(splitBGColor[2])
-            
-            fColor = btnJson['fontColor']
-            splitFColor = fColor.split(",")
-            fR = int(splitFColor[0])
-            fG = int(splitFColor[1])
-            fB = int(splitFColor[2])
-            
-            fType = btnJson['fType']
-            fSize = int(btnJson['fSize'])
-            
-            beeBtn = BEETFT_Button.Button(x,y,width,height,title,bgR,bgG,bgB,fR,fG,fB,fType,fSize,None,None,None,btnName)
-            newBtn = beeBtn.GetTextButton()
-            newBtn._propSetName(title)
-            self.leftMenuButtons.append(newBtn)
-        
+        self.leftMenuLoader = LeftMenuLoader.LeftMenuLoader(menuData)
         f.close()                                                   #close the file
             
         """
@@ -264,6 +215,15 @@ class jsonLoader():
         f.close()                                                   #close the file
         
         return
+    
+    """
+    GetLeftMenuLoader(self)
+    
+    returns Left Menu Loader Class
+    """
+    def GetLeftMenuLoader(self):
+        
+        return self.leftMenuLoader
     
     """
     GetPrinterInfoInterface(self)

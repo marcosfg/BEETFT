@@ -36,23 +36,19 @@ __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
 import os
-import json
-from pprint import pprint
-from subprocess import call
-import BEETFTJsonLoader
-import WaitForConnection
-import pygame
 
-import BEETFTDisplay
-#Screen interfaces imports
-import PrinterInfo
-import Jog
+import About
+import BEETFTJsonLoader
 import Calibration
 import FilamentChange
-import Settings
 import FileBrowser
-import About
+import Jog
+import PrinterInfo
 import Printing
+import Settings
+import WaitForConnection
+import pygame
+import BEETFT_Button
 
 os.environ["SDL_FBDEV"] = "/dev/fb1"
 os.environ["SDL_MOUSEDEV"] = "/dev/input/touchscreen"
@@ -76,8 +72,34 @@ class BEETFT_Main():
     done = False
     jsonLoader = None
     BEEDisplay = None
-    leftMenuButtons = None
     
+    """
+    Left Menu
+    """
+    leftMenuButtons = None
+    interfaceButtons = None
+    
+    leftMenuLoader = None
+    carouselButtons = None
+    visibleButtons = None
+    currentIdx = None
+    carouselItems = None
+    carouselX = None
+    carouselY = None
+    carouselWidth = None
+    carouselHeight = None
+    carouselButtonHeight = None
+    buttonNames = None
+    buttonTitles = None
+    carouselBgR = None
+    carouselBgG = None
+    carouselBgB = None
+    carouselFR = None
+    carouselFG = None
+    carouselFB = None
+    carouselFontType = None
+    carouselFontSize = None
+        
     """
     Interfaces
     """
@@ -115,7 +137,37 @@ class BEETFT_Main():
                 "x", self.jsonLoader.displayObject.displayHeight)
         
         self.BEEDisplay = self.jsonLoader.displayObject
-        self.leftMenuButtons = self.jsonLoader.GetLeftButtonsList()
+        
+        """
+        Left Menu Loader
+        """
+        self.leftMenuLoader = self.jsonLoader.GetLeftMenuLoader()
+        
+        self.carouselButtons = self.leftMenuLoader.GetCarouselButtons()
+        
+        self.currentIdx = 0
+        self.carouselItems = self.leftMenuLoader.GetCarouselItems()
+        self.carouselX = self.leftMenuLoader.GetCarouselX()
+        self.carouselY = self.leftMenuLoader.GetCarouselY()
+        self.carouselWidth = self.leftMenuLoader.GetCarouselWidth()
+        self.carouselHeight = self.leftMenuLoader.GetCarouselHeight()
+        self.carouselButtonHeight = self.leftMenuLoader.GetCarouselButtonHeight()
+        
+        self.buttonNames = self.leftMenuLoader.GetCarouselButtonNames()
+        self.buttonTitles = self.leftMenuLoader.GetCarouselButtonTitles()
+        
+        self.carouselBgR = self.leftMenuLoader.GetBgR()
+        self.carouselBgG = self.leftMenuLoader.GetBgG()
+        self.carouselBgB = self.leftMenuLoader.GetBgB()
+        self.carouselFR = self.leftMenuLoader.GetFR()
+        self.carouselFG = self.leftMenuLoader.GetFG()
+        self.carouselFB = self.leftMenuLoader.GetFB()
+        
+        self.carouselFontType = self.leftMenuLoader.GetCarouselFontType()
+        self.carouselFontSize = self.leftMenuLoader.GetCarouselFontSize()
+        
+        #self.interfaceButtons = self.jsonLoader.GetLeftButtonsList()
+        self.UpdateLeftButtons()
         
         """
         Screen Loaders
@@ -230,6 +282,15 @@ class BEETFT_Main():
                 
             self.currentScreen.handle_events(retVal)
             
+            for btn in self.carouselButtons:
+                if 'click' in btn.handleEvent(event):
+                    btnName = btn._propGetName()
+                    if btnName == "MenuUp":
+                        self.currentIdx = self.currentIdx - 1
+                    elif btnName == "MenuDown":
+                        self.currentIdx = self.currentIdx + 1
+                    self.UpdateLeftButtons()
+            
             setScreen = None
             for btn in self.leftMenuButtons:
                 if 'click' in btn.handleEvent(event):
@@ -282,6 +343,11 @@ class BEETFT_Main():
         for btn in self.jsonLoader.leftMenuButtons:
             btn.visible = True
         
+        #set carouselbuttons visible
+        for btn in self.carouselButtons:
+            btn.visible = True
+            pass
+        
         self.currentScreen.update()
             
         
@@ -301,6 +367,9 @@ class BEETFT_Main():
         #draw split line
         self.BEEDisplay.DrawLine(self.screen)
         
+        for btn in self.carouselButtons:
+            btn.draw(self.screen)
+        
         for btn in self.leftMenuButtons:
             btn.draw(self.screen)
             if btn._propGetName() == self.currentScreen.GetCurrentScreenName():
@@ -311,6 +380,35 @@ class BEETFT_Main():
         
         # update screen
         pygame.display.update()
+        
+        return
+    
+    """*************************************************************************
+                                UpdateLeftButtons Method 
+    
+    Updates Left Menu buttons to show
+    *************************************************************************"""  
+    def UpdateLeftButtons(self):
+        
+        self.leftMenuButtons = []
+        for i in range(0,self.carouselItems):
+            
+            pos = i + self.currentIdx
+            idx = pos % len(self.buttonNames)
+                
+            x = self.carouselX
+            y = self.carouselY + i*self.carouselHeight
+            width = self.carouselWidth
+            height = self.carouselButtonHeight
+            
+            beeBtn = BEETFT_Button.Button(x,y,width,height,
+                                            self.buttonNames[idx],
+                                            self.carouselBgR,self.carouselBgR,self.carouselBgR,
+                                            self.carouselFR,self.carouselFG,self.carouselFB,
+                                            self.carouselFontType,self.carouselFontSize,
+                                            None,None,None,self.buttonTitles[idx])
+            
+            self.leftMenuButtons.append(beeBtn.GetTextButton())
         
         return
     
