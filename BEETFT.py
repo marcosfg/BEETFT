@@ -54,7 +54,7 @@ import FileBrowser
 import About
 import Printing
 
-#os.environ["SDL_FBDEV"] = "/dev/fb1"
+os.environ["SDL_FBDEV"] = "/dev/fb1"
 
 
 """
