@@ -41,6 +41,7 @@ import pygame
 import pygbutton
 import json
 import BEETFT_Button
+import FileFinder
 
 class JogLoader():
     
@@ -72,14 +73,7 @@ class JogLoader():
         self.lblXPos = int(self.lblJson['X'])
         self.lblYPos = int(self.lblJson['Y'])
         
-        if lblFontType == "Regular":
-            self.lblFont = pygame.font.Font("Fonts/DejaVuSans-Regular.ttf",lblFontSize)
-        elif lblFontType == "Bold":
-            self.lblFont = pygame.font.Font("Fonts/DejaVuSans-Bold.ttf",lblFontSize)
-        elif lblFontType == "Italic":
-            self.lblFont = pygame.font.Font("Fonts/DejaVuSans-Italic.ttf",lblFontSize)
-        elif lblFontType == "Light":
-            self.lblFont = pygame.font.Font("Fonts/DejaVuSans-Light.ttf",lblFontSize)
+        self.lblFont = self.GetFont(lblFontType,lblFontSize)
         
         splitColor = lblFColor.split(",")
         self.lblFontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
@@ -124,6 +118,25 @@ class JogLoader():
                 self.interfaceButtons.append(newBtn)
                 
         return
+    
+    """
+    GetFont
+    """
+    def GetFont(self,fontType,fontSize):
+        
+        ff = FileFinder.FileFinder()
+        
+        font = None
+        if fontType == "Regular":
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Regular.ttf"),fontSize)
+        elif fontType == "Bold":
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Bold.ttf"),fontSize)
+        elif fontType == "Italic":
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Italic.ttf"),fontSize)
+        elif fontType == "Light":
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Light.ttf"),fontSize)
+            
+        return font
     
     """
     GetLeftButtonsList(self)

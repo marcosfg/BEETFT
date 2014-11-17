@@ -113,7 +113,7 @@ class CalibrationScreen():
                         self.calibrationState = self.calibrationState + 1
                         if self.calibrationState > 2:
                             self.exit = True
-                            self.calibrationState = 0
+                            self.calibrationState = 2
                         else:
                             self.lblFont = None
                             self.lblFontColor = None

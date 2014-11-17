@@ -56,4 +56,9 @@ class FileFinder():
     *************************************************************************"""
     def GetAbsPath(self, relPath):
         
-        return os.path.dirname(os.path.abspath(relPath)) + "/" + relPath
+        if relPath.find("/") >= 0:
+            splits = relPath.split("/")
+            strDir = os.path.dirname(os.path.abspath(relPath))
+            return strDir + "/" + splits[len(splits)-1]
+        else:
+            return os.path.dirname(os.path.abspath(relPath)) + "/" + relPath

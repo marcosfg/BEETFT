@@ -42,6 +42,7 @@ import pygbutton
 import json
 import BEETFT_Button
 import ProgressBar
+import FileFinder
 
 class PrintingLoader():
     
@@ -288,15 +289,18 @@ class PrintingLoader():
     GetFont
     """
     def GetFont(self,fontType,fontSize):
+        
+        ff = FileFinder.FileFinder()
+        
         font = None
         if fontType == "Regular":
-            font = pygame.font.Font("Fonts/DejaVuSans-Regular.ttf",fontSize)
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Regular.ttf"),fontSize)
         elif fontType == "Bold":
-            font = pygame.font.Font("Fonts/DejaVuSans-Bold.ttf",fontSize)
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Bold.ttf"),fontSize)
         elif fontType == "Italic":
-            font = pygame.font.Font("Fonts/DejaVuSans-Italic.ttf",fontSize)
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Italic.ttf"),fontSize)
         elif fontType == "Light":
-            font = pygame.font.Font("Fonts/DejaVuSans-Light.ttf",fontSize)
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Light.ttf"),fontSize)
             
         return font
     
