@@ -49,12 +49,16 @@ import AboutLoader
 
 import PrintingLoader
 
+import os
+import FileFinder
+
 class jsonLoader():
     
     """
     Json vars
     """
     #jsonPath = "BEETFTConfig.json"
+    """
     displayJsonPath = "/home/pi/BEETFT/DisplayConfig.json"
     leftMenuJsonPath = "/home/pi/BEETFT/LeftMenuButtonsConfiguration.json"
     printerInfoJsonPath = "/home/pi/BEETFT/PrinterInfoConfiguration.json"
@@ -66,6 +70,19 @@ class jsonLoader():
     aboutJsonPath = "/home/pi/BEETFT/AboutConfiguration.json"
     
     printingJsonPath = "/home/pi/BEETFT/PrintingConfiguration.json"
+    """
+    
+    displayJsonPath = "DisplayConfig.json"
+    leftMenuJsonPath = "LeftMenuButtonsConfiguration.json"
+    printerInfoJsonPath = "PrinterInfoConfiguration.json"
+    jogJsonPath = "JogConfiguration.json"
+    calibrationJsonPath = "CalibrationConfiguration.json"
+    filamentChangeJsonPath = "FilamentChangeConfiguration.json"
+    settingsJsonPath = "SettingsConfiguration.json"
+    fileBrowserJsonPath = "FileBrowserConfiguration.json"
+    aboutJsonPath = "AboutConfiguration.json"
+    
+    printingJsonPath = "PrintingConfiguration.json"
     
     """
     Display Configuration class
@@ -100,13 +117,13 @@ class jsonLoader():
     Loads Json file
     *************************************************************************"""
     def __init__(self):
-        
-        
+    
+        ff = FileFinder.FileFinder()
         
         """
         Get Display Configuration
         """
-        f = open(self.displayJsonPath,'r')                      #load json as text file
+        f = open(ff.GetAbsPath(self.displayJsonPath),'r')                      #load json as text file
         displayData = json.load(f)                              #parse the json file
         self.display = displayData.get('display')               #get the display list from json file
         displayJson = json.loads(json.dumps(self.display[0]))
@@ -125,7 +142,7 @@ class jsonLoader():
         """
         Get Left Menu Buttons Configuration
         """
-        f = open(self.leftMenuJsonPath,'r')                          #load json as text file
+        f = open(ff.GetAbsPath(self.leftMenuJsonPath),'r')                          #load json as text file
         menuData = json.load(f)                                     #parse the json file
         self.leftMenu = menuData.get('leftMenu')                    #get the leftPanel list from json file
         for btn in self.leftMenu:
@@ -169,7 +186,7 @@ class jsonLoader():
         """
         Get Printer Info Interface Configuration
         """
-        f = open(self.printerInfoJsonPath,'r')                          #load json as text file
+        f = open(ff.GetAbsPath(self.printerInfoJsonPath),'r')                          #load json as text file
         printerInfoData = json.load(f)                              #parse the json file
         printerInfo = printerInfoData['PrinterInfo']                #Get Printer Info
         printerInfoJson = json.loads(json.dumps(printerInfo[0]))    #Convert text to json
@@ -179,7 +196,7 @@ class jsonLoader():
         """
         Get Jog Interface Configuration
         """
-        f = open(self.jogJsonPath,'r')                          #load json as text file
+        f = open(ff.GetAbsPath(self.jogJsonPath),'r')                          #load json as text file
         jogData = json.load(f)                                     #parse the json file
         jog = jogData['Jog']                #Get Jog configuration text
         jogJson = json.loads(json.dumps(jog[0]))    #Convert text to json
@@ -189,7 +206,7 @@ class jsonLoader():
         """
         Get Calibration Interface Configuration
         """
-        f = open(self.calibrationJsonPath,'r')                          #load json as text file
+        f = open(ff.GetAbsPath(self.calibrationJsonPath),'r')                          #load json as text file
         calibrationData = json.load(f)                                     #parse the json file
         calibration = calibrationData['Calibration']                #Get Calibration configuration text
         calibrationJson = json.loads(json.dumps(calibration[0]))    #Convert text to json
@@ -199,7 +216,7 @@ class jsonLoader():
         """
         Get Filament Change Interface Configuration
         """
-        f = open(self.filamentChangeJsonPath,'r')                          #load json as text file
+        f = open(ff.GetAbsPath(self.filamentChangeJsonPath),'r')                          #load json as text file
         filamentChangeData = json.load(f)                                     #parse the json file
         filamentChange = filamentChangeData['FilamentChange']                #Get Filament Chnage configuration text
         filamentChangeJson = json.loads(json.dumps(filamentChange[0]))    #Convert text to json
@@ -209,7 +226,7 @@ class jsonLoader():
         """
         Get Settings Interface Configuration
         """
-        f = open(self.settingsJsonPath,'r')                            #load json as text file
+        f = open(ff.GetAbsPath(self.settingsJsonPath),'r')                            #load json as text file
         settingsData = json.load(f)                                    #parse the json file
         settings = settingsData['Settings']                                  #Get Settings configuration text
         settingsJson = json.loads(json.dumps(settings[0]))                #Convert text to json
@@ -219,7 +236,7 @@ class jsonLoader():
         """
         Get File Browser Interface Configuration
         """
-        f = open(self.fileBrowserJsonPath,'r')                          #load json as text file
+        f = open(ff.GetAbsPath(self.fileBrowserJsonPath),'r')                          #load json as text file
         fileBrowserData = json.load(f)                                     #parse the json file
         fileBrowser = fileBrowserData['FileBrowser']                #Get File Browser configuration text
         fileBrowserJson = json.loads(json.dumps(fileBrowser[0]))    #Convert text to json
@@ -229,7 +246,7 @@ class jsonLoader():
         """
         Get About Interface Configuration
         """
-        f = open(self.aboutJsonPath,'r')                            #load json as text file
+        f = open(ff.GetAbsPath(self.aboutJsonPath),'r')                            #load json as text file
         aboutData = json.load(f)                                    #parse the json file
         about = aboutData['About']                                  #Get About configuration text
         aboutJson = json.loads(json.dumps(about[0]))                #Convert text to json
@@ -239,7 +256,7 @@ class jsonLoader():
         """
         Get About Interface Configuration
         """
-        f = open(self.printingJsonPath,'r')                            #load json as text file
+        f = open(ff.GetAbsPath(self.printingJsonPath),'r')                            #load json as text file
         printingData = json.load(f)                                    #parse the json file
         printing = printingData['Printing']                                  #Get About configuration text
         printingJson = json.loads(json.dumps(printing[0]))                #Convert text to json

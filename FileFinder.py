@@ -35,64 +35,25 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import pygame
-import json
-import FileFinder
+import os
 
-class ColorCodes():
+class FileFinder():
     
-    jsonPath = "ColorCodes.json"
-    
-    colors = None
-    
-    colorNameList = []
-    colorCodeList = []
-    colorRGBList = []
+    absPath = None
     
     """*************************************************************************
                                 Init Method 
     
-    Loads Json File with color codes and extracts its info
+    
     *************************************************************************"""
-    def __init__(self):
-        
-        ff = FileFinder.FileFinder()
-        
-        f = open(ff.GetAbsPath(self.jsonPath),'r')                     #load json as text file
-        jsonData = json.load(f)                         #parse the json file
-        #self.display = jsonData.get('display')          #get the display list from json file
-        #self.leftMenu = jsonData.get('leftMenu')        #get the leftPanel list from json file
-        self.colors = jsonData.get('ColorCodes')      #get the color codes list from json file
-        f.close()   
-        
-        for code in self.colors:
-            self.colorNameList.append(code['ColorName'])
-            self.colorCodeList.append(code['ColorCode'])
-            
-            rgbColor = code['RGBColor']
-            rgbSplit = rgbColor.split(",")
-            self.colorRGBList.append(pygame.Color(
-                                                int(rgbSplit[0]),
-                                                int(rgbSplit[1]),
-                                                int(rgbSplit[2])))
-            
-        
+    def __init__(self):        
         return
     
-    """
-    GetColorNameList
-    """
-    def GetColorNameList(self):
-        return self.colorNameList
+    """*************************************************************************
+                                GetAbsolutePath Method 
     
-    """
-    GetColorCodeList
-    """
-    def GetColorCodeList(self):
-        return self.colorCodeList
     
-    """
-    GetColorList
-    """
-    def GetColorList(self):
-        return self.colorRGBList
+    *************************************************************************"""
+    def GetAbsPath(self, relPath):
+        
+        return os.path.dirname(os.path.abspath(relPath)) + "/" + relPath
