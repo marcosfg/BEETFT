@@ -25,14 +25,6 @@
                     "FontType":"Bold",
                     "FontSize":"9",
                     "FontColor":"0,0,0"
-                },
-                {
-                    "Text":"Screen Calibration",
-                    "X":"110",
-                    "Y":"190",
-                    "FontType":"Bold",
-                    "FontSize":"9",
-                    "FontColor":"0,0,0"
                 }
             ],
             "Buttons":[
@@ -57,20 +49,6 @@
                     "Height":"25",
                     "ButtonType":"Text",
                     "Title":"Update Cura",
-                    "FontType":"Regular",
-                    "FontSize":"12",
-                    "FontColor":"0,0,0",
-                    "bgColor":"255,255,255"
-                }
-                ,
-                {
-                    "ButtonName":"Calibrate Screen",
-                    "X":"110",
-                    "Y":"210",
-                    "Width":"150",
-                    "Height":"25",
-                    "ButtonType":"Text",
-                    "Title":"Calibrate Screen",
                     "FontType":"Regular",
                     "FontSize":"12",
                     "FontColor":"0,0,0",
