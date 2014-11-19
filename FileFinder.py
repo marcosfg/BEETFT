@@ -56,14 +56,19 @@ class FileFinder():
     *************************************************************************"""
     def GetAbsPath(self, relPath):
         path = ""
-        if relPath.find("/") >= 0:
-            splits = relPath.split("/")
+        if relPath.find("Fonts/") >= 0:
+            
             strDir = os.path.dirname(os.path.abspath(relPath))
+            fontPos = strDir.find("/Fonts")
+            
+            strDir = strDir[:fontPos]
+            
+            print(strDir)
             
             if strDir.find("BEETFT") < 0:
-                strDir = os.path.dirname(os.path.abspath(relPath)) + "/BEETFT/"
+                strDir = strDir+ "/BEETFT/"
             
-            path = strDir + "/" + splits[len(splits)-1]
+            path = strDir + "/" + relPath
             
         else:
             path = os.path.dirname(os.path.abspath(relPath)) + "/" + relPath
@@ -71,6 +76,6 @@ class FileFinder():
             if path.find("BEETFT") < 0:
                 path = os.path.dirname(os.path.abspath(relPath)) + "/BEETFT/" + relPath
         
-        print("Loading File: ",path)
+        #print("Loading File: ",path)
         
         return path
