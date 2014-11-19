@@ -35,12 +35,10 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import os
-import sys
-import pygame
-import pygbutton
 import json
+
 import FileFinder
+import pygame
 
 class PrinterInfoLoader():
     

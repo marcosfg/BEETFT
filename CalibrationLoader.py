@@ -35,13 +35,11 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import os
-import sys
-import pygame
-import pygbutton
 import json
+
 import BEETFT_Button
 import FileFinder
+import pygame
 
 class CalibrationLoader():
     
@@ -71,6 +69,8 @@ class CalibrationLoader():
     Inits current screen components
     *************************************************************************"""
     def __init__(self, interfaceJson):
+        
+        ff = FileFinder.FileFinder()
         
         self.interfaceJson = interfaceJson
         
@@ -126,11 +126,9 @@ class CalibrationLoader():
                     calButtons.append(newBtn)
                 elif btnType == "Img":
                     btnTitle = btn['Title']
-                    ff = FileFinder.FileFinder()
-                
-                    normalPath = ff.GetAbsPath(btn['NormalPath'])
-                    downPath = ff.GetAbsPath(btn['DownPath'])
-                    highlightedPath = ff.GetAbsPath(btn['HighlightedPath'])
+                    normalPath = btn['NormalPath']
+                    downPath = btn['DownPath']
+                    highlightedPath = btn['HighlightedPath']
                     btnName = btn['ButtonName']
                 
                     jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,None,
@@ -148,8 +146,8 @@ class CalibrationLoader():
         """
         Image Files Configuration
         """
-        self.leftImgPath = self.leftImgJson['ImgPath']
-        self.rightImgPath = self.rightImgJson['ImgPath']
+        self.leftImgPath = ff.GetAbsPath(self.leftImgJson['ImgPath'])
+        self.rightImgPath = ff.GetAbsPath(self.rightImgJson['ImgPath'])
         self.leftImgX = int(self.leftImgJson['X'])
         self.leftImgY = int(self.leftImgJson['Y'])
         self.rightImgX = int(self.rightImgJson['X'])

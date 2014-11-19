@@ -35,13 +35,11 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import os
-import sys
-import pygame
-import pygbutton
-import BEETFT_Button
 import json
+
+import BEETFT_Button
 import FileFinder
+import pygame
 
 class FileBrowserLoader():
     
@@ -92,6 +90,8 @@ class FileBrowserLoader():
     Inits current screen components
     *************************************************************************"""
     def __init__(self, interfaceJson):
+        
+        ff = FileFinder.FileFinder()
         
         self.interfaceJson = interfaceJson
         
@@ -182,11 +182,9 @@ class FileBrowserLoader():
                     filButtons.append(newBtn)
                 elif btnType == "Img":
                     btnTitle = btn['Title']
-                    ff = FileFinder.FileFinder()
-                
-                    normalPath = ff.GetAbsPath(btn['NormalPath'])
-                    downPath = ff.GetAbsPath(btn['DownPath'])
-                    highlightedPath = ff.GetAbsPath(btn['HighlightedPath'])
+                    normalPath = btn['NormalPath']
+                    downPath = btn['DownPath']
+                    highlightedPath = btn['HighlightedPath']
                     btnName = btn['ButtonName']
                 
                     jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,None,
@@ -231,8 +229,8 @@ class FileBrowserLoader():
         """
         Image Files Configuration
         """
-        self.slicingImgPath = self.slicingImgJson['ImgPath']
-        self.printImgPath = self.printImgJson['ImgPath']
+        self.slicingImgPath = ff.GetAbsPath(self.slicingImgJson['ImgPath'])
+        self.printImgPath = ff.GetAbsPath(self.printImgJson['ImgPath'])
         self.slicingImgX = int(self.slicingImgJson['X'])
         self.slicingImgY = int(self.slicingImgJson['Y'])
         self.printImgX = int(self.printImgJson['X'])

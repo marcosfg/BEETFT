@@ -35,10 +35,9 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import os
-import sys
+import FileFinder
 import pygame
-import pygbutton
+import WaitForConnectionLoader
 
 class WaitScreen():
     """
@@ -51,6 +50,8 @@ class WaitScreen():
     lblTop = None
     lblBottom = None
     bgImage = None
+    
+    loader = None
     
     """*************************************************************************
                                 Init Method 
@@ -66,26 +67,41 @@ class WaitScreen():
         self.screen = screen
         self.currentScreen = 'WaitConnection'
         
+        self.loader = WaitForConnectionLoader.WaitForConnectionLoader()
+        
+        lblText = self.loader.GetLblsText()
+        lblX = self.loader.GetLblsXPos()
+        lblY = self.loader.GetLblsYPos()
+        lblFont = self.loader.GetLblsFont()
+        lblFontColor = self.loader.GetLblsFontColor()
+        
+        for i in range(0,len(lblText)):
+            lbl = lblFont[i].render(lblText[i],1,lblFontColor[i])
+            self.screen.blit(lbl,(lblX[i],lblY[i]))
+        
+        
+        self.bgImage = pygame.image.load(self.loader.GetImagePath())
+        imgX = self.loader.GetImageX()
+        imgY = self.loader.GetImageY()
+        
+        
         # Start Image
-        self.bgImage = pygame.image.load('Images/beeBWVector.png')
-        
-        
-        
-        #clear whole screen
-        #self.screen.fill( self.color_bg )
+        #self.bgImage = pygame.image.load(imageSurf)
 
         # Draw Image
-        self.screen.blit(self.bgImage,(0,0))
+        self.screen.blit(self.bgImage,(imgX,imgY))
         
+        """
         #draw top label
-        topFont = pygame.font.Font("Fonts/DejaVuSans-Light.ttf",15)
-        self.lblTop = topFont.render("Ups... where's the BEE?", 1, (0, 0, 0))
+        topFont = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Light.ttf"),15)
+        self.lblTop = topFont.render(ff.GetAbsPath("Ups... where's the BEE?"), 1, (0, 0, 0))
         self.screen.blit(self.lblTop, (10, 10))
         
         #draw Bottom label
-        bottomFont = pygame.font.Font("Fonts/DejaVuSans-Light.ttf",10)
-        self.lblBottom = bottomFont.render("...please connect your BTF pritner", 1, (0, 0, 0))
+        bottomFont = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Light.ttf"),10)
+        self.lblBottom = bottomFont.render(ff.GetAbsPath("...please connect your BTF pritner"), 1, (0, 0, 0))
         self.screen.blit(self.lblBottom, (140, 210))
+"""
 
         # update screen
         pygame.display.update()
@@ -124,6 +140,7 @@ class WaitScreen():
         self.bgImage = None
         self.lblTop = None
         self.lblBottom = None
+        self.loader = None
         
         return
 

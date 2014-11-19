@@ -35,13 +35,11 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import os
-import sys
-import pygame
-import pygbutton
 import json
+
 import BEETFT_Button
 import FileFinder
+import pygame
 
 class JogLoader():
     
@@ -103,11 +101,9 @@ class JogLoader():
                 self.interfaceButtons.append(newBtn)
             elif btnType == "Img":
                 btnTitle = btn['Title']
-                ff = FileFinder.FileFinder()
-                
-                normalPath = ff.GetAbsPath(btn['NormalPath'])
-                downPath = ff.GetAbsPath(btn['DownPath'])
-                highlightedPath = ff.GetAbsPath(btn['HighlightedPath'])
+                normalPath = btn['NormalPath']
+                downPath = btn['DownPath']
+                highlightedPath = btn['HighlightedPath']
                 btnName = btn['ButtonName']
                 
                 jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,None,

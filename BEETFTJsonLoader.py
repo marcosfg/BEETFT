@@ -40,16 +40,15 @@ import json
 
 import AboutLoader
 import BEETFTDisplay
-import BEETFT_Button
 import CalibrationLoader
 import FilamentChangeLoader
 import FileBrowserLoader
 import FileFinder
 import JogLoader
+import LeftMenuLoader
 import PrinterInfoLoader
 import PrintingLoader
 import SettingsLoader
-import LeftMenuLoader
 
 class jsonLoader():
     

@@ -35,14 +35,12 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import os
-import sys
-import pygame
-import pygbutton
 import json
+
 import BEETFT_Button
-import ProgressBar
 import FileFinder
+import ProgressBar
+import pygame
 
 class FilamentChangeLoader():
     
@@ -81,6 +79,8 @@ class FilamentChangeLoader():
     Inits current screen components
     *************************************************************************"""
     def __init__(self, interfaceJson):
+        
+        ff = FileFinder.FileFinder()
         
         self.interfaceJson = interfaceJson
         
@@ -140,11 +140,9 @@ class FilamentChangeLoader():
                     filButtons.append(newBtn)
                 elif btnType == "Img":
                     btnTitle = btn['Title']
-                    ff = FileFinder.FileFinder()
-                
-                    normalPath = ff.GetAbsPath(btn['NormalPath'])
-                    downPath = ff.GetAbsPath(btn['DownPath'])
-                    highlightedPath = ff.GetAbsPath(btn['HighlightedPath'])
+                    normalPath = btn['NormalPath']
+                    downPath = btn['DownPath']
+                    highlightedPath = btn['HighlightedPath']
                     btnName = btn['ButtonName']
                 
                     jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,
@@ -162,7 +160,7 @@ class FilamentChangeLoader():
         Load Heating Image Configuration
         """
         imageJson = json.loads(json.dumps(self.interfaceJson['FirstImage']))
-        self.imagePath = imageJson['ImgPath']
+        self.imagePath = ff.GetAbsPath(imageJson['ImgPath'])
         self.imageX = int(imageJson['X'])
         self.imageY = int(imageJson['Y'])
         

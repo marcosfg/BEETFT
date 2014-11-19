@@ -36,10 +36,8 @@ __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
 import os
-import sys
+
 import pygame
-import pygbutton
-import os
 
 class SettingsScreen():
     

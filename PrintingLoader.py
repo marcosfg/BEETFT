@@ -35,14 +35,12 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import os
-import sys
-import pygame
-import pygbutton
 import json
+
 import BEETFT_Button
-import ProgressBar
 import FileFinder
+import ProgressBar
+import pygame
 
 class PrintingLoader():
     
@@ -97,6 +95,8 @@ class PrintingLoader():
     Inits current screen components
     *************************************************************************"""
     def __init__(self, interfaceJson):
+        
+        ff = FileFinder.FileFinder()
         
         self.interfaceJson = interfaceJson
         
@@ -217,11 +217,9 @@ class PrintingLoader():
                     filButtons.append(newBtn)
                 elif btnType == "Img":
                     btnTitle = btn['Title']
-                    ff = FileFinder.FileFinder()
-                
-                    normalPath = ff.GetAbsPath(btn['NormalPath'])
-                    downPath = ff.GetAbsPath(btn['DownPath'])
-                    highlightedPath = ff.GetAbsPath(btn['HighlightedPath'])
+                    normalPath = btn['NormalPath']
+                    downPath = btn['DownPath']
+                    highlightedPath = btn['HighlightedPath']
                     btnName = btn['ButtonName']
                 
                     jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,None,
@@ -241,7 +239,7 @@ class PrintingLoader():
         for img in self.imagesJson:
             imgJson = json.loads(json.dumps(img))
             for img in imgJson:
-                self.imagePath.append(img['ImgPath'])
+                self.imagePath.append(ff.GetAbsPath(img['ImgPath']))
                 self.imageX.append(int(img['X']))
                 self.imageY.append(int(img['Y']))
                 

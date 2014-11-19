@@ -36,6 +36,7 @@ __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
 import os
+import platform
 
 class FileFinder():
     
@@ -61,6 +62,10 @@ class FileFinder():
         else:
             self.absDirPath = self.currentDir + "/"
         
+        pSystem = platform.system()
+        if pSystem == "Darwin":
+            self.absDirPath = "/Users/marcosgomes/NetBeansProjects/BEETFT/src/"
+            
         return
     
     """*************************************************************************

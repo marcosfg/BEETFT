@@ -36,43 +36,53 @@ __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
 import json
-
-import BEETFT_Button
 import FileFinder
 import pygame
 
-class SettingsLoader():
+class WaitForConnectionLoader():
+    
+    jsonPath = "WaitForConnectionConfiguration.json"
     
     interfaceJson = None
+    
     lblsJson = None
-    buttonsJson = None
     lblFontColor = None
     lblXPos = None
     lblYPos = None
     lblText = None
     lblFont = None
     
-    interfaceButtons = None
+    imgJson = None
+    imagePath = None
+    imageX = None
+    imageY = None
     
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, interfaceJson):
+    def __init__(self):
         
-        self.interfaceJson = interfaceJson
+        ff = FileFinder.FileFinder()
+        
+        """
+        Get wait screen Configuration
+        """
+        f = open(ff.GetAbsPath(self.jsonPath),'r')                          #load json as text file
+        self.interfaceJson = json.load(f)                                     #parse the json file
+        
+        self.wait4connectionJson = self.interfaceJson['WaitForConnection'][0]
         
         self.lblsJson = []
-        self.buttonsJson = []
         self.lblFontColor = []
         self.lblXPos = []
         self.lblYPos = []
         self.lblText = []
         self.lblFont = []
         
-        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['Labels'])))
-        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['Buttons'])))
+        self.lblsJson.append(json.loads(json.dumps(self.wait4connectionJson['Labels'])))
+        self.imgJson = json.loads(json.dumps(self.wait4connectionJson['Image']))
         
         """
         Load Labels Configuration
@@ -93,54 +103,21 @@ class SettingsLoader():
                 self.lblFontColor.append(fontColor)
         
         """
-        Load Buttons Configuration
+        Loade Image Configurtation
         """
-        self.interfaceButtons = []
-        for btns in self.buttonsJson:
-            filButtons = []
-            for btn in btns:
-                btnX = int(btn['X'])
-                btnY = int(btn['Y'])
-                btnWidth = int(btn['Width'])
-                btnHeight = int(btn['Height'])
-                btnType = btn['ButtonType']
-                
-            
-                if btnType == "Text":
-                    btnTitle = btn['Title']
-                    bgColor = btn['bgColor'].split(",")
-                    fColor = btn['FontColor'].split(",")
-                    fType = btn['FontType']
-                    fSize = int(btn['FontSize'])
-                    btnName = btn['ButtonName']
-                
-                    jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,
-                                                int(bgColor[0]),int(bgColor[2]),int(bgColor[2]),
-                                                int(fColor[0]),int(fColor[2]),int(fColor[2]),
-                                                fType,fSize,None,None,None,btnName)
-                                                
-                    newBtn = jogBtn.GetTextButton()
-                    newBtn._propSetName(btnTitle)
-                    filButtons.append(newBtn)
-                elif btnType == "Img":
-                    btnTitle = btn['Title']
-                    normalPath = btn['NormalPath']
-                    downPath = btn['DownPath']
-                    highlightedPath = btn['HighlightedPath']
-                    btnName = btn['ButtonName']
-                
-                    jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,None,
-                                                None,None,None,None,None,None,
-                                                None,None,
-                                                normalPath,downPath,highlightedPath,
-                                                btnName)
-                    newBtn = jogBtn.GetImageButton()
-                    newBtn._propSetName(btnTitle)
-                    filButtons.append(newBtn)
+        self.imagePath = ff.GetAbsPath(self.imgJson['ImgPath'])
+        self.imageX = int(self.imgJson['X'])
+        self.imageY = int(self.imgJson['Y'])
         
-            self.interfaceButtons.append(filButtons)
-            
+        f.close()
+        
         return
+    
+    
+    
+    
+    
+    
     
     """
     GetFont
@@ -160,15 +137,6 @@ class SettingsLoader():
             font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Light.ttf"),fontSize)
             
         return font
-    
-    """
-    GetButtonsList(self)
-    
-    returns the list with buttons
-    """
-    def GetButtonsList(self):
-        
-        return self.interfaceButtons[0]
     
     """
     GetLblsText
@@ -199,3 +167,20 @@ class SettingsLoader():
     """
     def GetLblsYPos(self):
         return self.lblYPos
+    
+    """
+    GetImagePath
+    """
+    def GetImagePath(self):
+        return self.imagePath    
+    """
+    GetImageX
+    """
+    def GetImageX(self):
+        return self.imageX
+    
+    """
+    GetImageY
+    """
+    def GetImageY(self):
+        return self.imageY
