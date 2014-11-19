@@ -70,6 +70,18 @@ class FileFinder():
             
             path = strDir + "/" + relPath
             
+        elif relPath.find("Images/") >= 0:
+            strDir = os.path.dirname(os.path.abspath(relPath))
+            fontPos = strDir.find("/Images")
+            
+            strDir = strDir[:fontPos]
+            
+            print(strDir)
+            
+            if strDir.find("BEETFT") < 0:
+                strDir = strDir+ "/BEETFT/"
+            
+            path = strDir + "/" + relPath
         else:
             path = os.path.dirname(os.path.abspath(relPath)) + "/" + relPath
             
