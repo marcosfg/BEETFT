@@ -55,15 +55,17 @@ class FileFinder():
     
     *************************************************************************"""
     def GetAbsPath(self, relPath):
-        
+        path = ""
         if relPath.find("/") >= 0:
             splits = relPath.split("/")
             strDir = os.path.dirname(os.path.abspath(relPath))
-            return strDir + "/" + splits[len(splits)-1]
+            path = strDir + "/" + splits[len(splits)-1]
         else:
             path = os.path.dirname(os.path.abspath(relPath)) + "/" + relPath
             
-            if path.find("BEETFT"):
-                return os.path.dirname(os.path.abspath(relPath)) + "/" + relPath
-            else:
-                return os.path.dirname(os.path.abspath(relPath)) + "/BEETFT/" + relPath
+            if path.find("BEETFT") < 0:
+                path = os.path.dirname(os.path.abspath(relPath)) + "/BEETFT/" + relPath
+        
+        print("Loading File: ",path)
+        
+        return path
