@@ -88,6 +88,6 @@ class FileFinder():
             if path.find("BEETFT") < 0:
                 path = os.path.dirname(os.path.abspath(relPath)) + "/BEETFT/" + relPath
         
-        #print("Loading File: ",path)
+        print("Loading File: ",path)
         
         return path
