@@ -59,7 +59,12 @@ class FileFinder():
         if relPath.find("/") >= 0:
             splits = relPath.split("/")
             strDir = os.path.dirname(os.path.abspath(relPath))
+            
+            if strDir.find("BEETFT") < 0:
+                strDir = os.path.dirname(os.path.abspath(relPath)) + "/BEETFT/"
+            
             path = strDir + "/" + splits[len(splits)-1]
+            
         else:
             path = os.path.dirname(os.path.abspath(relPath)) + "/" + relPath
             
