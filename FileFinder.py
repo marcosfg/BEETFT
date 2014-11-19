@@ -40,13 +40,27 @@ import os
 class FileFinder():
     
     absPath = None
+    currentDir = None
+    absDirPath = None
     
     """*************************************************************************
                                 Init Method 
     
     
     *************************************************************************"""
-    def __init__(self):        
+    def __init__(self):
+        
+        self.currentDir = os.getcwd()
+        
+        dirSplit = self.currentDir.split("/")
+        if dirSplit[len(dirSplit)-1] != "BEETFT":
+            if dirSplit[len(dirSplit)-1] == "src":
+                self.absDirPath = self.currentDir + "/"
+            else:
+                self.absDirPath = self.currentDir + "/BEETFT/"
+        else:
+            self.absDirPath = self.currentDir + "/"
+        
         return
     
     """*************************************************************************
@@ -55,6 +69,7 @@ class FileFinder():
     
     *************************************************************************"""
     def GetAbsPath(self, relPath):
+        """
         path = ""
         if relPath.find("Fonts/") >= 0:
             
@@ -89,5 +104,9 @@ class FileFinder():
                 path = os.path.dirname(os.path.abspath(relPath)) + "/BEETFT/" + relPath
         
         print("Loading File: ",path)
+        
+        return path
+        """
+        path = self.absDirPath + relPath
         
         return path
