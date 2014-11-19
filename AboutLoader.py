@@ -126,9 +126,11 @@ class AboutLoader():
                     filButtons.append(newBtn)
                 elif btnType == "Img":
                     btnTitle = btn['Title']
-                    normalPath = btn['NormalPath']
-                    downPath = btn['DownPath']
-                    highlightedPath = btn['HighlightedPath']
+                    ff = FileFinder.FileFinder()
+
+                    normalPath = ff.GetAbsPath(btn['NormalPath'])
+                    downPath = ff.GetAbsPath(btn['DownPath'])
+                    highlightedPath = ff.GetAbsPath(btn['HighlightedPath'])
                     btnName = btn['ButtonName']
                 
                     jogBtn = BEETFT_Button.Button(btnX,btnY,btnWidth,btnHeight,None,
