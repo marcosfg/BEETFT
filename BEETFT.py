@@ -188,7 +188,7 @@ class BEETFT_Main():
         print("Drawing Interfaces")
         # init pygame and set up screen
         pygame.init()
-        pygame.mouse.set_visible = False
+        pygame.mouse.set_visible(False)
         
         self.screen = self.BEEDisplay.GetBEEScreen()
         self.screen.fill(self.BEEDisplay.GetbgColor())
