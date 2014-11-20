@@ -49,6 +49,8 @@ import Settings
 import WaitForConnection
 import pygame
 import BEETFT_Button
+import BEEConnect
+
 
 os.environ["SDL_FBDEV"] = "/dev/fb1"
 os.environ["SDL_MOUSEDEV"] = "/dev/input/touchscreen"
@@ -58,6 +60,11 @@ os.environ["SDL_MOUSEDRV"] = "TSLIB"
 Main Class Interfaces
 """
 class BEETFT_Main():
+    
+    """
+    BEEConnect vars
+    """
+    conn = None
     
     """
     State vars
@@ -183,12 +190,17 @@ class BEETFT_Main():
         self.printingScreenLoader = self.jsonLoader.GetPrintingInterface()
         
         """
+        Init BEEConnect
+        """
+        self.conn = BEEConnect.Connection()
+        
+        """
         Init pygame
         """
         print("Drawing Interfaces")
         # init pygame and set up screen
         pygame.init()
-        pygame.mouse.set_visible(False)
+        #pygame.mouse.set_visible(False)
         
         self.screen = self.BEEDisplay.GetBEEScreen()
         self.screen.fill(self.BEEDisplay.GetbgColor())
@@ -196,7 +208,7 @@ class BEETFT_Main():
         """
         Wait For Connection
         """
-        waitScreen = WaitForConnection.WaitScreen(self.screen)
+        waitScreen = WaitForConnection.WaitScreen(self.screen,self.conn)
         #If the user closes the windows without a connection
         if not waitScreen.connected:
             self.done = True
@@ -223,7 +235,7 @@ class BEETFT_Main():
         if self.currentScreenName == "PrinterInfo":
             self.currentScreen = PrinterInfo.PrinterInfoScreen(self.screen,self.printerInfoScreenLoader)
         elif self.currentScreenName == "Jog":
-            self.currentScreen = Jog.JogScreen(self.screen,self.jogLoader)
+            self.currentScreen = Jog.JogScreen(self.screen,self.jogLoader,self.conn)
         elif self.currentScreenName == "Calibration":
             self.currentScreen = Calibration.CalibrationScreen(self.screen,self.calibrationLoader)
         elif self.currentScreenName == "FilamentChange":

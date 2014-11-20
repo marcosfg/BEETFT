@@ -52,12 +52,16 @@ class JogScreen():
     
     interfaceLoader = None
     
+    beeConnect = None
+    
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, screen, interfaceLoader):
+    def __init__(self, screen, interfaceLoader, beeConnect):
+        
+        self.beeConnect = beeConnect
         
         self.screen = screen
         self.interfaceLoader = interfaceLoader
@@ -90,6 +94,7 @@ class JogScreen():
                         self.multiplier = btnName
                     elif btnName == "HomeXY":
                         print("G28 X0 Y0")
+                        self.beeConnect.dispatch("G28 X0 Y0")
                     elif btnName == "HomeZ":
                         print("G28 Z0")
                     elif btnName == "X+":
