@@ -1,0 +1,49 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1771" measuredH="863" mockupW="1771" mockupH="746">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::SiteMap" x="0" y="117" w="-1" h="-1" measuredW="1771" measuredH="550" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Start%0A-%20Disconnected%0A-%20Connected%20%0A--%20Menu%0A---%20printer%20Info%0A---%20Jog%0A---%20Calibra%E7%E3o%0A---%20Change%20Filament%0A---%20*configura%E7%E3o%0A----%20web%0A----%20Cura%3F%0A---%20Navega%E7%E3o%20de%20ficheiros%0A----%20Go%20to%20Printing%0A---%20About%20BEETFT%0A----%20Check%20for%20Updates%0A----%20Update%0A--%20Printing%0A---%20Stop%0A----%20Shutdown%0A----%20Pause%0A----%20Resume%0A--%20Other</text>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::CallOut" x="998" y="250" w="257" h="28" measuredW="270" measuredH="39" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>GetBEEStatus%28%29%20-%20StandBy%2CPrinting%2C%20Other</text>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::CallOut" x="934" y="139" w="257" h="28" measuredW="330" measuredH="39" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>BEEConnected%28%29%20-%20returns%20True%20if%20BTF%20is%20connected</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::CallOut" x="120" y="553" w="106" h="181" measuredW="270" measuredH="43" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>GetBEEStatus%28%29%20-%20StandBy%2CPrinting%2C%20Other%0AGetBEE_FW%28%29%20-%20firmware%20version%0AGetBEE_SN%28%29%20-%20serial%20number</text>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::CallOut" x="241" y="553" w="106" h="181" measuredW="283" measuredH="40" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Move%28X%2CY%2CZ%29%20-%20Do%20relative%20move%20by%20X%2CY%2CZ%0AHomeXY%28%29%20-%20Search%20X%20and%20Y%20home%20positions%0AHomeZ%28%29%20-%20Search%20Z%20home%20position</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::CallOut" x="362" y="553" w="106" h="181" measuredW="363" measuredH="37" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Move%28X%2CY%2CZ%29%20-%20Do%20relative%20move%20by%20X%2CY%2CZ%0AGoto1stCalibrationPoint%28%29%20-%20Move%20to%201st%20calobration%20point%0AGoto2ndCalibrationPoint%28%29%20-%20Move%20to%202nd%20calobration%20point%20%0AGoto3rdCalibrationPoint%28%29%20-%20Move%20to%203rd%20calobration%20point%0ASetOffset%28%29%20-%20Set%20offset%20for%20the%20current%20point</text>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::CallOut" x="483" y="554" w="106" h="181" measuredW="387" measuredH="39" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>GoToHeatingPosition%28%29%20-%20Go%20to%20heating%20position%0AGoToLoadPosition%28%29%20-%20Go%20to%20load/unload%20Position%0ALoadFilament%28%29%20-%20Load%20Filament%20option%20from%20BEESoft%0AUnloadFilament%28%29%20-%20Unload%20Filament%20option%20from%20BEESoft%0ASetColorCode%28int%20colorCode%29%20-%20Set%20filament%20color%20code%0AGetCurrentColorCode%28%29%20-%20Get%20current%20filament%20color%20code%0AGetCurrentTemperature%28%29%20-%20Get%20current%20temeprature%0AHeatNozzle%28%29%20-%20Heat%20nozzle%0AGetTargetTemperature%28%29%20-%20Get%20Setpoint%20Temp%0A%20%0AReadyToLoad%28%29%20-%20returns%20true%20if%20ready%20to%20load/unload%20filament%0ACancelHeating%28%29%20-%20Cancels%20Heating</text>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::CallOut" x="892" y="682" w="106" h="181" measuredW="336" measuredH="40" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>UploadGcode%28gCode%29%20-%20Uploads%20Gcode%20File%20to%20R2C2%0AStartPrint%28%29%20-%20starts%20printing%20uploaded%20gcode%0ACancelPrint%28%29%20-%20cancels%20print</text>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::CallOut" x="1314" y="682" w="337" h="181" measuredW="387" measuredH="39" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>GetTimeRemaining%28%29%20-%20Get%20Time%20Remaining%0APause%28%29%20-%20Pause%20Printing%0ACancelPrint%28%29%20-%20Cancels%20Printig%0AShutdown%28%29%20-%20Shutdown%20printer%20routine%0A%20%0A%20%0A%20%0AReadyToLoad%28%29%20-%20returns%20true%20if%20ready%20to%20load/unload%20filament%0A%20%0ALoadFilament%28%29%20-%20Load%20Filament%20option%20from%20BEESoft%0AUnloadFilament%28%29%20-%20Unload%20Filament%20option%20from%20BEESoft%0ASetColorCode%28int%20colorCode%29%20-%20Set%20filament%20color%20code%0AGetCurrentColorCode%28%29%20-%20Get%20current%20filament%20color%20code%0A%20</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

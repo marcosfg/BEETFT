@@ -1,74 +1,81 @@
 {
-    "leftMenuButtons":[
+    "leftMenu":[
         {
             "ButtonName":"Printer Info",
-            "Title":"Printer Info"
+            "Title":"Printer Info",
+            "Pos":"10,8",
+            "Size":"80x25",
+            "ButtonType":"Text",
+            "bgColor":"255,255,255",
+            "fontColor":"0,0,0",
+            "fSize":"10",
+            "fType":"Regular"
         },
         {
             "ButtonName":"Jog",
-            "Title":"Jog"
+            "Title":"Jog",
+            "Pos":"10,41",
+            "Size":"80x25",
+            "ButtonType":"Text",
+            "bgColor":"255,255,255",
+            "fontColor":"0,0,0",
+            "fSize":"10",
+            "fType":"Regular"
         },
         {
             "ButtonName":"Calibration",
-            "Title":"Calibration"
+            "Title":"Calibration",
+            "Pos":"10,74",
+            "Size":"80x25",
+            "ButtonType":"Text",
+            "bgColor":"255,255,255",
+            "fontColor":"0,0,0",
+            "fSize":"10",
+            "fType":"Regular"
         },
         {
             "ButtonName":"Filament",
-            "Title":"Filament"
+            "Title":"Filament",
+            "Pos":"10,107",
+            "Size":"80x25",
+            "ButtonType":"Text",
+            "bgColor":"255,255,255",
+            "fontColor":"0,0,0",
+            "fSize":"10",
+            "fType":"Regular"
         },
         {
             "ButtonName":"Settings",
-            "Title":"Settings"
+            "Title":"Settings",
+            "Pos":"10,140",
+            "Size":"80x25",
+            "ButtonType":"Text",
+            "bgColor":"255,255,255",
+            "fontColor":"0,0,0",
+            "fSize":"10",
+            "fType":"Regular"
         },
         {
             "ButtonName":"Browser",
-            "Title":"Browser"
+            "Title":"Browser",
+            "Pos":"10,173",
+            "Size":"80x25",
+            "ButtonType":"Text",
+            "bgColor":"255,255,255",
+            "fontColor":"0,0,0",
+            "fSize":"10",
+            "fType":"Regular"
         },
         {
             "ButtonName":"About",
-            "Title":"About"
-        }
-    ],
-    "Carousel":[
-        {
-            "Buttons":[
-                {
-                    "ButtonName":"MenuUp",
-                    "X":"0",
-                    "Y":"0",
-                    "Width":"100",
-                    "Height":"40",
-                    "ButtonType":"Img",
-                    "Title":"MenuUp",
-                    "NormalPath":"Images/MenuUp.png",
-                    "DownPath":"Images/InvertedMenuUp.png",
-                    "HighlightedPath":"Images/MenuUp.png"
-                },
-                {
-                    "ButtonName":"MenuDown",
-                    "X":"0",
-                    "Y":"200",
-                    "Width":"100",
-                    "Height":"40",
-                    "ButtonType":"Img",
-                    "Title":"MenuDown",
-                    "NormalPath":"Images/MenuDown.png",
-                    "DownPath":"Images/InvertedMenuDown.png",
-                    "HighlightedPath":"Images/MenuDown.png"
-                }
-            ],
-            "Configuration":{
-                "X":"10",
-                "Y":"44",
-                "Width":"80",
-                "Height":"39",
-                "CarouselItems":"4",
-                "ButtonHeight":"35",
-                "bgColor":"255,255,255",
-                "FontColor":"0,0,0",
-                "FontSize":"10",
-                "FontType":"Regular"
-            }
+            "Title":"About",
+            "Pos":"10,206",
+            "Size":"80x25",
+            "ButtonType":"Text",
+            "bgColor":"255,255,255",
+            "fontColor":"0,0,0",
+            "fSize":"10",
+            "fType":"Regular"
         }
     ]
 }

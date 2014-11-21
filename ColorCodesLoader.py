@@ -37,7 +37,6 @@ __license__ = "MIT"
 
 import pygame
 import json
-import FileFinder
 
 class ColorCodes():
     
@@ -54,11 +53,9 @@ class ColorCodes():
     
     Loads Json File with color codes and extracts its info
     *************************************************************************"""
-    def __init__(self):
+    def __init__(self,):
         
-        ff = FileFinder.FileFinder()
-        
-        f = open(ff.GetAbsPath(self.jsonPath),'r')                     #load json as text file
+        f = open(self.jsonPath,'r')                     #load json as text file
         jsonData = json.load(f)                         #parse the json file
         #self.display = jsonData.get('display')          #get the display list from json file
         #self.leftMenu = jsonData.get('leftMenu')        #get the leftPanel list from json file

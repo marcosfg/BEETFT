@@ -103,8 +103,8 @@
             ],
         "FileFolders":
                 {
-                    "RPI":"",
-                    "USB":""
+                    "RPI":"/Users/marcosgomes/Downloads/",
+                    "USB":"/Users/marcosgomes/Downloads/testeStl/"
                 },
         "FilePicker":
                 {

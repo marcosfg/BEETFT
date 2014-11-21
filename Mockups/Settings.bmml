@@ -1,0 +1,81 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1051" measuredH="487" mockupW="696" mockupH="240">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="455" y="247" w="220" h="240" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="-1"/>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="355" y="247" w="100" h="240" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1"/>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Button" x="364" y="450" w="40" h="30" measuredW="31" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%3C</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Button" x="410" y="450" w="40" h="30" measuredW="32" measuredH="27" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%3E</text>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Button" x="364" y="291" w="80" h="25" measuredW="61" measuredH="27" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Button</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Button" x="364" y="323" w="80" h="25" measuredW="61" measuredH="27" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Button</text>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Button" x="364" y="355" w="80" h="25" measuredW="61" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Button</text>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Button" x="364" y="386" w="80" h="25" measuredW="61" measuredH="27" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Button</text>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::Button" x="364" y="418" w="80" h="25" measuredW="61" measuredH="27" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Button</text>
+      </controlProperties>
+    </control>
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::Label" x="396" y="262" w="-1" h="-1" measuredW="28" measuredH="21" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>1%20/%20N</text>
+      </controlProperties>
+    </control>
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::Label" x="499" y="262" w="133" h="-1" measuredW="51" measuredH="21" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <text>Settings</text>
+      </controlProperties>
+    </control>
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::Button" x="484" y="331" w="163" h="25" measuredW="95" measuredH="27" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Update%20Web</text>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Button" x="484" y="396" w="163" h="25" measuredW="97" measuredH="27" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <state>up</state>
+        <text>Update%20Cura</text>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::Label" x="469" y="309" w="193" h="-1" measuredW="183" measuredH="21" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <text>Insert%20wifi.xml%20in%20the%20flash%20drive</text>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::Label" x="476" y="372" w="193" h="-1" measuredW="189" measuredH="21" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <text>Insert%20cura.xml%20in%20the%20flash%20drive</text>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::StickyNote" x="740" y="255" w="311" h="117" measuredW="109" measuredH="123" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Bot%F5s%20ficam%20dispon%EDveis%20com%20a%20detecc%E7%E3o%20da%20flash%20drive%20e%20dos%20ficheiros%20na%20mesma%3A%0A-%20Individualmente%20ou%20ambos</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

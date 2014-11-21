@@ -35,7 +35,10 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
+import os
+import sys
 import pygame
+import pygbutton
 
 
 
@@ -110,7 +113,7 @@ class CalibrationScreen():
                         self.calibrationState = self.calibrationState + 1
                         if self.calibrationState > 2:
                             self.exit = True
-                            self.calibrationState = 2
+                            self.calibrationState = 0
                         else:
                             self.lblFont = None
                             self.lblFontColor = None

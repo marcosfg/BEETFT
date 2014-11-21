@@ -35,7 +35,11 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
+import os
+import sys
 import pygame
+from turtle import width
+import pygbutton
 
 class ProgressBar():
     
