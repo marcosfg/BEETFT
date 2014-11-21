@@ -100,8 +100,8 @@ class Connection():
 
 
         # Verify that the end points exist
-        #assert self.ep_out is not None
-        #assert self.ep_in is not None
+        assert self.ep_out is not None
+        assert self.ep_in is not None
         
         self.connected = True
         

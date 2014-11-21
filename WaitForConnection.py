@@ -38,7 +38,8 @@ __license__ = "MIT"
 import FileFinder
 import pygame
 import WaitForConnectionLoader
-import BEEConnect
+import BEECommand
+from time import time
 
 class WaitScreen():
     """
@@ -54,30 +55,18 @@ class WaitScreen():
     
     loader = None
     
-    beeConnect = None
+    nextPullTime = None
     
     """*************************************************************************
                                 Init Method 
     
     intis all compoments
     *************************************************************************"""
-    def __init__(self, screen, beeConnect):
+    def __init__(self, screen):
         """
         .
         """
-        self.beeConnect = beeConnect
-        
-        self.connected = self.beeConnect.isConnected()
-        
-        t = self.beeConnect.dispatch("M625\n")
-
-        print(t)
-
-        t = self.beeConnect.dispatch("M630\n")
-
-        print(t)
-
-        t = self.beeConnect.dispatch("G28\n")
+        self.connected = False
         
         print("Printer Connection: ",self.connected)
         
@@ -124,9 +113,18 @@ class WaitScreen():
         # update screen
         pygame.display.update()
         
+        self.nextPullTime = time() + 0.5
+        
         while (not self.connected) and (not self.exit):
             # Handle events
             self.handle_events()
+            
+            t = time()
+            if t > self.nextPullTime:
+                comm =BEECommand.Command()
+                self.connected = comm.isConnected()
+                self.nextPullTime = time() + 0.5
+                print("Wait for connection")
             
         return
     
@@ -159,6 +157,7 @@ class WaitScreen():
         self.lblTop = None
         self.lblBottom = None
         self.loader = None
+        self.nextPullTime = None
         
         return
 

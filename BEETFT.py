@@ -49,7 +49,7 @@ import Settings
 import WaitForConnection
 import pygame
 import BEETFT_Button
-import BEEConnect
+import BEECommand
 
 
 os.environ["SDL_FBDEV"] = "/dev/fb1"
@@ -189,10 +189,7 @@ class BEETFT_Main():
         
         self.printingScreenLoader = self.jsonLoader.GetPrintingInterface()
         
-        """
-        Init BEEConnect
-        """
-        self.conn = BEEConnect.Connection()
+        
         
         """
         Init pygame
@@ -208,13 +205,16 @@ class BEETFT_Main():
         """
         Wait For Connection
         """
-        waitScreen = WaitForConnection.WaitScreen(self.screen,self.conn)
+        waitScreen = WaitForConnection.WaitScreen(self.screen)
         #If the user closes the windows without a connection
         if not waitScreen.connected:
             self.done = True
             
         waitScreen.KillAll()
         waitScreen = None
+        
+        comm =BEECommand.Command()
+        comm.startPrinter()
         
         self.GetBEEStatus() 
         
