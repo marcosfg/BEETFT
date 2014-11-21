@@ -35,12 +35,11 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import os
-import sys
-import pygame
-import pygbutton
-import BEETFT_Button
 import json
+
+import BEETFT_Button
+import FileFinder
+import pygame
 
 class FileBrowserLoader():
     
@@ -91,6 +90,8 @@ class FileBrowserLoader():
     Inits current screen components
     *************************************************************************"""
     def __init__(self, interfaceJson):
+        
+        ff = FileFinder.FileFinder()
         
         self.interfaceJson = interfaceJson
         
@@ -228,8 +229,8 @@ class FileBrowserLoader():
         """
         Image Files Configuration
         """
-        self.slicingImgPath = self.slicingImgJson['ImgPath']
-        self.printImgPath = self.printImgJson['ImgPath']
+        self.slicingImgPath = ff.GetAbsPath(self.slicingImgJson['ImgPath'])
+        self.printImgPath = ff.GetAbsPath(self.printImgJson['ImgPath'])
         self.slicingImgX = int(self.slicingImgJson['X'])
         self.slicingImgY = int(self.slicingImgJson['Y'])
         self.printImgX = int(self.printImgJson['X'])
@@ -241,15 +242,18 @@ class FileBrowserLoader():
     GetFont
     """
     def GetFont(self,fontType,fontSize):
+        
+        ff = FileFinder.FileFinder()
+        
         font = None
         if fontType == "Regular":
-            font = pygame.font.Font("Fonts/DejaVuSans-Regular.ttf",fontSize)
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Regular.ttf"),fontSize)
         elif fontType == "Bold":
-            font = pygame.font.Font("Fonts/DejaVuSans-Bold.ttf",fontSize)
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Bold.ttf"),fontSize)
         elif fontType == "Italic":
-            font = pygame.font.Font("Fonts/DejaVuSans-Italic.ttf",fontSize)
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Italic.ttf"),fontSize)
         elif fontType == "Light":
-            font = pygame.font.Font("Fonts/DejaVuSans-Light.ttf",fontSize)
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Light.ttf"),fontSize)
             
         return font
     

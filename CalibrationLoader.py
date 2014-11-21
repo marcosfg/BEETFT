@@ -35,12 +35,11 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import os
-import sys
-import pygame
-import pygbutton
 import json
+
 import BEETFT_Button
+import FileFinder
+import pygame
 
 class CalibrationLoader():
     
@@ -71,6 +70,8 @@ class CalibrationLoader():
     *************************************************************************"""
     def __init__(self, interfaceJson):
         
+        ff = FileFinder.FileFinder()
+        
         self.interfaceJson = interfaceJson
         
         self.lblJson.append(json.loads(json.dumps(self.interfaceJson['FirstLabel'])))
@@ -92,18 +93,7 @@ class CalibrationLoader():
             self.lblXPos.append(int(lbl['X']))
             self.lblYPos.append(int(lbl['Y']))
             
-            font = None
-            
-            if lblFontType == "Regular":
-                font = pygame.font.Font("Fonts/DejaVuSans-Regular.ttf",lblFontSize)
-            elif lblFontType == "Bold":
-                font = pygame.font.Font("Fonts/DejaVuSans-Bold.ttf",lblFontSize)
-            elif lblFontType == "Italic":
-                font = pygame.font.Font("Fonts/DejaVuSans-Italic.ttf",lblFontSize)
-            elif lblFontType == "Light":
-                font = pygame.font.Font("Fonts/DejaVuSans-Light.ttf",lblFontSize)
-            
-            self.lblFont.append(font)
+            self.lblFont.append(self.GetFont(lblFontType,lblFontSize))
             
             splitColor = lblFColor.split(",")
             fontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
@@ -156,14 +146,33 @@ class CalibrationLoader():
         """
         Image Files Configuration
         """
-        self.leftImgPath = self.leftImgJson['ImgPath']
-        self.rightImgPath = self.rightImgJson['ImgPath']
+        self.leftImgPath = ff.GetAbsPath(self.leftImgJson['ImgPath'])
+        self.rightImgPath = ff.GetAbsPath(self.rightImgJson['ImgPath'])
         self.leftImgX = int(self.leftImgJson['X'])
         self.leftImgY = int(self.leftImgJson['Y'])
         self.rightImgX = int(self.rightImgJson['X'])
         self.rightImgY = int(self.rightImgJson['Y'])
             
         return
+    
+    """
+    GetFont
+    """
+    def GetFont(self,fontType,fontSize):
+        
+        ff = FileFinder.FileFinder()
+        
+        font = None
+        if fontType == "Regular":
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Regular.ttf"),fontSize)
+        elif fontType == "Bold":
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Bold.ttf"),fontSize)
+        elif fontType == "Italic":
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Italic.ttf"),fontSize)
+        elif fontType == "Light":
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Light.ttf"),fontSize)
+            
+        return font
     
     """
     GetLeftButtonsList(self)

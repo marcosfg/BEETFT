@@ -36,11 +36,10 @@ __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
 import os
-import sys
-import pygame
-import pygbutton
-import os
 from time import time
+
+import FileFinder
+import pygame
 
 class FileBrowserScreen():
     
@@ -441,7 +440,9 @@ class FileBrowserScreen():
         
         self.fileList = []
         
-        for file in os.listdir(directory):
+        ff = FileFinder.FileFinder()
+        
+        for file in os.listdir(ff.GetAbsPath(directory)):
             if file.endswith(".stl") or file.endswith(".gcode"):                
                 self.fileList.append(file)
                 #print(file)

@@ -35,13 +35,12 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import os
-import sys
-import pygame
-import pygbutton
 import json
+
 import BEETFT_Button
+import FileFinder
 import ProgressBar
+import pygame
 
 class FilamentChangeLoader():
     
@@ -80,6 +79,8 @@ class FilamentChangeLoader():
     Inits current screen components
     *************************************************************************"""
     def __init__(self, interfaceJson):
+        
+        ff = FileFinder.FileFinder()
         
         self.interfaceJson = interfaceJson
         
@@ -159,7 +160,7 @@ class FilamentChangeLoader():
         Load Heating Image Configuration
         """
         imageJson = json.loads(json.dumps(self.interfaceJson['FirstImage']))
-        self.imagePath = imageJson['ImgPath']
+        self.imagePath = ff.GetAbsPath(imageJson['ImgPath'])
         self.imageX = int(imageJson['X'])
         self.imageY = int(imageJson['Y'])
         
@@ -224,15 +225,18 @@ class FilamentChangeLoader():
     GetFont
     """
     def GetFont(self,fontType,fontSize):
+        
+        ff = FileFinder.FileFinder()
+        
         font = None
         if fontType == "Regular":
-            font = pygame.font.Font("Fonts/DejaVuSans-Regular.ttf",fontSize)
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Regular.ttf"),fontSize)
         elif fontType == "Bold":
-            font = pygame.font.Font("Fonts/DejaVuSans-Bold.ttf",fontSize)
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Bold.ttf"),fontSize)
         elif fontType == "Italic":
-            font = pygame.font.Font("Fonts/DejaVuSans-Italic.ttf",fontSize)
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Italic.ttf"),fontSize)
         elif fontType == "Light":
-            font = pygame.font.Font("Fonts/DejaVuSans-Light.ttf",fontSize)
+            font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Light.ttf"),fontSize)
             
         return font
     

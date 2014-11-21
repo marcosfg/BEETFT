@@ -35,13 +35,11 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import os
-import sys
-import pygame
-import pygbutton
 from time import time
+
 import ColorCodesLoader
-import ProgressBar
+import FileFinder
+import pygame
 
 class FilamentChangeScreen():
     
@@ -250,7 +248,8 @@ class FilamentChangeScreen():
                 if i == 2:
                     colorLbl = pickerFont.render(self.colorNameList[idx], 1, pickerColor)
                 else:
-                    font = pygame.font.Font("Fonts/DejaVuSans-Light.ttf",fontSize)
+                    ff = FileFinder.FileFinder()
+                    font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Light.ttf"),fontSize)
                     colorLbl = font.render(self.colorNameList[idx], 1, pickerColor)
                     
                 self.screen.blit(colorLbl, (x + height +5,y+lblOffset+((-2+i)*height)))

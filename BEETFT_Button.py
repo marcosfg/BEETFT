@@ -37,6 +37,7 @@ __license__ = "MIT"
 
 import pygame
 import pygbutton
+import FileFinder
 
 class Button():
     
@@ -78,21 +79,23 @@ class Button():
         if (fR is not None) or (fG is not None) or (fB is not None):
             self.fontColor = pygame.Color(fR,fG,fB)
         
+        ff = FileFinder.FileFinder()
+        
         if fontType=="Regular":
-            self.font = pygame.font.Font("Fonts/DejaVuSans-Regular.ttf",fontSize)
+            self.font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Regular.ttf"),fontSize)
         elif fontType=="Bold":
-            self.font = pygame.font.Font("Fonts/DejaVuSans-Bold.ttf",fontSize)
+            self.font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Bold.ttf"),fontSize)
         elif fontType=="Italic":
-            self.font = pygame.font.Font("Fonts/DejaVuSans-Italic.ttf",fontSize)
+            self.font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Italic.ttf"),fontSize)
         elif fontType=="Light":
-            self.font = pygame.font.Font("Fonts/DejaVuSans-Light.ttf",fontSize)
+            self.font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Light.ttf"),fontSize)
         
         if normal is not None:
-            self.normalSurf = normal
+            self.normalSurf = ff.GetAbsPath(normal)
         if down is not None:
-            self.downSurf = down
+            self.downSurf = ff.GetAbsPath(down)
         if highlight is not None:
-            self.highlightSurf = highlight
+            self.highlightSurf = ff.GetAbsPath(highlight)
         
         
     def GetTextButton(self):
