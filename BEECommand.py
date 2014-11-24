@@ -41,6 +41,7 @@ import sys
 import os
 import time
 import BEEConnect
+from time import time
 
 class Command():
     
@@ -67,6 +68,33 @@ class Command():
         return self.connected
     
     """*************************************************************************
+                                SendAndWait Method 
+    
+    *************************************************************************"""
+    def SendAndWait(self,cmd):
+        
+        try:
+            resp = self.beeConnect.dispatch(cmd)
+            print(resp)
+
+        except Exception:
+            busy = True
+            nextSend = time() + 1
+            while busy:
+                t = time()
+                if t > nextSend:
+                    try:
+
+                        resp = self.beeConnect.dispatch("M625\n")
+                        print(resp)
+                        if resp.find("S:3") >= 0:
+                            busy = False
+                    except Exception:
+                        pass
+        
+        return
+    
+    """*************************************************************************
                                 Start Printer Method 
     
     *************************************************************************"""
@@ -77,24 +105,9 @@ class Command():
         print(resp)
         resp = self.beeConnect.dispatch("M630\n")
         print(resp)
-        resp = self.beeConnect.dispatch("G28\n")
-        print(resp)
         
-        return
-    
-    """*************************************************************************
-                                Move Method 
-    
-    *************************************************************************"""
-    def move(self,x,y,z):
+        self.SendAndWait("G28\n")
         
-        self.beeConnect = BEEConnect.Connection()
-        resp = self.beeConnect.dispatch("M625\n")
-        print(resp)
-        resp = self.beeConnect.dispatch("M630\n")
-        print(resp)
-        resp = self.beeConnect.dispatch("G28\n")
-        print(resp)
         
         return
     
@@ -105,8 +118,10 @@ class Command():
     def homeXY(self):
         
         self.beeConnect = BEEConnect.Connection()
-        resp = self.beeConnect.dispatch("G28 X0 Y0\n")
-        print(resp)
+        
+        self.SendAndWait("G28 X0 Y0\n")
+        
+        self.beeConnect.close()
         
         return
     
@@ -117,8 +132,10 @@ class Command():
     def homeZ(self):
         
         self.beeConnect = BEEConnect.Connection()
-        resp = self.beeConnect.dispatch("G28 Z0\n")
-        print(resp)
+        
+        self.SendAndWait("G28 Z0\n")
+        
+        self.beeConnect.close()
         
         return
     
@@ -159,7 +176,91 @@ class Command():
         
         commandStr = "G1 X" + str(newX) + " Y" + str(newY) + " Z" + str(newZ) + " E" + str(newE) + "\n"
         
-        resp = self.beeConnect.dispatch(commandStr)
+        self.SendAndWait(commandStr)
+        
+        self.beeConnect.close()
+        
+        return
+    
+    """*************************************************************************
+                                GoToFirstCalibrationPoint Method 
+    
+    *************************************************************************"""
+    def GoToFirstCalibrationPoint(self):
+        
+        self.beeConnect = BEEConnect.Connection()
+        
+        
+        #go to home
+        self.SendAndWait("G28\n")
+        
+        #set feedrate
+        resp = self.beeConnect.dispatch("G1 F15000\n")
         print(resp)
+        
+        #set acceleration
+        resp = self.beeConnect.dispatch("M206 X400\n")
+        print(resp)
+        
+        #go to first point
+        self.SendAndWait("G1 X0 Y67 Z2\n")
+        
+        #set acceleration
+        resp = self.beeConnect.dispatch("M206 X1000\n")
+        print(resp)
+        
+        
+        self.beeConnect.close() 
+        
+        return
+    
+    """*************************************************************************
+                                GoToSecondCalibrationPoint Method 
+    
+    *************************************************************************"""
+    def GoToSecondCalibrationPoint(self):
+        
+        self.beeConnect = BEEConnect.Connection()
+        
+        #set feedrate
+        resp = self.beeConnect.dispatch("G1 F5000\n")
+        print(resp)
+        #set acceleration
+        resp = self.beeConnect.dispatch("M206 X400\n")
+        print(resp)
+        
+        self.move(0,0,10,0)
+        #go to SECOND point
+        resp = self.beeConnect.dispatch("G1 X-31 Y-65\n")
+        print(resp)
+        self.move(0,0,-10,0)
+        
+        
+        self.beeConnect.close() 
+        
+        return
+    
+    """*************************************************************************
+                                GoToThirdCalibrationPoint Method 
+    
+    *************************************************************************"""
+    def GoToThirdCalibrationPoint(self):
+        
+        self.beeConnect = BEEConnect.Connection()
+        
+        #set feedrate
+        resp = self.beeConnect.dispatch("G1 F1000\n")
+        print(resp)
+        #set acceleration
+        resp = self.beeConnect.dispatch("M206 X400\n")
+        print(resp)
+        
+        self.move(0,0,10,0)
+        #go to SECOND point
+        resp = self.beeConnect.dispatch("G1 X35 Y65\n")
+        print(resp)
+        self.move(0,0,-10,0)
+        
+        self.beeConnect.close() 
         
         return

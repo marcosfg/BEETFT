@@ -35,8 +35,9 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import usb.core
-import usb.util
+import usb.legacy as usb
+#import usb.core
+#import usb.util
 import sys
 import os
 import time
@@ -107,6 +108,16 @@ class Connection():
         
         return
     
+    """*************************************************************************
+                                close Method 
+    
+    returns the connection state
+    *************************************************************************"""
+    def close(self):
+        
+        self.dev.reset()
+        
+        return 
     
     """*************************************************************************
                                 dispatch Method 

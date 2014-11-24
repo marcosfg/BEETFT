@@ -213,7 +213,7 @@ class BEETFT_Main():
         waitScreen.KillAll()
         waitScreen = None
         
-        comm =BEECommand.Command()
+        comm = BEECommand.Command()
         comm.startPrinter()
         
         self.GetBEEStatus() 
@@ -235,7 +235,7 @@ class BEETFT_Main():
         if self.currentScreenName == "PrinterInfo":
             self.currentScreen = PrinterInfo.PrinterInfoScreen(self.screen,self.printerInfoScreenLoader)
         elif self.currentScreenName == "Jog":
-            self.currentScreen = Jog.JogScreen(self.screen,self.jogLoader,self.conn)
+            self.currentScreen = Jog.JogScreen(self.screen,self.jogLoader)
         elif self.currentScreenName == "Calibration":
             self.currentScreen = Calibration.CalibrationScreen(self.screen,self.calibrationLoader)
         elif self.currentScreenName == "FilamentChange":

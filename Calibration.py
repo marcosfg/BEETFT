@@ -36,7 +36,7 @@ __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
 import pygame
-
+import BEECommand
 
 
 class CalibrationScreen():
@@ -90,8 +90,10 @@ class CalibrationScreen():
         self.leftBoltImgY = self.interfaceLoader.GetLeftImgY()
         
         
+        comm = BEECommand.Command()
+        comm.GoToFirstCalibrationPoint()
         
-        
+        return
 
     """*************************************************************************
                                 handle_events Method 
@@ -118,15 +120,31 @@ class CalibrationScreen():
                             self.lblFont = self.interfaceLoader.GetlblFont(self.calibrationState)
                             self.lblFontColor = self.interfaceLoader.GetlblFontColor(self.calibrationState)
                             self.buttons = self.interfaceLoader.GetLeftButtonsList(self.calibrationState)
+                            if self.calibrationState == 1:
+                                comm = BEECommand.Command()
+                                comm.GoToSecondCalibrationPoint()
+                            elif self.calibrationState == 2:
+                                comm = BEECommand.Command()
+                                comm.GoToThirdCalibrationPoint()
+                            
+                            
                     
                     elif btnName == "+0.5mm":
                         print("Move +0.5mm")
+                        comm =BEECommand.Command()
+                        comm.move(None,None,float(+0.5),None)
                     elif btnName == "+0.05mm":
                         print("Move +0.05mm")
+                        comm =BEECommand.Command()
+                        comm.move(None,None,float(+0.05),None)
                     elif btnName == "-0.05mm":
                         print("Move -0.05mm")
+                        comm =BEECommand.Command()
+                        comm.move(None,None,float(-0.05),None)
                     elif btnName == "-0.5mm":
                         print("Move -0.5mm")
+                        comm =BEECommand.Command()
+                        comm.move(None,None,float(-0.5),None)
                     
         return
 

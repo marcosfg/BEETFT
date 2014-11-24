@@ -60,9 +60,9 @@ class JogScreen():
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, screen, interfaceLoader, beeConnect):
+    def __init__(self, screen, interfaceLoader):
         
-        self.beeConnect = beeConnect
+        #self.beeConnect = beeConnect
         
         self.screen = screen
         self.interfaceLoader = interfaceLoader
