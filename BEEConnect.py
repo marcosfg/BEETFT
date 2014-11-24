@@ -35,9 +35,9 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import usb.legacy as usb
-#import usb.core
-#import usb.util
+import usb
+import usb.core
+import usb.util
 import sys
 import os
 import time
