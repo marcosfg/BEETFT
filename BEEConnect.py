@@ -53,6 +53,8 @@ class Connection():
     cfg = None
     ep_out = None
     ep_in = None
+    
+    backend = None
 
     """*************************************************************************
                                 Init Method 
@@ -60,6 +62,7 @@ class Connection():
     Inits current screen components
     *************************************************************************"""
     def __init__(self):
+        
         
         # find our device
         self.dev = usb.core.find(idVendor=0xffff, idProduct=0x014e)
@@ -74,6 +77,8 @@ class Connection():
             print("Can't Find Printer")
             self.connected = False
             return
+        
+        self.dev.reset()
         # set the active configuration. With no arguments, the first
         # configuration will be the active one
         self.dev.set_configuration()
@@ -115,7 +120,10 @@ class Connection():
     *************************************************************************"""
     def close(self):
         
-        self.dev.reset()
+        #rm = usb.core._ResourceManager(self.dev,self.backend)
+        #rm.release_all_interfaces(self.dev)
+        
+        #self.dev.reset()
         
         return 
     
