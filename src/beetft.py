@@ -50,6 +50,7 @@ import WaitForConnection
 import pygame
 import BEETFT_Button
 import BEECommand
+import BEEConnect
 
 
 os.environ["SDL_FBDEV"] = "/dev/fb1"
@@ -64,7 +65,9 @@ class BEETFT_Main():
     """
     BEEConnect vars
     """
-    conn = None
+    #conn = None
+    bee = None
+    con = None
     
     """
     State vars
@@ -197,7 +200,9 @@ class BEETFT_Main():
         print("Drawing Interfaces")
         # init pygame and set up screen
         pygame.init()
-        #pygame.mouse.set_visible(False)
+        pygame.mouse.set_visible(False)
+        
+        
         
         self.screen = self.BEEDisplay.GetBEEScreen()
         self.screen.fill(self.BEEDisplay.GetbgColor())
@@ -210,18 +215,19 @@ class BEETFT_Main():
         if not waitScreen.connected:
             self.done = True
             
+        self.bee = waitScreen.bee
+        self.comm = BEECommand.Command(self.bee)
+        
         waitScreen.KillAll()
         waitScreen = None
         
-        comm = BEECommand.Command()
-        comm.startPrinter()
+        self.GetBEEStatus()
         
-        self.GetBEEStatus() 
         
         """
         Print interface screen
         """
-        if self.BEEState == "Printing":
+        if self.BEEState == "SD_Print":
             self.currentScreen = Printing.PrintScreen(self.screen,self.printingScreenLoader,self.BEEDisplay)
             
             self.currentScreen.KillAll()
@@ -233,19 +239,19 @@ class BEETFT_Main():
         self.currentScreenName = self.jsonLoader.GetDefaultScreen()
         
         if self.currentScreenName == "PrinterInfo":
-            self.currentScreen = PrinterInfo.PrinterInfoScreen(self.screen,self.printerInfoScreenLoader)
+            self.currentScreen = PrinterInfo.PrinterInfoScreen(self.screen,self.printerInfoScreenLoader,self.comm)
         elif self.currentScreenName == "Jog":
-            self.currentScreen = Jog.JogScreen(self.screen,self.jogLoader)
+            self.currentScreen = Jog.JogScreen(self.screen,self.jogLoader,self.comm)
         elif self.currentScreenName == "Calibration":
-            self.currentScreen = Calibration.CalibrationScreen(self.screen,self.calibrationLoader)
+            self.currentScreen = Calibration.CalibrationScreen(self.screen,self.calibrationLoader,self.comm)
         elif self.currentScreenName == "FilamentChange":
-            self.currentScreen = FilamentChange.FilamentChangeScreen(self.screen,self.filamentChangeLoader)
+            self.currentScreen = FilamentChange.FilamentChangeScreen(self.screen,self.filamentChangeLoader,self.comm)
         elif self.currentScreenName == "Settings":
-            self.currentScreen = Settings.SettingsScreen(self.screen,self.settingsLoader)
+            self.currentScreen = Settings.SettingsScreen(self.screen,self.settingsLoader,self.comm)
         elif self.currentScreenName == "FileBrowser":
-            self.currentScreen = FileBrowser.FileBrowserScreen(self.screen,self.fileBrowserLoader)
+            self.currentScreen = FileBrowser.FileBrowserScreen(self.screen,self.fileBrowserLoader,self.comm)
         elif self.currentScreenName == "About":
-            self.currentScreen = About.AboutScreen(self.screen,self.aboutLoader)
+            self.currentScreen = About.AboutScreen(self.screen,self.aboutLoader,self.comm)
         
     """*************************************************************************
                                 Start Method 
@@ -272,6 +278,10 @@ class BEETFT_Main():
             if self.currentScreen.ExitCallBack():
                 self.currentScreen.KillAll()
                 self.currentScreen = None
+                self.comm.homeZ()
+                self.comm = None
+                self.bee.close()
+                self.bee = None
                 self = BEETFT_Main()
             
         pygame.quit()
@@ -292,8 +302,6 @@ class BEETFT_Main():
                 print("quit")
                 self.done = True
                 
-            self.currentScreen.handle_events(retVal)
-            
             for btn in self.carouselButtons:
                 if 'click' in btn.handleEvent(event):
                     btnName = btn._propGetName()
@@ -327,21 +335,27 @@ class BEETFT_Main():
                 self.currentScreen = None
                 
                 if setScreen == "PrinterInfo":
-                    self.currentScreen = PrinterInfo.PrinterInfoScreen(self.screen,self.printerInfoScreenLoader)
+                    self.currentScreen = PrinterInfo.PrinterInfoScreen(self.screen,self.printerInfoScreenLoader,self.comm)
                 elif setScreen == "Jog":
-                    self.currentScreen = Jog.JogScreen(self.screen,self.jogLoader)
+                    self.currentScreen = Jog.JogScreen(self.screen,self.jogLoader,self.comm)
                 elif setScreen == "Calibration":
-                    self.currentScreen = Calibration.CalibrationScreen(self.screen,self.calibrationLoader)
+                    self.currentScreen = Calibration.CalibrationScreen(self.screen,self.calibrationLoader,self.comm)
                 elif setScreen == "FilamentChange":
-                    self.currentScreen = FilamentChange.FilamentChangeScreen(self.screen,self.filamentChangeLoader)
+                    self.currentScreen = FilamentChange.FilamentChangeScreen(self.screen,self.filamentChangeLoader,self.comm)
                 elif setScreen == "Settings":
-                    self.currentScreen = Settings.SettingsScreen(self.screen,self.settingsLoader)
+                    self.currentScreen = Settings.SettingsScreen(self.screen,self.settingsLoader,self.comm)
                 elif setScreen == "FileBrowser":
-                    self.currentScreen = FileBrowser.FileBrowserScreen(self.screen,self.fileBrowserLoader)
+                    self.currentScreen = FileBrowser.FileBrowserScreen(self.screen,self.fileBrowserLoader,self.comm)
                 elif setScreen == "About":
-                    self.currentScreen = About.AboutScreen(self.screen,self.aboutLoader)
+                    self.currentScreen = About.AboutScreen(self.screen,self.aboutLoader,self.comm)
                     
                 self.currentScreenName = self.currentScreen.GetCurrentScreenName()
+                
+            
+        self.currentScreen.handle_events(retVal)
+        
+                
+        return
         
         
         
@@ -431,7 +445,9 @@ class BEETFT_Main():
     *************************************************************************"""  
     def GetBEEStatus(self):
         
-        self.BEEState = "Printing"
+        self.BEEState = self.comm.getStatus()
+        
+        print("Printer Status: ",self.BEEState)
         
         return
 

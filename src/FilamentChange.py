@@ -40,8 +40,11 @@ from time import time
 import ColorCodesLoader
 import FileFinder
 import pygame
+import BEECommand
 
 class FilamentChangeScreen():
+    
+    comm = None
     
     exit = False
     interfaceState = 0
@@ -57,7 +60,7 @@ class FilamentChangeScreen():
     
     targetTemperature = 220     
     nozzleTemperature = 0
-    pullInterval = 0.1         #pull interval for simulation mode
+    pullInterval = 1         #pull interval for simulation mode
     nextPullTime = None
     
     firstNextReady = False      #true when target temperature is established
@@ -73,6 +76,9 @@ class FilamentChangeScreen():
     selectedColorFont = None
     selectedColorFontColor = None
     
+    selectedColorCode = None
+    selectedColorName = None
+    
     """
     Progress Bar vars
     """
@@ -85,9 +91,11 @@ class FilamentChangeScreen():
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, screen, interfaceLoader):
+    def __init__(self, screen, interfaceLoader, comm):
         
         print("Loading Filament Change Screen Components")
+        
+        self.comm = comm
         
         self.exit = False
         self.firstNextReady = False
@@ -118,8 +126,22 @@ class FilamentChangeScreen():
         self.colorCodeList = self.colorCodes.GetColorCodeList()
         self.colorList = self.colorCodes.GetColorList()
         
-        #TODO ask the printer current Temperature
-        self.nozzleTemperature = 0
+        #Get Nozzle Temeprature
+        self.nozzleTemperature = self.comm.GetNozzleTemperature()
+        print("Current Nozzle Temperature: ", self.nozzleTemperature)
+        
+        #Heat Nozzle
+        self.comm.SetNozzleTemperature(self.targetTemperature)
+        
+        #Go to Heat Position
+        self.comm.home()
+        self.comm.GoToHeatPos()
+        
+        #Get current colot code
+        self.selectedColorCode = self.comm.GetBeeCode()
+        print("Current Color Code: ", self.selectedColorCode)
+        self.selectedColorName = self.colorCodes.GetColorName(self.selectedColorCode)
+        print("Current Color Name: ", self.selectedColorName)
         
         self.nextPullTime = time() + self.pullInterval
         
@@ -143,11 +165,17 @@ class FilamentChangeScreen():
                     if btnName == "Next":
                         if self.interfaceState == 0:
                             self.interfaceState = 1
+                            self.comm.GoToRestPos()
                         elif self.interfaceState == 2:
                             self.interfaceState = 1
-                            #TODO SEND FILAMENT CODE TO PRINTER
+                            #Get selected list index
                             self.selectedColoridx = (2+self.listPosition) % len(self.colorList)
-                            print("Selected Filament Code: ", self.colorCodeList[self.selectedColoridx])
+                            #Get selected color code
+                            self.selectedColorCode = self.colorCodeList[self.selectedColoridx]
+                            self.comm.SetBeeCode(self.selectedColorCode)
+                            #Get selected color name
+                            self.selectedColorName = self.colorCodes.GetColorName(self.selectedColorCode)
+                            print("Selected Filament Code: ", self.selectedColorCode)
                     elif btnName == "OK":
                         if self.interfaceState == 1:
                             self.exit = True
@@ -155,8 +183,10 @@ class FilamentChangeScreen():
                         self.interfaceState = self.interfaceState + 1
                     elif btnName == "Load":
                         print("Load Filament")
+                        self.comm.Load()
                     elif btnName == "Unload":
                         print("Unload Filament")
+                        self.comm.Unload()
                     elif btnName == "Up":
                         self.listPosition = self.listPosition - 1
                     elif btnName == "Down":
@@ -220,7 +250,7 @@ class FilamentChangeScreen():
             self.screen.blit(self.progressBar.GetSurface(float(self.nozzleTemperature/self.targetTemperature)),
                                 self.progressBar.GetPos())
         elif self.interfaceState == 1:
-            lblCurrentColorText = "Current Color: " + self.colorNameList[self.selectedColoridx]
+            lblCurrentColorText = "Current Color: " + self.selectedColorName
             lbl = self.selectedColorFont.render(lblCurrentColorText, 1, self.selectedColorFontColor)
             self.screen.blit(lbl, (self.interfaceLoader.GetSelectedLblX(),self.interfaceLoader.GetSelectedLblY()))
             
@@ -281,8 +311,8 @@ class FilamentChangeScreen():
     *************************************************************************""" 
     def KillAll(self):
         
-        #TODO
         #CANCEL HEATING
+        self.comm.SetNozzleTemperature(0)
         
         self.exit = None
         self.interfaceState = None
@@ -327,8 +357,6 @@ class FilamentChangeScreen():
     *************************************************************************""" 
     def ExitCallBack(self):
         
-        #TODO
-        #CANCEL HEATING
         
         return self.exit
     
@@ -341,15 +369,17 @@ class FilamentChangeScreen():
         
         t = time()
         if t > self.nextPullTime:
-            self.nextPullTime = time() + self.pullInterval
-            if self.nozzleTemperature <= self.targetTemperature:
-                self.nozzleTemperature = self.nozzleTemperature + 20
-            else:
-                self.nozzleTemperature = self.targetTemperature
+            
+            self.nozzleTemperature = self.comm.GetNozzleTemperature()
             
             if self.nozzleTemperature >= self.targetTemperature:
                 self.nozzleTemperature = self.targetTemperature
+                if(self.firstNextReady == False):
+                    self.comm.beep()
+                
                 self.firstNextReady = True
+            
+            self.nextPullTime = time() + self.pullInterval
         
         
         return

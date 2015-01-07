@@ -1,27 +1,27 @@
-__author__="marcosgomes"
-__date__ ="$Nov 24, 2014 11:57:08 AM$"
+__author__ = "mgomes"
+__date__ = "$Jan 7, 2015 1:46:15 PM$"
 
-from setuptools import setup,find_packages
+from setuptools import setup, find_packages
 
 setup (
-  name = 'BEETFT',
-  version = '0.1',
-  packages = find_packages(),
+       name='BEETFT',
+       version='0.1',
+       packages=find_packages(),
 
-  # Declare your packages' dependencies here, for eg:
-  install_requires=['foo>=3'],
+       # Declare your packages' dependencies here, for eg:
+       install_requires=['foo>=3'],
 
-  # Fill in these to make your Egg ready for upload to
-  # PyPI
-  author = 'marcosgomes',
-  author_email = '',
+       # Fill in these to make your Egg ready for upload to
+       # PyPI
+       author='mgomes',
+       author_email='',
 
-  summary = 'Just another Python package for the cheese shop',
-  url = '',
-  license = '',
-  long_description= 'Long description of the package',
+       summary='Just another Python package for the cheese shop',
+       url='',
+       license='',
+       long_description='Long description of the package',
 
-  # could also include long_description, download_url, classifiers, etc.
+       # could also include long_description, download_url, classifiers, etc.
 
   
-)
+       )

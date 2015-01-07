@@ -35,6 +35,7 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
+import BEECommand
 
 class AboutScreen():
     
@@ -53,16 +54,20 @@ class AboutScreen():
     
     updateReady = None
     
+    con = None
+    
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, screen, interfaceLoader):
+    def __init__(self, screen, interfaceLoader, con):
         """
         .
         """
         print("Loading About Screen Components")
+        
+        self.con = con
         
         self.screen = screen
         self.interfaceLoader = interfaceLoader

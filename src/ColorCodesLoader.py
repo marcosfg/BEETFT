@@ -96,3 +96,16 @@ class ColorCodes():
     """
     def GetColorList(self):
         return self.colorRGBList
+    
+    """*************************************************************************
+                                Init Method 
+    
+    Loads Json File with color codes and extracts its info
+    *************************************************************************"""
+    def GetColorName(self, code):
+        
+        for c in self.colors:
+            if(c['ColorCode'] == code):
+                return c['ColorName']
+            
+        return

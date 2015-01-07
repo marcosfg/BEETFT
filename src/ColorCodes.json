@@ -2,47 +2,47 @@
     "ColorCodes":[
         {
             "ColorName":"Black",
-            "ColorCode":"A001",
+            "ColorCode":"A1",
             "RGBColor":"0,0,0"
         },
         {
             "ColorName":"White",
-            "ColorCode":"A002",
+            "ColorCode":"A2",
             "RGBColor":"255,255,255"
         },
         {
             "ColorName":"Blue",
-            "ColorCode":"A003",
+            "ColorCode":"A3",
             "RGBColor":"0,0,255"
         },
         {
             "ColorName":"Green",
-            "ColorCode":"A004",
+            "ColorCode":"A4",
             "RGBColor":"0,255,0"
         },
         {
             "ColorName":"Red",
-            "ColorCode":"A005",
+            "ColorCode":"A5",
             "RGBColor":"255,0,0"
         },
         {
             "ColorName":"Yellow",
-            "ColorCode":"A006",
+            "ColorCode":"A6",
             "RGBColor":"255,255,0"
         },
         {
             "ColorName":"Turquoise",
-            "ColorCode":"A007",
+            "ColorCode":"A7",
             "RGBColor":"64,224,208"
         },
         {
             "ColorName":"Orange",
-            "ColorCode":"A008",
+            "ColorCode":"A8",
             "RGBColor":"255,165,0"
         },
         {
             "ColorName":"Transparent",
-            "ColorCode":"A009",
+            "ColorCode":"A9",
             "RGBColor":"220,220,220"
         }
     ]

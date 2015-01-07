@@ -54,6 +54,8 @@ class AboutLoader():
     
     interfaceButtons = None
     
+    bee = None
+    
     """*************************************************************************
                                 Init Method 
     

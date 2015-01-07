@@ -58,13 +58,15 @@ class FileFinder():
             if dirSplit[len(dirSplit)-1] == "src":
                 self.absDirPath = self.currentDir + "/"
             else:
-                self.absDirPath = self.currentDir + "/BEETFT/"
+                self.absDirPath = self.currentDir + "/BEETFT/src"
         else:
             self.absDirPath = self.currentDir + "/"
         
         pSystem = platform.system()
-        if pSystem == "Darwin":
-            self.absDirPath = "/Users/marcosgomes/NetBeansProjects/BEETFT/src/"
+        #print(pSystem)
+        #print(self.absDirPath)
+        #if pSystem == "Darwin":
+        #    self.absDirPath = "/Users/marcosgomes/NetBeansProjects/BEETFT/src/"
             
         return
     

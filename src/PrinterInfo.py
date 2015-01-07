@@ -67,7 +67,7 @@ class PrinterInfoScreen():
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, screen, interfaceLoader):
+    def __init__(self, screen, interfaceLoader, comm):
         
         self.screen = screen
         self.interfaceLoader = interfaceLoader

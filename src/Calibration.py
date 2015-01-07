@@ -61,14 +61,18 @@ class CalibrationScreen():
     leftBoltImgX = 0
     leftBoltImgY = 0
     
+    comm = None
+    
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, screen, interfaceLoader):
+    def __init__(self, screen, interfaceLoader, comm):
         
         print("Loading Calibration Screen Components")
+        
+        self.comm = comm
         
         self.exit = False
         
@@ -90,8 +94,7 @@ class CalibrationScreen():
         self.leftBoltImgY = self.interfaceLoader.GetLeftImgY()
         
         
-        comm = BEECommand.Command()
-        comm.GoToFirstCalibrationPoint()
+        self.comm.GoToFirstCalibrationPoint()
         
         return
 
@@ -121,30 +124,24 @@ class CalibrationScreen():
                             self.lblFontColor = self.interfaceLoader.GetlblFontColor(self.calibrationState)
                             self.buttons = self.interfaceLoader.GetLeftButtonsList(self.calibrationState)
                             if self.calibrationState == 1:
-                                comm = BEECommand.Command()
-                                comm.GoToSecondCalibrationPoint()
+                                self.comm.GoToSecondCalibrationPoint()
                             elif self.calibrationState == 2:
-                                comm = BEECommand.Command()
-                                comm.GoToThirdCalibrationPoint()
+                                self.comm.GoToThirdCalibrationPoint()
                             
                             
                     
                     elif btnName == "+0.5mm":
                         print("Move +0.5mm")
-                        comm =BEECommand.Command()
-                        comm.move(None,None,float(+0.5),None)
+                        self.comm.move(None,None,float(+0.5),None)
                     elif btnName == "+0.05mm":
                         print("Move +0.05mm")
-                        comm =BEECommand.Command()
-                        comm.move(None,None,float(+0.05),None)
+                        self.comm.move(None,None,float(+0.05),None)
                     elif btnName == "-0.05mm":
                         print("Move -0.05mm")
-                        comm =BEECommand.Command()
-                        comm.move(None,None,float(-0.05),None)
+                        self.comm.move(None,None,float(-0.05),None)
                     elif btnName == "-0.5mm":
                         print("Move -0.5mm")
-                        comm =BEECommand.Command()
-                        comm.move(None,None,float(-0.5),None)
+                        self.comm.move(None,None,float(-0.5),None)
                     
         return
 

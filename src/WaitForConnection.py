@@ -38,6 +38,7 @@ __license__ = "MIT"
 import FileFinder
 import pygame
 import WaitForConnectionLoader
+import BEEConnect
 import BEECommand
 from time import time
 
@@ -57,6 +58,8 @@ class WaitScreen():
     
     nextPullTime = None
     
+    bee = None
+    
     """*************************************************************************
                                 Init Method 
     
@@ -69,6 +72,7 @@ class WaitScreen():
         self.connected = False
         
         print("Printer Connection: ",self.connected)
+        
         
         self.exit = False
         self.screen = screen
@@ -121,8 +125,18 @@ class WaitScreen():
             
             t = time()
             if t > self.nextPullTime:
-                comm =BEECommand.Command()
-                self.connected = comm.isConnected()
+                
+                self.bee = BEEConnect.Connection()
+                if(self.bee.isConnected() == True):
+                    comm = BEECommand.Command(self.bee)
+                    resp = comm.startPrinter()
+                
+                    if('Firmware' in resp):
+                        self.connected = self.bee.connected
+                        self.bee.sendCmd("G28\n","3")
+                    elif('Bootloader' in resp):
+                        self.bee = None
+                    
                 self.nextPullTime = time() + 0.5
                 print("Wait for connection")
             
@@ -139,10 +153,6 @@ class WaitScreen():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.exit = True
-
-        	# Did the user click on the screen?
-            if event.type == pygame.MOUSEBUTTONDOWN:
-            	self.connected = True
                 
         return
     
