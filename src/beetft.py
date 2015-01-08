@@ -36,7 +36,7 @@ __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
 import os
-
+import sys
 import About
 import BEETFTJsonLoader
 import Calibration
@@ -79,6 +79,7 @@ class BEETFT_Main():
     vars
     @var done: anything can set to True to force quit
     """
+    restart = False
     done = False
     jsonLoader = None
     BEEDisplay = None
@@ -134,6 +135,7 @@ class BEETFT_Main():
         
         #Make sure the infinite loop wokrs
         self.done = False
+        self.restart = True
         
         self.BEEState = "Disconnected"
         """
@@ -282,7 +284,10 @@ class BEETFT_Main():
                 self.comm = None
                 self.bee.close()
                 self.bee = None
-                self = BEETFT_Main()
+                self.done = True
+                self.restart = True
+                #pygame.quit()
+                #self = BEETFT_Main()
             
         pygame.quit()
         
@@ -451,6 +456,13 @@ class BEETFT_Main():
         
         return
 
+def restart_program():
+    python = sys.executable
+    os.execl(python, python, * sys.argv)
+
 if __name__ == '__main__':
-    opp = BEETFT_Main()
-    opp.start()
+    app = BEETFT_Main()
+    app.start()
+    if(app.restart == True):
+        app = None
+        restart_program()

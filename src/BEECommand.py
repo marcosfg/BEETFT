@@ -100,7 +100,10 @@ class Command():
         
         sPos = resp.find('S:')
         
-        status = int(resp[sPos+2])
+        try:
+            status = int(resp[sPos+2])
+        except:
+            return "Unknown"
         
         if(status == 3):
             return "Ready"
@@ -413,11 +416,6 @@ class Command():
         
         
         return code
-        
-        #bcode:A306 ok Q:0
-        #bcode:A0 ok Q:0
-        
-        #return
 
     """*************************************************************************
                                 SetBeeCode Method 
@@ -430,6 +428,14 @@ class Command():
         #Set BeeCode
         resp = self.beeConnect.sendCmd(commandStr)
         
-        
+        return
+
+    """*************************************************************************
+                                initSD Method 
+    
+    *************************************************************************"""
+    def initSD(self):
+        #Init SD
+        resp = self.beeConnect.sendCmd("M21\n")
         
         return
