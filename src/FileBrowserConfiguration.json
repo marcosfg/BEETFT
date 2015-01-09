@@ -103,7 +103,7 @@
             ],
         "FileFolders":
                 {
-                    "RPI":"/RPI",
+                    "RPI":"",
                     "USB":"/USB"
                 },
         "FilePicker":

@@ -37,7 +37,7 @@ __license__ = "MIT"
 
 import os
 from time import time
-
+import math
 import FileFinder
 import pygame
 
@@ -61,6 +61,8 @@ class FileBrowserScreen():
     selectedRoot = "RPI"
     selctedRootRect = None
     
+    cancelTransfer = False
+    initTransfer = False
     
     """
     File Picker
@@ -92,16 +94,26 @@ class FileBrowserScreen():
     printImgX = 0
     printImgY = 0
     
+    """
+    BEEConnect vars
+    """
+    #conn = None
+    beeCon = None
+    beeCmd = None
+    
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, screen, interfaceLoader, comm):
+    def __init__(self, screen, interfaceLoader, cmd):
         """
         .
         """
         print("Loading File Browser Screen Components")
+        
+        self.beeCmd = cmd
+        self.beeCon = self.beeCmd.beeCon
         
         self.exit = False
         self.firstNextReady = False
@@ -111,6 +123,9 @@ class FileBrowserScreen():
         self.interfaceLoader = interfaceLoader
         
         self.interfaceState = 0         #reset interface state
+        
+        self.cancelTransfer = False
+        self.initTransfer = False
         
         """
         Load lists and settings from interfaceLoader
@@ -175,6 +190,8 @@ class FileBrowserScreen():
                             self.interfaceState = self.interfaceState + 1
                         elif self.selectedFileName.endswith(".gcode"):
                             self.interfaceState = self.interfaceState + 3
+                            self.initTransfer = True
+                            #self.transferFile(self.selectedFileName)
                         
                         print("Selected: ",self.selectedFileName)
                     elif btnName == "ResLow":
@@ -197,7 +214,9 @@ class FileBrowserScreen():
                         self.ready2Print = False
                         
                     elif btnName == "Cancel":
-                        self.exit = True
+                        self.cancelTransfer = True
+                        self.interfaceState = 0
+                        #self.exit = True
                     elif btnName == "Print":
                         self.interfaceState = 3
                         
@@ -224,6 +243,7 @@ class FileBrowserScreen():
                     
                     self.buttons = self.interfaceLoader.GetButtonsList(self.interfaceState)
                     
+            event = None
         
         return
 
@@ -324,6 +344,7 @@ class FileBrowserScreen():
         elif self.interfaceState == 2:
             # Draw Image
             self.screen.blit(self.slicingImg,(self.slicingImgX,self.slicingImgY))
+        #TRANSFERING
         elif self.interfaceState == 3:
             # Draw Image
             self.screen.blit(self.printImg,(self.printImgX,self.printImgY))
@@ -400,6 +421,10 @@ class FileBrowserScreen():
             self.ready2Print = True
             self.nextPullTime = time() + self.pullInterval
             
+        if(self.interfaceState == 3):
+            if(self.initTransfer == True):
+                self.transferFile(self.selectedFileName)
+            
         return
     
     """*************************************************************************
@@ -447,4 +472,91 @@ class FileBrowserScreen():
                 self.fileList.append(file)
                 #print(file)
                 
+        return
+    
+    """*************************************************************************
+                                transferFile Method 
+    
+    Transfers Gcode file to R2C2
+    *************************************************************************""" 
+    def transferFile(self, filename):
+        
+        self.initTransfer = False
+        
+        #check if file exists
+        if(os.path.isfile(filename) == False):
+            print("File does not exist")
+            return
+        
+        #Load File
+        print("   :","Loading File")
+        f = open(filename, 'rb')
+        fSize = os.path.getsize(filename)
+        print("   :","File Size: ", fSize, "bytes")
+        
+        blockBytes = self.beeCmd.MESSAGE_SIZE * self.beeCmd.BLOCK_SIZE
+        nBlocks = math.ceil(fSize/blockBytes)
+        print("   :","Number of Blocks: ", nBlocks)
+        
+        
+        
+        #TODO SEND M31 WITH ESTIMATED TIME
+        
+        fnSplit = filename.split(".")
+        sdFN = fnSplit[0]
+        
+        #CREATE SD FILE
+        resp = self.beeCmd.CraeteFile(sdFN)
+        if(not resp):
+            return
+        
+        #Start transfer
+        blocksTransfered = 0
+        totalBytes = 0
+        
+        startTime = time()
+        
+        #Load local file
+        with open(filename, 'rb') as f:
+
+            while(blocksTransfered < nBlocks and self.cancelTransfer == False):
+
+                startPos = totalBytes
+                endPos = totalBytes + blockBytes
+                
+                bytes2write = endPos - startPos
+                
+                if(blocksTransfered == nBlocks -1):
+                    self.beeCmd.StartTransfer(fSize,startPos)
+                    bytes2write = fSize - startPos
+                else:
+                    self.beeCmd.StartTransfer(endPos,startPos)
+                    
+                msg2write = math.ceil(bytes2write/self.beeCmd.MESSAGE_SIZE)
+
+                for i in range(0,msg2write):
+                    msg = f.read(self.beeCmd.MESSAGE_SIZE)
+                    #print(msg)
+                    resp = self.beeCon.sendCmd(msg,"tog")
+
+                    #print(resp)
+                    totalBytes += self.beeCmd.MESSAGE_SIZE
+                    
+                retVal = pygame.event.get()
+                self.handle_events(retVal)
+                blocksTransfered += 1
+                print("   :","Transfered ", str(blocksTransfered), "/", str(nBlocks), " blocks ", totalBytes, "/", fSize, " bytes")
+            
+        print("   :","Transfer completed")
+        
+        elapsedTime = time()- startTime
+        avgSpeed = fSize//elapsedTime
+        print("Elapsed time: ",elapsedTime)
+        print("Average Transfer Speed: ", avgSpeed)
+        
+        #CREATE SD FILE
+        resp = self.beeCmd.OpenFile(sdFN)
+        if(not resp):
+            return
+        
         return

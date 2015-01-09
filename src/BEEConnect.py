@@ -51,7 +51,7 @@ class Connection():
     cfg = None
     intf = None
 
-    READ_TIMEOUT = 2000
+    READ_TIMEOUT = 500
     DEFAULT_READ_LENGTH = 512
 
     queryInterval = 0.5
@@ -70,28 +70,6 @@ class Connection():
         self.findBEE()
         
         return
-    
-    """*************************************************************************
-                            sendCmd Method 
-
-    *************************************************************************"""
-    def sendCmd(self,cmd,wait=None):
-
-        #self.findBEE()
-
-        resp = None
-
-        if wait is None:
-                resp = self.dispatch(cmd)
-        else:
-                #resp = self.dispatch(cmd)
-                self.waitFor(cmd,wait)
-        
-        # release the device
-        #usb.util.dispose_resources(self.dev)
-        #usb.util.release_interface(self.dev, self.intf)
-        
-        return resp
 
     """*************************************************************************
                             findBEE Method 
@@ -161,45 +139,98 @@ class Connection():
                             dispatch Method
 
     *************************************************************************"""
-    def dispatch(self,message):
+    def dispatch(self,message,to=None,superSpeed=False):
         
-        time.sleep(0.001)
-        self.ep_out.write(message)
-        time.sleep(0.009)
+        timeout = self.READ_TIMEOUT
+        
+        if(to is not None):
+            timeout = to
+        
+        if(message == "dummy"):
+            pass
+        elif(superSpeed):
+            #time.sleep(0.001)
+            self.ep_out.write(message)
+            #time.sleep(0.001)
+        else:
+            time.sleep(0.001)
+            self.ep_out.write(message)
+            time.sleep(0.009)
         sret = ""
-            
+        
         try:
             #ret = self.dev.read(self.endpoint.bEndpointAddress,self.DEFAULT_READ_LENGTH)
-            ret = self.ep_in.read(self.DEFAULT_READ_LENGTH, self.READ_TIMEOUT)
+            ret = self.ep_in.read(self.DEFAULT_READ_LENGTH, timeout)
             sret = ''.join([chr(x) for x in ret])
             
             #print(sret)
         except usb.core.USBError as e:
-            if e.args == ('Operation timed out',):
+            if ("timed out" in str(e.args)):
+                #print("Read Timeout")
                 pass
-
+            
+        #print("sent: ", message, " received: ", sret)
         return sret
+
+    """*************************************************************************
+                            sendCmd Method 
+
+    *************************************************************************"""
+    def sendCmd(self,cmd,wait=None,timeout=None):
+
+        #self.findBEE()
+
+        resp = None
+
+        if wait is None:
+            resp = self.dispatch(cmd)
+        else:
+            if(wait == "tog"):
+                resp = self.wait4tog(cmd)
+            else:
+                resp = self.waitFor(cmd,wait,timeout)
+            
+        return resp
 
     """*************************************************************************
                             waitFor Method 
 
     *************************************************************************"""
-    def waitFor(self,cmd,s):
+    def waitFor(self,cmd,s,timeout=None):
         self.dispatch(cmd)
         busy = True
-        nextSend = time.time() + self.queryInterval
+        #nextSend = time.time() + self.queryInterval
         while busy:
-                t = time.time()
-                if t > nextSend:
-                        try:
-                                resp = self.dispatch("M625\n")
-                                #print(resp)
-                                if resp.find("S:" + str(s)) >= 0:
-                                        busy = False
-                        except Exception:
-                                pass
+            #t = time.time()
+            #if t > nextSend:
+            try:
+                resp = self.dispatch("M625\n",timeout)
+                #print(resp)
+                str2find = "S:" + str(s)
+                if resp.find(str2find) >= 0:
+                        busy = False
+            except Exception:
+                pass
         
-        return
+        return resp
+
+    """*************************************************************************
+                            wait4tog Method 
+
+    *************************************************************************"""
+    def wait4tog(self,cmd):
+        
+        resp = self.dispatch(cmd,500,True)
+        str2find = "tog"
+        busy = True
+        
+        while "tog" not in resp:
+            try:
+                resp += self.dispatch("dummy",500)
+            except Exception:
+                pass
+        
+        return resp
     
     """*************************************************************************
                             close Method

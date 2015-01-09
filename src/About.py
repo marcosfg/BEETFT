@@ -54,20 +54,23 @@ class AboutScreen():
     
     updateReady = None
     
-    con = None
+    """
+    BEEConnect vars
+    """
+    beeCmd = None
     
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, screen, interfaceLoader, con):
+    def __init__(self, screen, interfaceLoader, cmd):
         """
         .
         """
         print("Loading About Screen Components")
         
-        self.con = con
+        self.beeCmd = cmd
         
         self.screen = screen
         self.interfaceLoader = interfaceLoader

@@ -44,7 +44,11 @@ import BEECommand
 
 class FilamentChangeScreen():
     
-    comm = None
+    """
+    BEEConnect vars
+    """
+    beeCmd = None
+    
     
     exit = False
     interfaceState = 0
@@ -91,11 +95,11 @@ class FilamentChangeScreen():
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, screen, interfaceLoader, comm):
+    def __init__(self, screen, interfaceLoader, cmd):
         
         print("Loading Filament Change Screen Components")
         
-        self.comm = comm
+        self.beeCmd = cmd
         
         self.exit = False
         self.firstNextReady = False
@@ -127,18 +131,18 @@ class FilamentChangeScreen():
         self.colorList = self.colorCodes.GetColorList()
         
         #Get Nozzle Temeprature
-        self.nozzleTemperature = self.comm.GetNozzleTemperature()
+        self.nozzleTemperature = self.beeCmd.GetNozzleTemperature()
         print("Current Nozzle Temperature: ", self.nozzleTemperature)
         
         #Heat Nozzle
-        self.comm.SetNozzleTemperature(self.targetTemperature)
+        self.beeCmd.SetNozzleTemperature(self.targetTemperature)
         
         #Go to Heat Position
-        self.comm.home()
-        self.comm.GoToHeatPos()
+        self.beeCmd.home()
+        self.beeCmd.GoToHeatPos()
         
         #Get current colot code
-        self.selectedColorCode = self.comm.GetBeeCode()
+        self.selectedColorCode = self.beeCmd.GetBeeCode()
         print("Current Color Code: ", self.selectedColorCode)
         self.selectedColorName = self.colorCodes.GetColorName(self.selectedColorCode)
         print("Current Color Name: ", self.selectedColorName)
@@ -165,14 +169,14 @@ class FilamentChangeScreen():
                     if btnName == "Next":
                         if self.interfaceState == 0:
                             self.interfaceState = 1
-                            self.comm.GoToRestPos()
+                            self.beeCmd.GoToRestPos()
                         elif self.interfaceState == 2:
                             self.interfaceState = 1
                             #Get selected list index
                             self.selectedColoridx = (2+self.listPosition) % len(self.colorList)
                             #Get selected color code
                             self.selectedColorCode = self.colorCodeList[self.selectedColoridx]
-                            self.comm.SetBeeCode(self.selectedColorCode)
+                            self.beeCmd.SetBeeCode(self.selectedColorCode)
                             #Get selected color name
                             self.selectedColorName = self.colorCodes.GetColorName(self.selectedColorCode)
                             print("Selected Filament Code: ", self.selectedColorCode)
@@ -183,10 +187,10 @@ class FilamentChangeScreen():
                         self.interfaceState = self.interfaceState + 1
                     elif btnName == "Load":
                         print("Load Filament")
-                        self.comm.Load()
+                        self.beeCmd.Load()
                     elif btnName == "Unload":
                         print("Unload Filament")
-                        self.comm.Unload()
+                        self.beeCmd.Unload()
                     elif btnName == "Up":
                         self.listPosition = self.listPosition - 1
                     elif btnName == "Down":
@@ -312,7 +316,7 @@ class FilamentChangeScreen():
     def KillAll(self):
         
         #CANCEL HEATING
-        self.comm.SetNozzleTemperature(0)
+        self.beeCmd.SetNozzleTemperature(0)
         
         self.exit = None
         self.interfaceState = None
@@ -370,12 +374,12 @@ class FilamentChangeScreen():
         t = time()
         if t > self.nextPullTime:
             
-            self.nozzleTemperature = self.comm.GetNozzleTemperature()
+            self.nozzleTemperature = self.beeCmd.GetNozzleTemperature()
             
             if self.nozzleTemperature >= self.targetTemperature:
                 self.nozzleTemperature = self.targetTemperature
                 if(self.firstNextReady == False):
-                    self.comm.beep()
+                    self.beeCmd.beep()
                 
                 self.firstNextReady = True
             

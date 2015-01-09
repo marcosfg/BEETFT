@@ -46,7 +46,10 @@ import time
 class Command():
     
     connected = None
-    beeConnect = None
+    beeCon = None
+    
+    MESSAGE_SIZE = 512
+    BLOCK_SIZE = 32
 
     """*************************************************************************
                                 Init Method 
@@ -55,8 +58,8 @@ class Command():
     *************************************************************************"""
     def __init__(self, bee):
         
-        self.beeConnect = bee
-        self.connected = self.beeConnect.isConnected()
+        self.beeCon = bee
+        self.connected = self.beeCon.isConnected()
         
         return
     
@@ -73,19 +76,19 @@ class Command():
     *************************************************************************"""
     def startPrinter(self):
         
-        #self.beeConnect = BEEConnect.Connection()
-        resp = self.beeConnect.sendCmd("M625\n")
+        #self.beeCon = BEEConnect.Connection()
+        resp = self.beeCon.sendCmd("M625\n")
         print(resp)
         if('Bad M-code 625' in resp):   #printer in bootloader mode
             print("Printer running in Bootloader Mode")
             print("Changing to firmware")
-            self.beeConnect.sendCmd("M630\n")
+            self.beeCon.sendCmd("M630\n")
             return "Bootloader"
         elif('ok Q' in resp):
             print("Printer running in firmware mode")
             return "Firmware"
         else:
-            return None
+            return ""
         
         return
     
@@ -95,7 +98,7 @@ class Command():
     *************************************************************************"""
     def getStatus(self):
         
-        resp = self.beeConnect.sendCmd("M625\n")
+        resp = self.beeCon.sendCmd("M625\n")
         print(resp)
         
         sPos = resp.find('S:')
@@ -126,7 +129,7 @@ class Command():
     *************************************************************************"""
     def beep(self):
         
-        self.beeConnect.sendCmd("M300 P2000\n")
+        self.beeCon.sendCmd("M300 P2000\n")
         
         return
 
@@ -136,7 +139,7 @@ class Command():
     *************************************************************************"""
     def home(self):
         
-        self.beeConnect.sendCmd("G28\n","3")
+        self.beeCon.sendCmd("G28\n","3")
         
         return
     
@@ -146,7 +149,7 @@ class Command():
     *************************************************************************"""
     def homeXY(self):
         
-        self.beeConnect.sendCmd("G28 X0 Y0\n","3")
+        self.beeCon.sendCmd("G28 X0 Y0\n","3")
         
         return
     
@@ -156,7 +159,7 @@ class Command():
     *************************************************************************"""
     def homeZ(self):
         
-        self.beeConnect.sendCmd("G28 Z0\n","3")
+        self.beeCon.sendCmd("G28 Z0\n","3")
         
         return
     
@@ -166,7 +169,7 @@ class Command():
     *************************************************************************"""
     def move(self,x=None,y=None,z=None,e=None):
         
-        resp = self.beeConnect.sendCmd("M121\n")
+        resp = self.beeCon.sendCmd("M121\n")
         print(resp)
         
         splits = resp.split(" ")
@@ -196,7 +199,7 @@ class Command():
         
         commandStr = "G1 X" + str(newX) + " Y" + str(newY) + " Z" + str(newZ) + " E" + str(newE) + "\n"
         
-        self.beeConnect.sendCmd(commandStr,"3")
+        self.beeCon.sendCmd(commandStr,"3")
         
         return
     
@@ -208,21 +211,21 @@ class Command():
         
         
         #go to home
-        self.beeConnect.sendCmd("G28\n","3")
+        self.beeCon.sendCmd("G28\n","3")
         
         #set feedrate
-        resp = self.beeConnect.sendCmd("G1 F15000\n")
+        resp = self.beeCon.sendCmd("G1 F15000\n")
         print(resp)
         
         #set acceleration
-        resp = self.beeConnect.sendCmd("M206 X400\n")
+        resp = self.beeCon.sendCmd("M206 X400\n")
         print(resp)
         
         #go to first point
-        self.beeConnect.sendCmd("G1 X0 Y67 Z2\n")
+        self.beeCon.sendCmd("G1 X0 Y67 Z2\n")
         
         #set acceleration
-        resp = self.beeConnect.sendCmd("M206 X1000\n","3")
+        resp = self.beeCon.sendCmd("M206 X1000\n","3")
         print(resp)
         
         return
@@ -234,21 +237,21 @@ class Command():
     def GoToSecondCalibrationPoint(self):
         
         #record calibration position
-        resp = self.beeConnect.sendCmd("M603\n")
+        resp = self.beeCon.sendCmd("M603\n")
         print(resp)
-        resp = self.beeConnect.sendCmd("M601\n")
+        resp = self.beeCon.sendCmd("M601\n")
         print(resp)
         
         #set feedrate
-        resp = self.beeConnect.sendCmd("G1 F5000\n")
+        resp = self.beeCon.sendCmd("G1 F5000\n")
         print(resp)
         #set acceleration
-        resp = self.beeConnect.sendCmd("M206 X400\n")
+        resp = self.beeCon.sendCmd("M206 X400\n")
         print(resp)
         
         self.move(0,0,10,0)
         #go to SECOND point
-        resp = self.beeConnect.sendCmd("G1 X-31 Y-65\n","3")
+        resp = self.beeCon.sendCmd("G1 X-31 Y-65\n","3")
         print(resp)
         self.move(0,0,-10,0)
         
@@ -261,15 +264,15 @@ class Command():
     def GoToThirdCalibrationPoint(self):
         
         #set feedrate
-        resp = self.beeConnect.sendCmd("G1 F5000\n")
+        resp = self.beeCon.sendCmd("G1 F5000\n")
         print(resp)
         #set acceleration
-        resp = self.beeConnect.sendCmd("M206 X400\n")
+        resp = self.beeCon.sendCmd("M206 X400\n")
         print(resp)
         
         self.move(0,0,10,0)
         #go to SECOND point
-        resp = self.beeConnect.sendCmd("G1 X35 Y-65\n","3")
+        resp = self.beeCon.sendCmd("G1 X35 Y-65\n","3")
         print(resp)
         self.move(0,0,-10,0)
         
@@ -282,7 +285,7 @@ class Command():
     def GetNozzleTemperature(self):
         
         #get Temperature
-        resp = self.beeConnect.sendCmd("M105\n")
+        resp = self.beeCon.sendCmd("M105\n")
         #print(resp)
         
         try:
@@ -304,7 +307,7 @@ class Command():
         commandStr = "M104 S" + str(t) + "\n"
         
         #set Temperature
-        resp = self.beeConnect.sendCmd(commandStr)
+        resp = self.beeCon.sendCmd(commandStr)
         print(resp)
         
         return
@@ -315,15 +318,15 @@ class Command():
     *************************************************************************"""
     def Load(self):
         
-        resp = self.beeConnect.sendCmd("G92 E\n")
-        resp = self.beeConnect.sendCmd("M300 P500\n")
-        resp = self.beeConnect.sendCmd("M300 S0 P500\n")
-        resp = self.beeConnect.sendCmd("M300 P500\n")
-        resp = self.beeConnect.sendCmd("M300 S0 P500\n")
-        resp = self.beeConnect.sendCmd("M300 P500\n")
-        resp = self.beeConnect.sendCmd("M300 S0 P500\n")
-        resp = self.beeConnect.sendCmd("G1 F300 E100\n")
-        resp = self.beeConnect.sendCmd("G92 E\n")
+        resp = self.beeCon.sendCmd("G92 E\n")
+        resp = self.beeCon.sendCmd("M300 P500\n")
+        resp = self.beeCon.sendCmd("M300 S0 P500\n")
+        resp = self.beeCon.sendCmd("M300 P500\n")
+        resp = self.beeCon.sendCmd("M300 S0 P500\n")
+        resp = self.beeCon.sendCmd("M300 P500\n")
+        resp = self.beeCon.sendCmd("M300 S0 P500\n")
+        resp = self.beeCon.sendCmd("G1 F300 E100\n")
+        resp = self.beeCon.sendCmd("G92 E\n")
         return
 
     """*************************************************************************
@@ -332,20 +335,20 @@ class Command():
     *************************************************************************"""
     def Unload(self):
         
-        resp = self.beeConnect.sendCmd("G92 E\n")
-        resp = self.beeConnect.sendCmd("M300 P500\n")
-        resp = self.beeConnect.sendCmd("M300 S0 P500\n")
-        resp = self.beeConnect.sendCmd("M300 P500\n")
-        resp = self.beeConnect.sendCmd("M300 S0 P500\n")
-        resp = self.beeConnect.sendCmd("M300 P500\n")
-        resp = self.beeConnect.sendCmd("M300 S0 P500\n")
-        resp = self.beeConnect.sendCmd("G1 F300 E50\n")
-        resp = self.beeConnect.sendCmd("G92 E\n")
-        resp = self.beeConnect.sendCmd("G1 F1000 E-23\n","3")
-        resp = self.beeConnect.sendCmd("G1 F800 E2\n","3")
-        resp = self.beeConnect.sendCmd("G1 F2000 E-23\n","3")
-        resp = self.beeConnect.sendCmd("G1 F200 E-50\n","3")
-        resp = self.beeConnect.sendCmd("G92 E\n")
+        resp = self.beeCon.sendCmd("G92 E\n")
+        resp = self.beeCon.sendCmd("M300 P500\n")
+        resp = self.beeCon.sendCmd("M300 S0 P500\n")
+        resp = self.beeCon.sendCmd("M300 P500\n")
+        resp = self.beeCon.sendCmd("M300 S0 P500\n")
+        resp = self.beeCon.sendCmd("M300 P500\n")
+        resp = self.beeCon.sendCmd("M300 S0 P500\n")
+        resp = self.beeCon.sendCmd("G1 F300 E50\n")
+        resp = self.beeCon.sendCmd("G92 E\n")
+        resp = self.beeCon.sendCmd("G1 F1000 E-23\n","3")
+        resp = self.beeCon.sendCmd("G1 F800 E2\n","3")
+        resp = self.beeCon.sendCmd("G1 F2000 E-23\n","3")
+        resp = self.beeCon.sendCmd("G1 F200 E-50\n","3")
+        resp = self.beeCon.sendCmd("G92 E\n")
         
         return
 
@@ -356,18 +359,18 @@ class Command():
     def GoToHeatPos(self):
         
         #set feedrate
-        resp = self.beeConnect.sendCmd("G1 F15000\n")
+        resp = self.beeCon.sendCmd("G1 F15000\n")
         print(resp)
         
         #set acceleration
-        resp = self.beeConnect.sendCmd("M206 X400\n")
+        resp = self.beeCon.sendCmd("M206 X400\n")
         print(resp)
         
         #go to first point
-        self.beeConnect.sendCmd("G1 X30 Y0 Z10\n")
+        self.beeCon.sendCmd("G1 X30 Y0 Z10\n")
         
         #set acceleration
-        resp = self.beeConnect.sendCmd("M206 X1000\n","3")
+        resp = self.beeCon.sendCmd("M206 X1000\n","3")
         print(resp)
         
         return
@@ -379,18 +382,18 @@ class Command():
     def GoToRestPos(self):
         
         #set feedrate
-        resp = self.beeConnect.sendCmd("G1 F15000\n")
+        resp = self.beeCon.sendCmd("G1 F15000\n")
         print(resp)
         
         #set acceleration
-        resp = self.beeConnect.sendCmd("M206 X400\n")
+        resp = self.beeCon.sendCmd("M206 X400\n")
         print(resp)
         
         #go to first point
-        self.beeConnect.sendCmd("G1 X-50 Y0 Z110\n")
+        self.beeCon.sendCmd("G1 X-50 Y0 Z110\n")
         
         #set acceleration
-        resp = self.beeConnect.sendCmd("M206 X1000\n","3")
+        resp = self.beeCon.sendCmd("M206 X1000\n","3")
         print(resp)
         
         return
@@ -402,7 +405,7 @@ class Command():
     def GetBeeCode(self):
         
         #Get BeeCode
-        resp = self.beeConnect.sendCmd("M400\n")
+        resp = self.beeCon.sendCmd("M400\n")
         print(resp)
         
         splits = resp.split(" ")
@@ -426,7 +429,7 @@ class Command():
         commandStr = "M400 " + code + "\n"
         
         #Set BeeCode
-        resp = self.beeConnect.sendCmd(commandStr)
+        resp = self.beeCon.sendCmd(commandStr)
         
         return
 
@@ -436,6 +439,108 @@ class Command():
     *************************************************************************"""
     def initSD(self):
         #Init SD
-        resp = self.beeConnect.sendCmd("M21\n")
+        resp = self.beeCon.sendCmd("M21\n")
+        
+        tries = 10
+        while(tries > 0):
+            if("ok" in resp.lower()):
+                break
+            else:
+                resp = self.beeCon.sendCmd("\n")
+            tries -= 1
         
         return
+    """*************************************************************************
+                                CraeteFile Method 
+    
+    *************************************************************************"""
+    def CraeteFile(self, fileName):
+        #Init SD
+        self.initSD()
+        
+        fn = fileName
+        if(len(fileName) > 8):
+            fn = fileName[:8]
+        
+        cmdStr = "M30 " + fn + "\n"
+        
+        resp = self.beeCon.sendCmd(cmdStr)
+
+        tries = 10
+        while(tries > 0):
+            
+            if("file created" in resp.lower()):
+                print("   :"" SD file created")
+                break
+            elif("error" in resp.lower()):
+                print("   : Error creating file")
+                return False
+            else:
+                resp = self.beeCon.sendCmd("\n")
+                #print(resp,"...")
+            
+            tries -= 1
+        if(tries <= 0):
+            return False
+        
+        return True
+
+    """*************************************************************************
+                                OpenFile Method 
+    
+    *************************************************************************"""
+    def OpenFile(self, fileName):
+        #Init SD
+        self.initSD()
+        
+        cmdStr = "M23 " + fileName + "\n"
+        
+        #Open File
+        resp = self.beeCon.sendCmd(cmdStr)
+        
+        tries = 10
+        while(tries > 0):
+            if("file opened" in resp.lower()):
+                print("   :"" SD file opened")
+                break
+            else:
+                resp = self.beeCon.sendCmd("\n")
+            tries -= 1
+        
+        if(tries <= 0):
+            return False
+        
+        return True
+    
+    """*************************************************************************
+                                StartTransfer Method 
+    
+    *************************************************************************"""
+    def StartTransfer(self, fSize, a):
+        
+        cmdStr = "M28 D" + str(fSize - 1) + " A" + str(a) + "\n"
+        resp = self.beeCon.sendCmd(cmdStr)
+        #print(cmdStr)
+        tries = 10
+        while(tries > 0):
+            if("ok" in resp.lower()):
+                print("   :",resp)
+                break
+            else:
+                resp = self.beeCon.sendCmd("\n")
+            tries -= 1
+        
+        if(tries <= 0):
+            return False
+        
+        return True
+
+    """*************************************************************************
+                                SendBlock Method 
+    
+    *************************************************************************"""
+    def SendBlock(self, d, a, block):
+        
+        
+        
+        return True

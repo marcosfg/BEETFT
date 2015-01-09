@@ -58,7 +58,11 @@ class WaitScreen():
     
     nextPullTime = None
     
-    bee = None
+    """
+    BEEConnect vars
+    """
+    beeCon = None
+    beeCmd = None
     
     """*************************************************************************
                                 Init Method 
@@ -101,18 +105,6 @@ class WaitScreen():
 
         # Draw Image
         self.screen.blit(self.bgImage,(imgX,imgY))
-        
-        """
-        #draw top label
-        topFont = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Light.ttf"),15)
-        self.lblTop = topFont.render(ff.GetAbsPath("Ups... where's the BEE?"), 1, (0, 0, 0))
-        self.screen.blit(self.lblTop, (10, 10))
-        
-        #draw Bottom label
-        bottomFont = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Light.ttf"),10)
-        self.lblBottom = bottomFont.render(ff.GetAbsPath("...please connect your BTF pritner"), 1, (0, 0, 0))
-        self.screen.blit(self.lblBottom, (140, 210))
-"""
 
         # update screen
         pygame.display.update()
@@ -126,16 +118,29 @@ class WaitScreen():
             t = time()
             if t > self.nextPullTime:
                 
-                self.bee = BEEConnect.Connection()
-                if(self.bee.isConnected() == True):
-                    comm = BEECommand.Command(self.bee)
-                    resp = comm.startPrinter()
+                self.beeCon = BEEConnect.Connection()
+                if(self.beeCon.isConnected() == True):
+                    self.beeCmd = BEECommand.Command(self.beeCon)
+                    resp = self.beeCmd.startPrinter()
                 
                     if('Firmware' in resp):
-                        self.connected = self.bee.connected
-                        self.bee.sendCmd("G28\n","3")
+                        self.connected = self.beeCon.connected
+                        #self.bee.sendCmd("G28\n","3")
                     elif('Bootloader' in resp):
-                        self.bee = None
+                        self.beeCon = None
+                    else:
+                        cmdStr = "M625 " + "a"*507
+                        tries = 32
+                        print("Cleaning buffer")
+                        while(tries > 0):
+                            try:
+                                resp = self.beeCon.sendCmd(cmdStr,None,50)
+                            except:
+                                pass
+                            tries -= 1
+                        self.beeCon.close()
+                        self.beeCon = None
+                        #return None
                     
                 self.nextPullTime = time() + 0.5
                 print("Wait for connection")
