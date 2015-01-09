@@ -1,5 +1,5 @@
 __author__ = "mgomes"
-__date__ = "$Jan 9, 2015 3:01:32 PM$"
+__date__ = "$Jan 9, 2015 6:05:33 PM$"
 
 from setuptools import setup, find_packages
 

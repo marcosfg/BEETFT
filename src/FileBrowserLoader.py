@@ -40,6 +40,7 @@ import json
 import BEETFT_Button
 import FileFinder
 import pygame
+import ProgressBar
 
 class FileBrowserLoader():
     
@@ -76,13 +77,23 @@ class FileBrowserLoader():
     usbDir = None
     
     slicingImgJson = None
-    printImgJson = None
+    transfImgJson = None
+    heatImgJson = None
+    
     slicingImgPath = None
-    printImgPath = None
+    transfImgPath = None
+    heatImgPath = None
+    
     slicingImgX = 100
-    printImgX = 100
+    transfImgX = 100
+    heatImgX = 100
+    
     sliceImgY = 0
-    printImgY = 0
+    transfImgY = 0
+    heatfImgY = 0
+    
+    #Progress Bar
+    progressBar = None
     
     """*************************************************************************
                                 Init Method 
@@ -99,11 +110,13 @@ class FileBrowserLoader():
         self.topLblJson.append(json.loads(json.dumps(self.interfaceJson['SecondTopLabel'])))
         self.topLblJson.append(json.loads(json.dumps(self.interfaceJson['ThirdTopLabel'])))
         self.topLblJson.append(json.loads(json.dumps(self.interfaceJson['FourthTopLabel'])))
+        self.topLblJson.append(json.loads(json.dumps(self.interfaceJson['FifthTopLabel'])))
         
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FirstButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['SecondButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['ThirdButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FourthButtons'])))
+        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FifthButtons'])))
         
         self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FirstLabels'])))
         self.lblIndexes.append(len(self.lblsJson[0]))
@@ -113,9 +126,12 @@ class FileBrowserLoader():
         self.lblIndexes.append(len(self.lblsJson[2]))
         self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FourthLabels'])))
         self.lblIndexes.append(len(self.lblsJson[3]))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FifthLabels'])))
+        self.lblIndexes.append(len(self.lblsJson[4]))
         
         self.slicingImgJson = json.loads(json.dumps(self.interfaceJson['SlicingImage']))
-        self.printImgJson = json.loads(json.dumps(self.interfaceJson['PrintImage']))
+        self.transfImgJson = json.loads(json.dumps(self.interfaceJson['TransfImage']))
+        self.heatImgJson = json.loads(json.dumps(self.interfaceJson['HeatImage']))
         
         """
         Load Top Labels Configuration
@@ -230,11 +246,37 @@ class FileBrowserLoader():
         Image Files Configuration
         """
         self.slicingImgPath = ff.GetAbsPath(self.slicingImgJson['ImgPath'])
-        self.printImgPath = ff.GetAbsPath(self.printImgJson['ImgPath'])
+        self.transfImgPath = ff.GetAbsPath(self.transfImgJson['ImgPath'])
+        self.heatImgPath = ff.GetAbsPath(self.heatImgJson['ImgPath'])
+        
         self.slicingImgX = int(self.slicingImgJson['X'])
         self.slicingImgY = int(self.slicingImgJson['Y'])
-        self.printImgX = int(self.printImgJson['X'])
-        self.printImgY = int(self.printImgJson['Y'])
+        
+        self.transfImgX = int(self.transfImgJson['X'])
+        self.transfImgY = int(self.transfImgJson['Y'])
+        
+        self.heatImgX = int(self.heatImgJson['X'])
+        self.heatImgY = int(self.heatImgJson['Y'])
+        
+        """
+        Load Progress Bar Configuration
+        """
+        pBarJson = json.loads(json.dumps(self.interfaceJson['ProgressBar']))
+        pBarX = int(pBarJson['X'])
+        pBarY = int(pBarJson['Y'])
+        pBarWidth = int(pBarJson['Width'])
+        pBarHeight = int(pBarJson['Height'])
+        pBarThickness = int(pBarJson['Thickness'])
+        pBarLineColorRGB = pBarJson['LineColor']
+        pBarFillColorRGB = pBarJson['bgColor']
+        
+        splitColor = pBarLineColorRGB.split(",")
+        pBarLineColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
+        
+        splitColor = pBarFillColorRGB.split(",")
+        pBarFillColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
+        
+        self.progressBar = ProgressBar.ProgressBar(pBarX,pBarY,pBarWidth,pBarHeight,pBarLineColor,pBarFillColor,pBarThickness)
         
         return
     
@@ -447,11 +489,17 @@ class FileBrowserLoader():
         return self.slicingImgPath
     
     """
-    GetPrintImgPath
+    GetTransfImgPath
     """
-    def GetPrintImgPath(self):
-        return self.printImgPath
-    
+    def GetTransfImgPath(self):
+        return self.transfImgPath
+
+    """
+    GetHeatImgPath
+    """
+    def GetHeatImgPath(self):
+        return self.heatImgPath
+
     """
     GetSlicingImgX
     """
@@ -465,13 +513,34 @@ class FileBrowserLoader():
         return self.slicingImgY
     
     """
-    GetPrintImgX
+    GetTransfImgX
     """
-    def GetPrintImgX(self):
-        return self.printImgX
+    def GetTransfImgX(self):
+        return self.transfImgX
     
     """
-    GetPrintImgY
+    GetTransfImgY
     """
-    def GetPrintImgY(self):
-        return self.printImgY
+    def GetTransfImgY(self):
+        return self.transfImgY
+
+    """
+    GetHeatImgX
+    """
+    def GetHeatImgX(self):
+        return self.heatImgX
+    
+    """
+    GetHeatImgY
+    """
+    def GetHeatImgY(self):
+        return self.heatImgY
+    
+    """*************************************************************************
+                                PROGRES BAR
+    *************************************************************************"""
+    """
+    GetProgessBar
+    """
+    def GetProgessBar(self):
+        return self.progressBar

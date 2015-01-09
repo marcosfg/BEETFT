@@ -30,7 +30,16 @@
                     },
             "FourthTopLabel":
                     {
-                        "Text":"Preparing... Please Wait",
+                        "Text":"Transfering... Please Wait",
+                        "X":"110",
+                        "Y":"5",
+                        "FontType":"Bold",
+                        "FontSize":"12",
+                        "FontColor":"0,0,0"
+                    },
+            "FifthTopLabel":
+                    {
+                        "Text":"Heating... Please Wait",
                         "X":"110",
                         "Y":"5",
                         "FontType":"Bold",
@@ -298,11 +307,44 @@
             ],
         "FourthLabels":[
             ],
-        "PrintImage":
+        "TransfImage":
                 {
                     "ImgPath":"Images/beeBWVectorSmall.png",
                     "X":"150",
                     "Y":"50"
+                },
+        "FifthButtons":[
+                {
+                    "ButtonName":"Cancel",
+                    "X":"250",
+                    "Y":"200",
+                    "Width":"55",
+                    "Height":"25",
+                    "ButtonType":"Text",
+                    "Title":"Cancel",
+                    "FontType":"Regular",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0",
+                    "bgColor":"255,255,255"
+                }
+            ],
+        "FifthLabels":[
+            ],
+        "HeatImage":
+                {
+                    "ImgPath":"Images/beeBWVectorSmall.png",
+                    "X":"150",
+                    "Y":"50"
+                },
+        "ProgressBar":
+                {
+                    "X":"110",
+                    "Y":"160",
+                    "Width":"200",
+                    "Height":"25",
+                    "Thickness":"3",
+                    "bgColor":"0,0,0",
+                    "LineColor":"0,0,0"
                 }
         }
     ]

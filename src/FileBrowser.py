@@ -63,6 +63,10 @@ class FileBrowserScreen():
     
     cancelTransfer = False
     initTransfer = False
+    blocksTransfered = 0
+    nBlocks = 0
+    
+    startPrint = False
     
     """
     File Picker
@@ -88,11 +92,30 @@ class FileBrowserScreen():
     Images
     """
     slicingImgPath = None
-    printImgPath = None
+    transfImgPath = None
+    heatImgPath = None
+    
     slicingImgX = 0
     slicingImgY = 0
-    printImgX = 0
-    printImgY = 0
+    
+    transfImgX = 0
+    transfImgY = 0
+    
+    heatImgX = 0
+    heatImgY = 0
+    
+    """
+    Heating vars
+    """
+    targetTemperature = 220     
+    nozzleTemperature = 0
+    
+    """
+    Progress Bar vars
+    """
+    progressBar = None
+    pBarRect = None
+    pBarFill = None
     
     """
     BEEConnect vars
@@ -140,16 +163,25 @@ class FileBrowserScreen():
         
         self.buttons = self.interfaceLoader.GetButtonsList(self.interfaceState)
         
+        #PROGRESS BAR
+        self.progressBar = self.interfaceLoader.GetProgessBar()
         
+        #FILE LIST
         self.LoadFileList(self.interfaceLoader.GetRpiDir())
         self.pickerStrLen = self.interfaceLoader.GetPickerStrLen()
         
         self.slicingImg = pygame.image.load(self.interfaceLoader.GetSlicingImgPath())
-        self.printImg = pygame.image.load(self.interfaceLoader.GetPrintImgPath())
+        self.transfImg = pygame.image.load(self.interfaceLoader.GetTransfImgPath())
+        self.heatImg = pygame.image.load(self.interfaceLoader.GetHeatImgPath())
+        
         self.slicingImgX = self.interfaceLoader.GetSlicingImgX()
         self.slicingImgY = self.interfaceLoader.GetSlicingImgY()
-        self.printImgX = self.interfaceLoader.GetPrintImgX()
-        self.printImgY = self.interfaceLoader.GetPrintImgY()
+        
+        self.transfImgX = self.interfaceLoader.GetTransfImgX()
+        self.transfImgY = self.interfaceLoader.GetTransfImgY()
+        
+        self.heatImgX = self.interfaceLoader.GetHeatImgX()
+        self.heatImgY = self.interfaceLoader.GetHeatImgY()
         
         self.nextPullTime = time() + self.pullInterval
     
@@ -347,7 +379,24 @@ class FileBrowserScreen():
         #TRANSFERING
         elif self.interfaceState == 3:
             # Draw Image
-            self.screen.blit(self.printImg,(self.printImgX,self.printImgY))
+            self.screen.blit(self.transfImg,(self.transfImgX,self.transfImgY))
+            # Draw Progress Bar
+            self.progressBar.DrawRect(self.screen)
+            fill = 0
+            try:
+                fill = float(self.blocksTransfered/self.nBlocks)
+            except:
+                pass
+            self.screen.blit(self.progressBar.GetSurface(fill),
+                                self.progressBar.GetPos())
+        #HEATING
+        elif self.interfaceState == 4:
+            # Draw Image
+            self.screen.blit(self.heatImg,(self.heatImgX,self.heatImgY))
+            # Draw Progress Bar
+            self.progressBar.DrawRect(self.screen)
+            self.screen.blit(self.progressBar.GetSurface(float(self.nozzleTemperature/self.targetTemperature)),
+                                self.progressBar.GetPos())
         
         return
     
@@ -392,11 +441,14 @@ class FileBrowserScreen():
         self.pullInterval = None
         self.nextPullTime = None
         self.slicingImgPath = None
-        self.printImgPath = None
+        self.transfImgPath = None
+        self.heatImgPath = None
         self.slicingImgX = None
         self.slicingImgY = None
-        self.printImgX = None
-        self.printImgY = None
+        self.transfImgX = None
+        self.transfImgY = None
+        self.heatImgX = None
+        self.heatImgY = None
         
         return
     
@@ -418,12 +470,41 @@ class FileBrowserScreen():
         
         t = time()
         if t > self.nextPullTime:
-            self.ready2Print = True
+            #self.ready2Print = True
+            
+            if(self.interfaceState == 4):
+                self.nozzleTemperature = self.beeCmd.GetNozzleTemperature()
+                if(self.nozzleTemperature >= self.targetTemperature):
+                    self.nozzleTemperature = self.targetTemperature
+                    if(self.startPrint == True):
+                        self.startPrint = False
+                        self.beeCmd.home()
+                        self.beeCmd.startSDPrint();
+                    
+            
             self.nextPullTime = time() + self.pullInterval
             
         if(self.interfaceState == 3):
             if(self.initTransfer == True):
+                self.blocksTransfered = 0
+                self.nBlocks = 0
                 self.transferFile(self.selectedFileName)
+                
+        """
+        t = time()
+        if t > self.nextPullTime:
+            
+            self.nozzleTemperature = self.beeCmd.GetNozzleTemperature()
+            
+            if self.nozzleTemperature >= self.targetTemperature:
+                self.nozzleTemperature = self.targetTemperature
+                if(self.firstNextReady == False):
+                    self.beeCmd.beep()
+                
+                self.firstNextReady = True
+            
+            self.nextPullTime = time() + self.pullInterval
+        """
             
         return
     
@@ -482,6 +563,7 @@ class FileBrowserScreen():
     def transferFile(self, filename):
         
         self.initTransfer = False
+        self.startPrint = False
         
         #check if file exists
         if(os.path.isfile(filename) == False):
@@ -495,8 +577,8 @@ class FileBrowserScreen():
         print("   :","File Size: ", fSize, "bytes")
         
         blockBytes = self.beeCmd.MESSAGE_SIZE * self.beeCmd.BLOCK_SIZE
-        nBlocks = math.ceil(fSize/blockBytes)
-        print("   :","Number of Blocks: ", nBlocks)
+        self.nBlocks = math.ceil(fSize/blockBytes)
+        print("   :","Number of Blocks: ", self.nBlocks)
         
         
         
@@ -511,7 +593,7 @@ class FileBrowserScreen():
             return
         
         #Start transfer
-        blocksTransfered = 0
+        self.blocksTransfered = 0
         totalBytes = 0
         
         startTime = time()
@@ -519,14 +601,14 @@ class FileBrowserScreen():
         #Load local file
         with open(filename, 'rb') as f:
 
-            while(blocksTransfered < nBlocks and self.cancelTransfer == False):
+            while(self.blocksTransfered < self.nBlocks and self.cancelTransfer == False):
 
                 startPos = totalBytes
                 endPos = totalBytes + blockBytes
                 
                 bytes2write = endPos - startPos
                 
-                if(blocksTransfered == nBlocks -1):
+                if(self.blocksTransfered == self.nBlocks -1):
                     self.beeCmd.StartTransfer(fSize,startPos)
                     bytes2write = fSize - startPos
                 else:
@@ -544,8 +626,11 @@ class FileBrowserScreen():
                     
                 retVal = pygame.event.get()
                 self.handle_events(retVal)
-                blocksTransfered += 1
-                print("   :","Transfered ", str(blocksTransfered), "/", str(nBlocks), " blocks ", totalBytes, "/", fSize, " bytes")
+                self.Pull()
+                self.draw()
+                self.update()
+                self.blocksTransfered += 1
+                print("   :","Transfered ", str(self.blocksTransfered), "/", str(self.nBlocks), " blocks ", totalBytes, "/", fSize, " bytes")
             
         print("   :","Transfer completed")
         
@@ -554,9 +639,18 @@ class FileBrowserScreen():
         print("Elapsed time: ",elapsedTime)
         print("Average Transfer Speed: ", avgSpeed)
         
-        #CREATE SD FILE
+        #OPEN SD FILE
         resp = self.beeCmd.OpenFile(sdFN)
         if(not resp):
             return
+        
+        print("Heating")
+        #Heat Nozzle
+        self.beeCmd.SetNozzleTemperature(self.targetTemperature)
+        self.startPrint = True
+        
+        print("Start printing")
+        
+        self.interfaceState = 4
         
         return

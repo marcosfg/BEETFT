@@ -318,15 +318,15 @@ class Command():
     *************************************************************************"""
     def Load(self):
         
-        resp = self.beeCon.sendCmd("G92 E\n")
-        resp = self.beeCon.sendCmd("M300 P500\n")
-        resp = self.beeCon.sendCmd("M300 S0 P500\n")
-        resp = self.beeCon.sendCmd("M300 P500\n")
-        resp = self.beeCon.sendCmd("M300 S0 P500\n")
-        resp = self.beeCon.sendCmd("M300 P500\n")
-        resp = self.beeCon.sendCmd("M300 S0 P500\n")
-        resp = self.beeCon.sendCmd("G1 F300 E100\n")
-        resp = self.beeCon.sendCmd("G92 E\n")
+        self.beeCon.sendCmd("G92 E\n")
+        self.beeCon.sendCmd("M300 P500\n")
+        self.beeCon.sendCmd("M300 S0 P500\n")
+        self.beeCon.sendCmd("M300 P500\n")
+        self.beeCon.sendCmd("M300 S0 P500\n")
+        self.beeCon.sendCmd("M300 P500\n")
+        self.beeCon.sendCmd("M300 S0 P500\n")
+        self.beeCon.sendCmd("G1 F300 E100\n")
+        self.beeCon.sendCmd("G92 E\n")
         return
 
     """*************************************************************************
@@ -335,20 +335,20 @@ class Command():
     *************************************************************************"""
     def Unload(self):
         
-        resp = self.beeCon.sendCmd("G92 E\n")
-        resp = self.beeCon.sendCmd("M300 P500\n")
-        resp = self.beeCon.sendCmd("M300 S0 P500\n")
-        resp = self.beeCon.sendCmd("M300 P500\n")
-        resp = self.beeCon.sendCmd("M300 S0 P500\n")
-        resp = self.beeCon.sendCmd("M300 P500\n")
-        resp = self.beeCon.sendCmd("M300 S0 P500\n")
-        resp = self.beeCon.sendCmd("G1 F300 E50\n")
-        resp = self.beeCon.sendCmd("G92 E\n")
-        resp = self.beeCon.sendCmd("G1 F1000 E-23\n","3")
-        resp = self.beeCon.sendCmd("G1 F800 E2\n","3")
-        resp = self.beeCon.sendCmd("G1 F2000 E-23\n","3")
-        resp = self.beeCon.sendCmd("G1 F200 E-50\n","3")
-        resp = self.beeCon.sendCmd("G92 E\n")
+        self.beeCon.sendCmd("G92 E\n")
+        self.beeCon.sendCmd("M300 P500\n")
+        self.beeCon.sendCmd("M300 S0 P500\n")
+        self.beeCon.sendCmd("M300 P500\n")
+        self.beeCon.sendCmd("M300 S0 P500\n")
+        self.beeCon.sendCmd("M300 P500\n")
+        self.beeCon.sendCmd("M300 S0 P500\n")
+        self.beeCon.sendCmd("G1 F300 E50\n")
+        self.beeCon.sendCmd("G92 E\n")
+        self.beeCon.sendCmd("G1 F1000 E-23\n","3")
+        self.beeCon.sendCmd("G1 F800 E2\n","3")
+        self.beeCon.sendCmd("G1 F2000 E-23\n","3")
+        self.beeCon.sendCmd("G1 F200 E-50\n","3")
+        self.beeCon.sendCmd("G92 E\n")
         
         return
 
@@ -536,11 +536,11 @@ class Command():
         return True
 
     """*************************************************************************
-                                SendBlock Method 
+                                startSDPrint Method 
     
     *************************************************************************"""
-    def SendBlock(self, d, a, block):
+    def startSDPrint(self):
         
-        
+        self.beeCon.sendCmd("M33\n")
         
         return True
