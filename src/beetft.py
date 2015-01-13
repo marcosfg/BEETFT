@@ -51,7 +51,8 @@ import pygame
 import BEETFT_Button
 import BEECommand
 import BEEConnect
-
+import math
+import time
 
 os.environ["SDL_FBDEV"] = "/dev/fb1"
 os.environ["SDL_MOUSEDEV"] = "/dev/input/touchscreen"
@@ -74,6 +75,10 @@ class BEETFT_Main():
     """
     BEEConnected = False
     BEEState = "Diconnected"            #["Diconnected","StandBy","Printing"]
+    
+    blocksTransfered = 0
+    nBlocks = 0
+    cancelTransfer = False
     
     """
     vars
@@ -136,6 +141,7 @@ class BEETFT_Main():
         #Make sure the infinite loop wokrs
         self.done = False
         self.restart = True
+        self.cancelTransfer = False
         
         self.BEEState = "Disconnected"
         """
@@ -229,33 +235,16 @@ class BEETFT_Main():
         """
         Print interface screen
         """
-        if self.BEEState == "SD_Print":
-            self.currentScreen = Printing.PrintScreen(self.screen,self.printingScreenLoader,self.BEEDisplay)
-            
-            self.currentScreen.KillAll()
-            self.currentScreen = None
-        elif self.BEEState == "Ready":
+        if(self.BEEState == "SD_Print"):
+            #init print screen in Printing state
+            self.LoadCurrentScreen("Print", 0)
+        elif( self.BEEState == "Ready"):
+            """
+            Init Interfaces Screens
+            """
             self.beeCmd.home()
-        
-        """
-        Init Interfaces Screens
-        """
-        self.currentScreenName = self.jsonLoader.GetDefaultScreen()
-        
-        if self.currentScreenName == "PrinterInfo":
-            self.currentScreen = PrinterInfo.PrinterInfoScreen(self.screen,self.printerInfoScreenLoader,self.beeCmd)
-        elif self.currentScreenName == "Jog":
-            self.currentScreen = Jog.JogScreen(self.screen,self.jogLoader,self.beeCmd)
-        elif self.currentScreenName == "Calibration":
-            self.currentScreen = Calibration.CalibrationScreen(self.screen,self.calibrationLoader,self.beeCmd)
-        elif self.currentScreenName == "FilamentChange":
-            self.currentScreen = FilamentChange.FilamentChangeScreen(self.screen,self.filamentChangeLoader,self.beeCmd)
-        elif self.currentScreenName == "Settings":
-            self.currentScreen = Settings.SettingsScreen(self.screen,self.settingsLoader,self.beeCmd)
-        elif self.currentScreenName == "FileBrowser":
-            self.currentScreen = FileBrowser.FileBrowserScreen(self.screen,self.fileBrowserLoader,self.beeCmd)
-        elif self.currentScreenName == "About":
-            self.currentScreen = About.AboutScreen(self.screen,self.aboutLoader,self.beeCmd)
+            self.currentScreenName = self.jsonLoader.GetDefaultScreen()
+            self.LoadCurrentScreen(self.currentScreenName)
         
     """*************************************************************************
                                 Start Method 
@@ -276,7 +265,19 @@ class BEETFT_Main():
             self.draw()
             
             #Pull variables
-            self.currentScreen.Pull()
+            pullRes = self.currentScreen.Pull()
+            
+            #check for gobal actions
+            if(pullRes is not None):
+                print(pullRes)
+                if(pullRes == "Transfer"):
+                    #init print screen in Transfer state
+                    self.BEEState = "Transfer"
+                    self.cancelTransfer = False
+                    fileName = self.currentScreen.selectedFileName
+                    self.LoadCurrentScreen("Print", 5)
+                    self.transferFile(fileName)
+                
             
             # Check for interface CallBack
             if self.currentScreen.ExitCallBack():
@@ -339,29 +340,13 @@ class BEETFT_Main():
                     
             
             if (not (setScreen is None)) and (not setScreen==self.currentScreen.GetCurrentScreenName()):
-                self.currentScreen.KillAll()
-                self.currentScreen = None
-                
-                if setScreen == "PrinterInfo":
-                    self.currentScreen = PrinterInfo.PrinterInfoScreen(self.screen,self.printerInfoScreenLoader,self.beeCmd)
-                elif setScreen == "Jog":
-                    self.currentScreen = Jog.JogScreen(self.screen,self.jogLoader,self.beeCmd)
-                elif setScreen == "Calibration":
-                    self.currentScreen = Calibration.CalibrationScreen(self.screen,self.calibrationLoader,self.beeCmd)
-                elif setScreen == "FilamentChange":
-                    self.currentScreen = FilamentChange.FilamentChangeScreen(self.screen,self.filamentChangeLoader,self.beeCmd)
-                elif setScreen == "Settings":
-                    self.currentScreen = Settings.SettingsScreen(self.screen,self.settingsLoader,self.beeCmd)
-                elif setScreen == "FileBrowser":
-                    self.currentScreen = FileBrowser.FileBrowserScreen(self.screen,self.fileBrowserLoader,self.beeCmd)
-                elif setScreen == "About":
-                    self.currentScreen = About.AboutScreen(self.screen,self.aboutLoader,self.beeCmd)
-                    
-                self.currentScreenName = self.currentScreen.GetCurrentScreenName()
+                self.LoadCurrentScreen(setScreen)
                 
             
-        self.currentScreen.handle_events(retVal)
+        respEvent = self.currentScreen.handle_events(retVal)
         
+        if(self.BEEState == "Transfer" and respEvent == "Cancel"):
+            self.cancelTransfer = True
                 
         return
         
@@ -373,15 +358,18 @@ class BEETFT_Main():
     Calls all the individual update methods
     *************************************************************************"""
     def update(self):
-        #set left buttons visible
-        for btn in self.jsonLoader.leftMenuButtons:
-            btn.visible = True
-        
-        #set carouselbuttons visible
-        for btn in self.carouselButtons:
-            btn.visible = True
+        if(self.BEEState == "SD_Print" or self.BEEState == "Transfer"):
             pass
-        
+        else:
+            #set left buttons visible
+            for btn in self.jsonLoader.leftMenuButtons:
+                btn.visible = True
+
+            #set carouselbuttons visible
+            for btn in self.carouselButtons:
+                btn.visible = True
+                pass
+
         self.currentScreen.update()
             
         
@@ -393,22 +381,24 @@ class BEETFT_Main():
     Draws current screen and calls all the individual draw methods
     *************************************************************************"""   
     def draw(self):
+        
         #clear whole screen
         self.screen.fill(self.BEEDisplay.GetbgColor())
         
-        pygame.mouse.set_visible = False
-        
-        #draw split line
-        self.BEEDisplay.DrawLine(self.screen)
-        
-        for btn in self.carouselButtons:
-            btn.draw(self.screen)
-        
-        for btn in self.leftMenuButtons:
-            btn.draw(self.screen)
-            if btn._propGetName() == self.currentScreen.GetCurrentScreenName():
-                pygame.draw.rect(self.screen, btn._propGetFgColor(), btn._propGetRect(), 3)
-        
+        if(self.BEEState == "SD_Print" or self.BEEState == "Transfer"):
+            pass
+        else:
+            #draw split line
+            self.BEEDisplay.DrawLine(self.screen)
+
+            for btn in self.carouselButtons:
+                btn.draw(self.screen)
+
+            for btn in self.leftMenuButtons:
+                btn.draw(self.screen)
+                if btn._propGetName() == self.currentScreen.GetCurrentScreenName():
+                    pygame.draw.rect(self.screen, btn._propGetFgColor(), btn._propGetRect(), 3)
+
         #draw screen elements
         self.currentScreen.draw()
         
@@ -456,6 +446,133 @@ class BEETFT_Main():
         self.BEEState = self.beeCmd.getStatus()
         
         print("Printer Status: ",self.BEEState)
+        
+        return
+    
+    """*************************************************************************
+                                LoadCurrentScreen Method 
+    
+    Updates slected screen
+    *************************************************************************"""  
+    def LoadCurrentScreen(self, setScreen, state = 0):
+        
+        if(self.currentScreen is not None):
+            print("New Screen")
+            self.currentScreen.KillAll()
+            self.currentScreen = None
+            
+        if(setScreen == "Print"):
+            self.currentScreen = Printing.PrintScreen(self.screen,self.printingScreenLoader,self.beeCmd, state)
+        else:
+            if setScreen == "PrinterInfo":
+                self.currentScreen = PrinterInfo.PrinterInfoScreen(self.screen,self.printerInfoScreenLoader,self.beeCmd)
+            elif setScreen == "Jog":
+                self.currentScreen = Jog.JogScreen(self.screen,self.jogLoader,self.beeCmd)
+            elif setScreen == "Calibration":
+                self.currentScreen = Calibration.CalibrationScreen(self.screen,self.calibrationLoader,self.beeCmd)
+            elif setScreen == "FilamentChange":
+                self.currentScreen = FilamentChange.FilamentChangeScreen(self.screen,self.filamentChangeLoader,self.beeCmd)
+            elif setScreen == "Settings":
+                self.currentScreen = Settings.SettingsScreen(self.screen,self.settingsLoader,self.beeCmd)
+            elif setScreen == "FileBrowser":
+                self.currentScreen = FileBrowser.FileBrowserScreen(self.screen,self.fileBrowserLoader,self.beeCmd)
+            elif setScreen == "About":
+                self.currentScreen = About.AboutScreen(self.screen,self.aboutLoader,self.beeCmd)
+
+            self.currentScreenName = self.currentScreen.GetCurrentScreenName()
+
+        return
+    
+    """*************************************************************************
+                                transferFile Method 
+    
+    Transfers gcode file to R2C2
+    *************************************************************************"""  
+    def transferFile(self, fileName):
+        
+        #check if file exists
+        if(os.path.isfile(fileName) == False):
+            print("File does not exist")
+            return
+        
+        #Load File
+        print("   :","Loading File")
+        f = open(fileName, 'rb')
+        fSize = os.path.getsize(fileName)
+        print("   :","File Size: ", fSize, "bytes")
+        
+        blockBytes = self.beeCmd.MESSAGE_SIZE * self.beeCmd.BLOCK_SIZE
+        self.nBlocks = math.ceil(fSize/blockBytes)
+        print("   :","Number of Blocks: ", self.nBlocks)
+        
+        
+        
+        #TODO SEND M31 WITH ESTIMATED TIME
+        
+        fnSplit = fileName.split(".")
+        sdFN = fnSplit[0]
+        
+        #CREATE SD FILE
+        resp = self.beeCmd.CraeteFile(sdFN)
+        if(not resp):
+            return
+        
+        #Start transfer
+        self.blocksTransfered = 0
+        totalBytes = 0
+        
+        startTime = time.time()
+        
+        #Load local file
+        with open(fileName, 'rb') as f:
+
+            while(self.blocksTransfered < self.nBlocks and self.cancelTransfer == False):
+
+                startPos = totalBytes
+                endPos = totalBytes + blockBytes
+                
+                bytes2write = endPos - startPos
+                
+                if(self.blocksTransfered == self.nBlocks -1):
+                    self.beeCmd.StartTransfer(fSize,startPos)
+                    bytes2write = fSize - startPos
+                else:
+                    self.beeCmd.StartTransfer(endPos,startPos)
+                    
+                msg2write = math.ceil(bytes2write/self.beeCmd.MESSAGE_SIZE)
+
+                for i in range(0,msg2write):
+                    msg = f.read(self.beeCmd.MESSAGE_SIZE)
+                    #print(msg)
+                    resp = self.beeCon.sendCmd(msg,"tog")
+
+                    #print(resp)
+                    totalBytes += self.beeCmd.MESSAGE_SIZE
+                
+                self.blocksTransfered += 1
+                
+                self.currentScreen.Pull([self.blocksTransfered,self.nBlocks])
+                self.handle_events()
+                self.update()
+                self.draw()
+                
+                
+                print("   :","Transfered ", str(self.blocksTransfered), "/", str(self.nBlocks), " blocks ", totalBytes, "/", fSize, " bytes")
+            
+        print("   :","Transfer completed")
+        
+        elapsedTime = time.time()- startTime
+        avgSpeed = fSize//elapsedTime
+        print("Elapsed time: ",elapsedTime)
+        print("Average Transfer Speed: ", avgSpeed)
+        
+        #OPEN SD FILE
+        resp = self.beeCmd.OpenFile(sdFN)
+        if(not resp):
+            return
+        
+        #init print screen in Heat state
+        self.LoadCurrentScreen("Print", 6)
         
         return
 

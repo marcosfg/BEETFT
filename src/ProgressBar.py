@@ -36,6 +36,7 @@ __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
 import pygame
+import math
 
 class ProgressBar():
     
@@ -83,12 +84,19 @@ class ProgressBar():
     """
     GetRect
     """
-    def GetSurface(self,fillWidth):
+    def GetSurface(self,fillWidth, maxFill):
         
-        if fillWidth > 1:
-            fillWidth = 1
+        surf = None
         
-        surf = pygame.Surface((int(fillWidth*self.width),self.height))
+        if(maxFill == 0):
+            surf = pygame.Surface((0,self.height))
+        else:
+            if(fillWidth <= 0):
+                surf = pygame.Surface((0,self.height))
+            else:
+                fill = math.ceil(fillWidth*self.width/maxFill)
+                surf = pygame.Surface((int(fill),self.height))
+        
         surf.fill(self.fillColor)
         
         #fillWidth = int((self.nozzleTemperature/self.targetTemperature)*width)

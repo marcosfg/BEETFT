@@ -376,18 +376,15 @@ class FileBrowserScreen():
         elif self.interfaceState == 2:
             # Draw Image
             self.screen.blit(self.slicingImg,(self.slicingImgX,self.slicingImgY))
+        
         #TRANSFERING
         elif self.interfaceState == 3:
             # Draw Image
             self.screen.blit(self.transfImg,(self.transfImgX,self.transfImgY))
             # Draw Progress Bar
             self.progressBar.DrawRect(self.screen)
-            fill = 0
-            try:
-                fill = float(self.blocksTransfered/self.nBlocks)
-            except:
-                pass
-            self.screen.blit(self.progressBar.GetSurface(fill),
+            
+            self.screen.blit(self.progressBar.GetSurface(self.blocksTransfered,self.nBlocks),
                                 self.progressBar.GetPos())
         #HEATING
         elif self.interfaceState == 4:
@@ -395,7 +392,7 @@ class FileBrowserScreen():
             self.screen.blit(self.heatImg,(self.heatImgX,self.heatImgY))
             # Draw Progress Bar
             self.progressBar.DrawRect(self.screen)
-            self.screen.blit(self.progressBar.GetSurface(float(self.nozzleTemperature/self.targetTemperature)),
+            self.screen.blit(self.progressBar.GetSurface(self.nozzleTemperature,self.targetTemperature),
                                 self.progressBar.GetPos())
         
         return
@@ -488,25 +485,10 @@ class FileBrowserScreen():
             if(self.initTransfer == True):
                 self.blocksTransfered = 0
                 self.nBlocks = 0
-                self.transferFile(self.selectedFileName)
-                
-        """
-        t = time()
-        if t > self.nextPullTime:
+                return "Transfer"
+                #self.transferFile(self.selectedFileName)
             
-            self.nozzleTemperature = self.beeCmd.GetNozzleTemperature()
-            
-            if self.nozzleTemperature >= self.targetTemperature:
-                self.nozzleTemperature = self.targetTemperature
-                if(self.firstNextReady == False):
-                    self.beeCmd.beep()
-                
-                self.firstNextReady = True
-            
-            self.nextPullTime = time() + self.pullInterval
-        """
-            
-        return
+        return 
     
     """*************************************************************************
                                 GetSelectedIdx Method 
@@ -623,13 +605,14 @@ class FileBrowserScreen():
 
                     #print(resp)
                     totalBytes += self.beeCmd.MESSAGE_SIZE
-                    
+                
+                self.blocksTransfered += 1
                 retVal = pygame.event.get()
                 self.handle_events(retVal)
                 self.Pull()
                 self.draw()
                 self.update()
-                self.blocksTransfered += 1
+                
                 print("   :","Transfered ", str(self.blocksTransfered), "/", str(self.nBlocks), " blocks ", totalBytes, "/", fSize, " bytes")
             
         print("   :","Transfer completed")

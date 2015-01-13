@@ -251,7 +251,7 @@ class FilamentChangeScreen():
             
             # Draw Progress Bar
             self.progressBar.DrawRect(self.screen)
-            self.screen.blit(self.progressBar.GetSurface(float(self.nozzleTemperature/self.targetTemperature)),
+            self.screen.blit(self.progressBar.GetSurface(self.nozzleTemperature,self.targetTemperature),
                                 self.progressBar.GetPos())
         elif self.interfaceState == 1:
             lblCurrentColorText = "Current Color: " + self.selectedColorName

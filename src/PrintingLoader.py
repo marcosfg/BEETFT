@@ -116,27 +116,34 @@ class PrintingLoader():
         self.imageX = []
         self.imageY = []
         
-        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FirstTopLabel'])))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['PrintingTopLabel'])))
         self.lblIndexes.append(len(self.lblsJson[0]))
-        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['SecondTopLabel'])))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['PausedTopLabel'])))
         self.lblIndexes.append(len(self.lblsJson[1]))
-        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['ThirdTopLabel'])))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['ShutdownTopLabel'])))
         self.lblIndexes.append(len(self.lblsJson[2]))
-        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FourthTopLabel'])))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FilamentTopLabel'])))
         self.lblIndexes.append(len(self.lblsJson[3]))
-        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FifthTopLabel'])))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['PickerTopLabel'])))
         self.lblIndexes.append(len(self.lblsJson[4]))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['TransferTopLabel'])))
+        self.lblIndexes.append(len(self.lblsJson[5]))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['HeatTopLabel'])))
+        self.lblIndexes.append(len(self.lblsJson[6]))
         
-        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FirstButtons'])))
-        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['SecondButtons'])))
-        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['ThirdButtons'])))
-        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FourthButtons'])))
-        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FifthButtons'])))
+        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['PrintingButtons'])))
+        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['PausedButtons'])))
+        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['ShutdownButtons'])))
+        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FilamentButtons'])))
+        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['PickerButtons'])))
+        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['TransferButtons'])))
+        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['HeatButtons'])))
         
-        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['FirstImage'])))
-        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['SecondImage'])))
-        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['ThirdImage'])))
-        #self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['FourthImage'])))
+        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['PrintingImage'])))
+        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['PausedImage'])))
+        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['ShutdownImage'])))
+        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['TransferImage'])))
+        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['HeatImage'])))
         
         """
         Time Label Configuration
@@ -234,7 +241,7 @@ class PrintingLoader():
             self.interfaceButtons.append(filButtons)
             
         """
-        Load Heating Image Configuration
+        Load Image Configuration
         """
         for img in self.imagesJson:
             imgJson = json.loads(json.dumps(img))
@@ -284,7 +291,10 @@ class PrintingLoader():
         self.pickerFontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
                 
         return
-    
+
+    """*************************************************************************
+                                FONT
+    *************************************************************************"""
     """
     GetFont
     """
@@ -303,6 +313,10 @@ class PrintingLoader():
             font = pygame.font.Font(ff.GetAbsPath("Fonts/DejaVuSans-Light.ttf"),fontSize)
             
         return font
+
+    """*************************************************************************
+                                BUTTONS
+    *************************************************************************"""
     
     """
     GetButtonsList(self)
@@ -313,6 +327,9 @@ class PrintingLoader():
         
         return self.interfaceButtons[interfaceState]
     
+    """*************************************************************************
+                                LABELS
+    *************************************************************************"""
     """
     GetLblsText
     """
@@ -412,39 +429,54 @@ class PrintingLoader():
     def GetColorLblYPos(self,interfaceState):
         if interfaceState == 3:
             return self.colorLblYPos
+
+    """*************************************************************************
+                                IMAGES
+    *************************************************************************"""
     
     """
     GetImagePath
     """
     def GetImagePath(self,interfaceState):
-        if interfaceState >= len(self.imagePath):
-            return []
-        return self.imagePath[interfaceState]
+        if(interfaceState > 2):
+            return self.imagePath[interfaceState- 2]
+        else:
+            return self.imagePath[interfaceState]
     
     """
     GetImageX
     """
     def GetImageX(self,interfaceState):
-        if interfaceState >= len(self.imagePath):
-            return []
-        return self.imageX[interfaceState]
+        if(interfaceState > 2):
+            return self.imageX[interfaceState- 2]
+        else:
+            return self.imageX[interfaceState]
     
     """
     GetImageY
     """
     def GetImageY(self,interfaceState):
-        if interfaceState >= len(self.imagePath):
-            return []
-        return self.imageY[interfaceState]
+        if(interfaceState > 2):
+            return self.imageY[interfaceState- 2]
+        else:
+            return self.imageY[interfaceState]
+    
+    """*************************************************************************
+                                PICKER
+    *************************************************************************"""
     
     """
     GetProgessBar
     """
     def GetProgessBar(self,interfaceState):
-        if interfaceState == 0:
+        if(interfaceState == 0 or interfaceState == 5 or interfaceState == 6):
             return self.progressBar 
         else:
             return
+    
+    """*************************************************************************
+                                PROGRES BAR
+    *************************************************************************"""
     
     """
     GetPickerX

@@ -115,7 +115,7 @@ class Command():
         elif(status == 5):
             return "SD_Print"
         elif(status == 6):
-            return "Transfering"
+            return "Transfer"
         elif(status == 7):
             return "Pause"
         elif(status == 9):
@@ -542,5 +542,17 @@ class Command():
     def startSDPrint(self):
         
         self.beeCon.sendCmd("M33\n")
+        
+        return True
+
+    """*************************************************************************
+                                cancelSDPrint Method 
+    
+    *************************************************************************"""
+    def cancelSDPrint(self):
+        
+        self.beeCon.sendCmd("M112\n")
+        self.homeZ()
+        self.homeXY()
         
         return True

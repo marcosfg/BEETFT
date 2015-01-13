@@ -1,7 +1,7 @@
 {
     "Printing":[
         {
-            "FirstTopLabel":[
+            "PrintingTopLabel":[
                 {
                     "Text":"Printing in Progress",
                     "X":"110",
@@ -20,7 +20,7 @@
                     "FontSize":"12",
                     "FontColor":"0,0,0"
                 },
-            "FirstButtons":[
+            "PrintingButtons":[
                 {
                     "ButtonName":"Cancel",
                     "X":"14",
@@ -62,14 +62,14 @@
                 }
             ],
             
-            "FirstImage":[
+            "PrintingImage":[
                 {
                     "ImgPath":"Images/beeBWVectorSmall.png",
                     "X":"170",
                     "Y":"20"
                 }
             ],
-            "SecondTopLabel":[
+            "PausedTopLabel":[
                 {
                     "Text":"Paused... Waiting for resume",
                     "X":"20",
@@ -79,7 +79,7 @@
                     "FontColor":"0,0,0"
                 }
             ],
-            "SecondButtons":[
+            "PausedButtons":[
                 {
                     "ButtonName":"Cancel",
                     "X":"14",
@@ -120,14 +120,14 @@
                     "bgColor":"255,255,255"
                 }
             ],
-            "SecondImage":[
+            "PausedImage":[
                 {
                     "ImgPath":"Images/beeBWVectorSmall.png",
                     "X":"110",
                     "Y":"50"
                 }
             ],
-            "ThirdTopLabel":[
+            "ShutdownTopLabel":[
                 {
                     "Text":"Paused... Waiting for resume or shutdown",
                     "X":"10",
@@ -137,7 +137,7 @@
                     "FontColor":"0,0,0"
                 }
             ],
-            "ThirdButtons":[
+            "ShutdownButtons":[
                 {
                     "ButtonName":"Close",
                     "X":"218",
@@ -165,16 +165,16 @@
                     "bgColor":"255,255,255"
                 }
             ],
-            "ThirdImage":[
+            "ShutdownImage":[
                 {
                     "ImgPath":"Images/beeBWVectorSmall.png",
                     "X":"110",
                     "Y":"50"
                 }
             ],
-            "FourthTopLabel":[
+            "FilamentTopLabel":[
                 {
-                    "Text":"Processing... Please wait",
+                    "Text":"Filament Operations",
                     "X":"10",
                     "Y":"5",
                     "FontType":"Bold",
@@ -182,7 +182,7 @@
                     "FontColor":"0,0,0"
                 }
             ],
-            "FourthButtons":[
+            "FilamentButtons":[
                 {
                     "ButtonName":"Load",
                     "X":"14",
@@ -249,7 +249,7 @@
                     "bgColor":"255,255,255"
                 }
             ],
-            "FourthImage":[
+            "FilamentImage":[
                 {
                     
                 }
@@ -283,7 +283,7 @@
                     "FontSize":"12",
                     "FontColor":"0,0,0"
                 },
-            "FifthTopLabel":[
+            "PickerTopLabel":[
                 {
                     "Text":"PickColor",
                     "X":"10",
@@ -293,7 +293,7 @@
                     "FontColor":"0,0,0"
                 }
             ],
-            "FifthButtons":[
+            "PickerButtons":[
                 {
                     "ButtonName":"Next",
                     "X":"270",
@@ -329,6 +329,70 @@
                     "NormalPath":"Images/DownSmall.png",
                     "DownPath":"Images/InvertedDownSmall.png",
                     "HighlightedPath":"Images/DownSmall.png"
+                }
+            ],
+            "TransferTopLabel":[
+                {
+                    "Text":"Transfering... Please wait",
+                    "X":"20",
+                    "Y":"5",
+                    "FontType":"Bold",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0"
+                }
+            ],
+            "TransferButtons":[
+                {
+                    "ButtonName":"Cancel",
+                    "X":"14",
+                    "Y":"200",
+                    "Width":"88",
+                    "Height":"25",
+                    "ButtonType":"Text",
+                    "Title":"Cancel",
+                    "FontType":"Regular",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0",
+                    "bgColor":"255,255,255"
+                }
+            ],
+            "TransferImage":[
+                {
+                    "ImgPath":"Images/beeBWVectorSmall.png",
+                    "X":"110",
+                    "Y":"50"
+                }
+            ],
+            "HeatTopLabel":[
+                {
+                    "Text":"Heating... Please wait",
+                    "X":"20",
+                    "Y":"5",
+                    "FontType":"Bold",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0"
+                }
+            ],
+            "HeatButtons":[
+                {
+                    "ButtonName":"Cancel",
+                    "X":"14",
+                    "Y":"200",
+                    "Width":"88",
+                    "Height":"25",
+                    "ButtonType":"Text",
+                    "Title":"Cancel",
+                    "FontType":"Regular",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0",
+                    "bgColor":"255,255,255"
+                }
+            ],
+            "HeatImage":[
+                {
+                    "ImgPath":"Images/beeBWVectorSmall.png",
+                    "X":"110",
+                    "Y":"50"
                 }
             ]
         }

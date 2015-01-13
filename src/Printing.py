@@ -78,7 +78,7 @@ class PrintScreen():
     imageY = None
     
     timeRemaining = None
-    printPercent = None
+    printPercent = 0
     
     nextPullTime = None
     pullInterval = 1
@@ -88,7 +88,14 @@ class PrintScreen():
     """
     progressBar = None
     pBarRect = None
-    pBarFill = None
+    pBarFill = 0
+    pBarMax = 0
+    
+    blocksTransfered = 0
+    totalBlocks = 0
+    
+    targetTemperature = 220     
+    nozzleTemperature = 0
     
     """
     Color Picker vars
@@ -101,33 +108,43 @@ class PrintScreen():
     listPosition = 0
     selectedColoridx = 0
     
+    """
+    BEEConnect vars
+    """
+    #conn = None
+    beeCon = None
+    beeCmd = None
+    
     
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, screen, interfaceLoader, display):
+    def __init__(self, screen, interfaceLoader, cmd, interfaceState = 0):
         """
         .
         """
-        print("loading Print Screen")
+        print("loading Print Screen with interface:", interfaceState)
+        
+        self.beeCmd = cmd
+        self.beeCon = self.beeCmd.beeCon
+        
+        self.exit = False
+        
+        self.interfaceState = interfaceState         #set interface state
         
         self.screen = screen
         self.interfaceLoader = interfaceLoader
-        self.printing = True
+        
         self.exit = False
-        self.interfaceState = 0
-        self.printPercent = float(0)
         
-        self.nextPullTime = time()
-        self.Pull()
-        
-        self.BEEDisplay = display
-        
-        self.updateReady = False
+        #TODO UPDATE TIME REMAINING
+        self.timeRemaining = 0
         
         self.UpdateVars()
+        
+        self.nextPullTime = time() + self.pullInterval
         
         """
         Load Colors
@@ -137,44 +154,15 @@ class PrintScreen():
         self.colorCodeList = self.colorCodes.GetColorCodeList()
         self.colorList = self.colorCodes.GetColorList()
         
-        
-        self.start()
-        
         return
-    
-    """*************************************************************************
-                                start Method 
-    
-    Infinite Loop while printing state
-    *************************************************************************"""
-    def start(self):
-        
-        while (self.printing) and (not self.exit):
-            # Handle events
-            self.handle_events()
-            
-            # Update buttons visibility, text, graphs etc
-            self.update()
-
-            # Draw everything
-            self.draw()
-            
-            #Pull Variable
-            self.Pull()
-            
-        return
-        
-        return
-    
 
     """*************************************************************************
                                 handle_events Method 
     
     Received the event vector and checks if it has any event from interface items
     *************************************************************************"""
-    def handle_events(self):
+    def handle_events(self, retVal):
         
-        retVal = pygame.event.get()
         """handle all events."""
         for event in retVal:
             if event.type == pygame.QUIT:
@@ -188,8 +176,10 @@ class PrintScreen():
                     btnName = btn._propGetName()
                     
                     if btnName == "Cancel":
-                        print("\n//TODO: SEND CANCEL PRINT\n")
+                        if(self.interfaceState == 0):
+                            self.beeCmd.cancelSDPrint()
                         self.exit = True
+                        return "Cancel"
                     elif btnName == "Resume":
                         self.interfaceState = 0
                         print("\n//TODO: SEND RESUME PRINT\n")
@@ -236,12 +226,12 @@ class PrintScreen():
         
         #Update Time Label
         if self.interfaceState == 0:
-            str = self.timeLblText + self.timeRemaining
-            self.timeLbl = self.timeLblFont.render(str, 1, self.timeLblFontColor)
+            lblStr = self.timeLblText + str(self.timeRemaining)
+            self.timeLbl = self.timeLblFont.render(lblStr, 1, self.timeLblFontColor)
         #Update Color Label
         elif self.interfaceState == 3:
-            str = self.colorLblText + self.colorNameList[self.selectedColoridx]
-            self.colorLbl = self.colorLblFont.render(str, 1, self.colorLblFontColor)
+            lblStr = self.colorLblText + self.colorNameList[self.selectedColoridx]
+            self.colorLbl = self.colorLblFont.render(lblStr, 1, self.colorLblFontColor)
         
         
         for btn in self.buttons:
@@ -259,7 +249,7 @@ class PrintScreen():
     *************************************************************************""" 
     def draw(self):        
         #clear whole screen
-        self.screen.fill(self.BEEDisplay.GetbgColor())
+        #self.screen.fill(self.BEEDisplay.GetbgColor())
         
         #Draw Top label
         self.screen.blit(self.lbl, (self.lblXPos,self.lblYPos))
@@ -270,7 +260,7 @@ class PrintScreen():
             
             # Draw Progress Bar
             self.progressBar.DrawRect(self.screen)
-            self.screen.blit(self.progressBar.GetSurface(self.printPercent),
+            self.screen.blit(self.progressBar.GetSurface(self.printPercent,100),
                                 self.progressBar.GetPos())
         #Draw Time label
         elif self.interfaceState == 3:
@@ -312,7 +302,19 @@ class PrintScreen():
             
             self.pickColorRect = pygame.draw.rect(self.screen, pickerColor, (x,y,width,height), 3)
         
-        
+        elif(self.interfaceState == 5):
+            #Transfering
+            # Draw Progress Bar
+            self.progressBar.DrawRect(self.screen)
+            self.screen.blit(self.progressBar.GetSurface(self.blocksTransfered,self.totalBlocks),
+                                self.progressBar.GetPos())
+        elif(self.interfaceState == 6):
+            #Heating
+            # Draw Progress Bar
+            self.progressBar.DrawRect(self.screen)
+            self.screen.blit(self.progressBar.GetSurface(self.nozzleTemperature,self.targetTemperature),
+                                self.progressBar.GetPos())
+                                
         #Draw Image
         if (self.interfaceState != 3) and (self.interfaceState != 4):
             self.screen.blit(self.image,(self.imageX,self.imageY))
@@ -323,7 +325,7 @@ class PrintScreen():
         
         
         # update screen
-        pygame.display.update()
+        #pygame.display.update()
         
         return
     
@@ -377,6 +379,7 @@ class PrintScreen():
         self.progressBar = None
         self.pBarRect = None
         self.pBarFill = None
+        self.pBarMax = None
         self.pickColorRect = None
         self.colorCodes = None
         self.colorNameList = None
@@ -394,14 +397,28 @@ class PrintScreen():
     *************************************************************************""" 
     def ExitCallBack(self):
         
-        return False
+        return self.exit
     
     """*************************************************************************
                                 Pull Method 
     
     Pull variables
     *************************************************************************""" 
-    def Pull(self):
+    def Pull(self,arg=None):
+        
+        if(self.interfaceState == 5 and arg is not None):
+            self.blocksTransfered = int(arg[0])
+            self.totalBlocks = int(arg[1])
+        elif(self.interfaceState == 6):
+            self.nozzleTemperature = self.beeCmd.GetNozzleTemperature();
+            if(self.nozzleTemperature >= self.targetTemperature):
+                self.beeCmd.startSDPrint();
+                self.timeRemaining = 0
+                self.interfaceState = 0
+                self.printPercent = 0
+                self.printing = True
+            
+        
         
         t = time()
         if t > self.nextPullTime:
@@ -413,7 +430,6 @@ class PrintScreen():
                 self.printPercent = float(self.printPercent + 0.05)
                 if self.printPercent > 1:
                     self.printPercent = 1
-                    self.printing = False
         
             
         return
